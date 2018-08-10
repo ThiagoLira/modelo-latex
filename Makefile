@@ -1,6 +1,8 @@
 # makefile para a compilacao do documento
 
 BASE_NAME := quali
+BUILD_DIR := build
+PDF_NAME  := quali.pdf
 
 LATEX := pdflatex
 #LATEX := lualatex
@@ -26,7 +28,10 @@ MAKEINDEX := makeindex -s mkidxhead.ist -L
 STYLEFILES    := imeusp.sty plainnat-ime.bbx plainnat-ime.cbx
 OTHERTEXFILES := $(wildcard *.tex) $(STYLEFILES)
 BIBFILES      := $(wildcard *.bib)
-IMGFILES      := $(wildcard figuras/*)
+IMGFILES      := $(wildcard figures/*)
+CHAPTERS      := $(wildcard chapters/*)
+TIKZ          := $(wildcard tikz/*)
+
 # Voce pode acrescentar outras dependencias aqui
 MISCFILES     :=
 
@@ -101,7 +106,7 @@ all: $(BASE_NAME).pdf
 # O arquivo pdf final depende dos arquivos de bibliografia/indice, alem
 # dos demais arquivos que compoem o documento e dos arquivos temporarios
 # gerados pelo LaTeX na iteracao anterior que foram modificados
-%.pdf: %.bbl %.ind $(TEX_TEMP_FILES) %.tex $(BIBFILES) $(IMGFILES) $(OTHERTEXFILES) $(MISCFILES)
+%.pdf: %.bbl %.ind $(TEX_TEMP_FILES) %.tex $(BIBFILES) $(TIKZ) $(CHAPTERS) $(IMGFILES) $(OTHERTEXFILES) $(MISCFILES)
 	@if test $(MAKELEVEL) -ge 8; then \
 		$(SHOW_REPORT); \
 		$(SHOW_LOOP_ERROR); \
@@ -116,12 +121,13 @@ all: $(BASE_NAME).pdf
 	@if make -sq; then \
 		$(SHOW_REPORT); \
 		$(SHOW_SUCCESS_MSG); \
+		$(MAKE) post-build; \
 	else \
 		make -s; \
-	fi
+	fi 
 
 # bitex/biber e makeindex/xindy dependem de arquivos gerados pelo LaTeX
-%.idx-current %.bcf-current: %.tex $(BIBFILES) $(IMGFILES) $(OTHERTEXFILES) $(MISCFILES)
+%.idx-current %.bcf-current: %.tex $(BIBFILES) $(IMGFILES) $(TIKZ) $(CHAPTERS) $(OTHERTEXFILES) $(MISCFILES)
 	@echo "       Executando $(LATEX) $(OPTS) $* (iteração auxiliar $(MAKELEVEL))..."
 	@$(RUN_LATEX)
 	@$(REFRESH)
@@ -144,13 +150,23 @@ all: $(BASE_NAME).pdf
 		echo; \
 		echo "    **** Erro durante a execucao do bibtex/biber ****"; \
 		exit 1; \
-	fi
-	@echo
+	fi 
+	@echo 
+
+post-build:
+	@echo post build - moving files to build/ and renaming pdf
+	@mkdir -p $(BUILD_DIR)
+	@cp $(BASE_NAME).pdf $(PDF_NAME)
+	@mv *-current *.log *.aux *.bbl \
+	    *.bcf *.blg *.fls *.idx *.ilg \
+	    *.ind *.lof *.lot *.out *.xml \
+	    *.gz *.toc $(BASE_NAME).pdf $(BUILD_DIR)
+	@echo SUCCESS !
 
 clean: $(BASE_NAME)-clean
 
 %-clean:
-	-rm -f missfont.log $*.ps $*.pdf $*.dvi \
+	-rm -rf $(BUILD_DIR) missfont.log $*.ps $*.pdf $*.dvi \
 		latex-out.log makeindex-out.log bibtex-out.log \
 		hyperxindy.xdy-current mkidxhead.ist-current \
 		$*.bbl $*.aux $*.log $*.toc $*.cb $*.out $*.blg \
@@ -163,7 +179,7 @@ clean: $(BASE_NAME)-clean
 		$*.idx-current $*.bcf-current $*.fls-current \
 		$*.run.xml-current $*.synctex.gz-current \
 		$*.fdb_latexmk-current $*.ps-current \
-		$*.pdf-current $*.dvi-current
+		$*.pdf-current $*.dvi-current 
 
 define SHOW_REPORT =
 	if test -f bibtex-out.log; then \
