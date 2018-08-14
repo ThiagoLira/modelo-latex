@@ -12,6 +12,20 @@ Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição
 
 Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos também diversos exemplos de vetores aleatórios $x$ e podemos estar estudando alguma propriedade importante dessa distribuição.
 
+\section{Estatística Frequentista e Estatística Bayesina}
+
+Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML, cabe então uma breve elaboração das diferenças entre os dois grandes \textit{aproacches} da estatística.\\
+
+Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probailidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+
+E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana.
+
+\subsection{Estimação por Log-verossimilhança}
+
+Um exemplo de estimação frequentista que será usada nesse trabalho é a de log-verossimilhança. 
+Ela segue o princípio de maximizar a verossimilhança dada uma amostra de dados. Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $/theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
+
+$\theta = \argmax_{\theta} p_{modelo}(X,\theta) $
 
 %% ------------------------------------------------------------------------- %%
 \section{Fundamentos}\index{área do trabalho!fundamentos}
