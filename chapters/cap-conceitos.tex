@@ -2,13 +2,18 @@
 \chapter{Conceitos}
 \label{cap:conceitos}
 
+
+\section{Machine Learning}
+
+O campo de Machine Learning (ML) é uma ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
+
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado e não supervisionado. Técnicas de ambos os tipos serão usadas para os dados da Intercement.
 
-\section{Aprendizado Supervisionado}
+\subsection{Aprendizado Supervisionado}
 
-Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores $x$ são fornecidas anotacoes $y$, e desejamos então criar predições de anotacoes $y'$ para novas entradas $x'$.
+Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores $x$ são fornecidas anotacoes $y$, e desejamos então criar predições de anotacoes $y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio da busca pelo conjunto de parânetros $\theta$ que minimizem o erro na família de distribuições $p(y | x,\theta)$.
 
-\section{Aprendizado Não Supervisionado}
+\subsection{Aprendizado Não Supervisionado}
 
 Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos também diversos exemplos de vetores aleatórios $x$ e podemos estar estudando alguma propriedade importante dessa distribuição.
 
@@ -23,9 +28,15 @@ E no campo de ML, as duas maneiras de se gerar predições são estimadores freq
 \subsection{Estimação por Log-verossimilhança}
 
 Um exemplo de estimação frequentista que será usada nesse trabalho é a de log-verossimilhança. 
-Ela segue o princípio de maximizar a verossimilhança dada uma amostra de dados. Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $/theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
+Ela segue o princípio de maximizar a verossimilhança dada uma amostra de dados. Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
 
-$\theta = \argmax_{\theta} p_{modelo}(X,\theta) $
+\[ \theta = \argmax_{\theta} p_{modelo}(X,\theta) \] 
+
+Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos temos: \\
+
+\[ \theta = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)},\theta) \]
+
+
 
 %% ------------------------------------------------------------------------- %%
 \section{Fundamentos}\index{área do trabalho!fundamentos}
