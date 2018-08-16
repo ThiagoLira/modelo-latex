@@ -23,7 +23,7 @@ Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a 
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probailidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
-E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana.
+E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
 \subsection{Estimação por Log-verossimilhança}
 
@@ -37,16 +37,18 @@ Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. 
 \[ \theta = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)},\theta) \]
 
 
+\subsection{Inferência Bayesiana em Machine Learning}
 
-%% ------------------------------------------------------------------------- %%
-\section{Fundamentos}\index{área do trabalho!fundamentos}
-\label{sec:fundamentos}
+O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas. Em uma análise frequentista estima-se um valor de $\theta$ e então todas as predições são feitas a partir desse valor. No caso Baysiano se consideram todos os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar um grau de certeza \textbf{anterior} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$. 
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto.
+\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(X)}   \]
+
+Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
+
+\[ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta \]
+
+
+
 
 %% ------------------------------------------------------------------------- %%
 \section{Escolha de Modelos}
