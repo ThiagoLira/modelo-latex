@@ -3,25 +3,30 @@
 \label{cap:introducao}
 
 
-Esse trabalho surge de uma colaboração entre a empresa Intercement e o Laboratório de Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos 10 anos de dados de diversas etapas da produção de cimento de uma fábrica. Esse documento apresenta um estudo com a análise desses dados, desde a sua limpeza até uma criação de modelos preditivos para os mesmos.
+Esse trabalho surge de uma colaboração entre a empresa Intercement e o Laboratório de Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos 10 anos de dados de diversas etapas da produção de cimento de uma fábrica. Esse documento apresenta um estudo com a análise desses dados, desde a sua limpeza até uma criação de modelos preditivos para os mesmos. \\
 
-Os dados foram primeiramente convertidos para formato \textbf{csv} e então importados para o ambiente Python, usando as bibliotecas pandas, matplotlib, numpy, keras e sklearn.
+Os dados são medições de diversos parâmetros em meio ao processo do fabricação do cimento. Eles são divididos em diversas planilhas para diferentes etapas da produção de cimento, são elas:
+
+\begin{itemize}
 
 
-% \emph{Thesis are random access. Do NOT feel obliged to read a thesis from beginning to end.}
+        \item Cimento Cru
+        \item Farinha
+        \item Clinquér
+        \item Produção
+
+\end{itemize}
+
+
+Esse trabalho irá aplicar métodos modernos de ML e DP para a modelagem desses dados. Dado que o problema em questão é de /textbf{regressão}, i.e. queremos prever valores numéricos, saímos do domínio canônico onde são aplicados métodos de DL, um desses sería por exemplo NLP. Nesse trabalho serão reproduzidos modelos propostos por \citet{ubertime} e \citet{energylstm} para problemas de regressão.
 
 
 
 %% ------------------------------------------------------------------------- %%
-\section{Considerações Preliminares}
-\label{sec:consideracoes_preliminares}
+\section{Produção de Cimento}
+\label{sec:producao}
 
-Considerações preliminares\footnote{Nota de rodapé (não abuse).}\index{genoma!projetos}.
-% index permite acrescentar um item no indice remissivo
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto.
- 
+Com o fim  
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}

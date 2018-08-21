@@ -7,7 +7,7 @@
 
 O campo de Machine Learning (ML) é uma ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
 
-Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado e não supervisionado. Técnicas de ambos os tipos serão usadas para os dados da Intercement.
+Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 \subsection{Aprendizado Supervisionado}
 
@@ -39,7 +39,7 @@ Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. 
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
-O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas. Em uma análise frequentista estima-se um valor de $\theta$ e então todas as predições são feitas a partir desse valor. No caso Baysiano se consideram todos os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar um grau de certeza \textbf{anterior} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$. 
+O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas. Em uma análise frequentista estima-se um valor de $\theta$ e então todas as predições são feitas a partir desse valor. No caso Baysiano se consideram todos os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar um grau de certeza \textbf{anterior} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal $p(X,Y | \theta)$, a chamada verossimilhança. 
 
 \[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(X)}   \]
 
@@ -47,8 +47,7 @@ Finalmente, para realizar uma inferência devemos integrar por toda a distribui�
 
 \[ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta \]
 
-
-
+Essa integral é geralmente intratável \citep{bayesml}, e portanto será usado uma técnica que aproxima uma inferência Bayesiana em redes neurais, o MC Dropout \citep{dropbayes}.
 
 %% ------------------------------------------------------------------------- %%
 \section{Escolha de Modelos}
