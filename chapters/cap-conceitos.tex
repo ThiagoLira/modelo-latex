@@ -103,25 +103,25 @@ de classificação onde queremos aprender uma função da forma $y = f^*(x)$, um
 Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
 parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
 
-O modelo é uma composição de transformações lineares e não-lineares da forma: \\
+O modelo é uma composição de funções que unem uma transformação linear e
+a aplicação de uma função não-linear $\sigma$: \\
 
 \[ f(x)=  \sigma(W*x + b) \]
 
-Onde sigma é alguma função não-linear como a função sigmóide. A computação da
-saída de uma rede neural então pode ser escrita como:
+A computação da saída de uma rede neural então pode ser escrita como:
 
-\[   y = f_n \circ f_{n-1} \dots f_1(x)  \]
+\[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
 
 Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
-$f_i$ cujos parâmetros são $W$ e $b$.
+$f_i$ cujos parâmetros são $W$ e $b$. Portanto, para a i-ésima camada da rede
+sua saída sera da forma: 
 
 \[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
 
+Onde $a_{i-1}$ é a saída da camada anterior, também chamada de
+\textbf{ativação}. A saída dessa camada é então a sua ativação $a_i$. \\ 
 
-
-
-
-É interessante notar que uma rede neural é equivalente a realizar uma regressão logística por neurônio. Sendo que uma rede neural com apenas um neurônio é uma regressão logística dos dados. A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
+A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
 
 
 %\input{tiks/NN.tex}
