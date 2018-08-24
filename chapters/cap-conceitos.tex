@@ -77,6 +77,28 @@ Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
 
+A família das Redes Neurais Recorrentes é composta por modelos especializados
+em processar dados sequenciais, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
+\textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
+sequência o estado da rede seja de certo modo propagado temporalmente. A equação
+a seguir ilustra como seria uma função com recorrência: \\
+
+\[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
+
+Nessa equação vemos que o vetor $h$ na iteração $t$ tem seu valor dependente
+desse mesmo vetor na última iteração. RNNs aprendem a usar esse vetores com
+essas propriedades como
+\say{resumos} das iterações passadas, e usam-nos ao lado da entrada e dos
+parâmetros para o cálculo da saída em cada iteração.
+
+\subsubsection{LSTM}
+
+LSTMs são um tipo de RNN que por meio de sua arquitetura permitem que sequências
+maiores sejam processadas sem que o fluxo dos gradientes pela rede se torne
+problemático. 
+
+
+
 Como podemos ver na imagem, a entrada $x$, ao lado do estado interno $W$, são usados para gerar uma predição. Essa por sua vez é comparada com o nosso dado real para que se calcule um erro. O estado $W$ é calculado em cada iteração e usado no cálculo da próxima predição. De modo que esse estado é capaz de transmitir temporalmente ao longo do treinamento informações de dados anteriores.
 \\
 
@@ -120,6 +142,12 @@ sua saída sera da forma:
 
 Onde $a_{i-1}$ é a saída da camada anterior, também chamada de
 \textbf{ativação}. A saída dessa camada é então a sua ativação $a_i$. \\ 
+
+Vale notar que uma saída $y$ calculada por uma rede neural depende unicamente dos
+seus parâmetros e da entrada $x$. Isso não será verdade para os modelos
+\textbf{sequenciais} que também serão usados nesse trabalho, onde o estado
+interno de computação desses modelos é usado como entrada para uma próxima
+iteração. \\
 
 A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
 

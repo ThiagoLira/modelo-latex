@@ -10,20 +10,16 @@ Todos os testes foram feitos com normalização min-max dos dados, para que se e
 
 Como teste da acurácia dos modelos foi usada a métrica R-quadrado. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
 
-\bigskip
 
-\begin{center}
-$R_2 = 1 - \frac{SS_{res}}{SS_{tot}}$\\
+\[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
 
-$SS_{tot} = \sum (y - \hat{y})^2$
+\[SS_{tot} = \sum (y - \hat{y})^2\]
 
-$SS_{res} = \sum (y - \bar{y})^2$
+\[SS_{res} = \sum (y - \bar{y})^2\]
 
-$  \bar{y} = \frac{1}{n} \sum y$
-\end{center}
-\bigskip
+\[ \bar{y} = \frac{1}{n} \sum y\]
 
-%\justify
+% \justify
 Para essa métrica, o modelo pode performar arbitrariamente mal, com esse valor podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1, indicando um modelo ideal.\\
 
 \bigskip
@@ -60,16 +56,19 @@ Estudando os dados vemos que ouve um aumento repentino dos índices de dureza a 
 Segue um plot da nova divisão dos dados entre treino/teste e validação para os índices que estamos tentando modelar:
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{dataset_splitRC3.png}
 \caption{Divisão do dataset para a saída RC3}
 \end{figure}
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{dataset_splitRC7.png}
 \caption{Divisão do dataset para a saída RC7}
 \end{figure}
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{dataset_splitRC28.png}
 \caption{Divisão do dataset para a saída RC28}
 \end{figure}
@@ -82,16 +81,19 @@ Finalmente, seguem plots dos novos resultados, esses sendo reproduzidos apenas p
 Primeiro, os modelos considerando os dados como não-sequenciais:
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{farinha_2008-2012-2014RC3.png}
 \caption{Comparação dos 3 modelos não-sequenciais na tarefa de regressão do índice RC3}
 \end{figure}
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{farinha_2008-2012-2014RC7.png}
 \caption{Comparação dos 3 modelos não-sequenciais na tarefa de regressão do índice RC7}
 \end{figure}
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{farinha_2008-2012-2014RC28.png}
 \caption{Comparação dos 3 modelos não-sequenciais na tarefa de regressão do índice RC28}
 \end{figure}
@@ -101,6 +103,7 @@ Agora, a performance da Rede Neural usando a técnica de Monte Carlo Dropout par
 
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=1\columnwidth]{NNMCDP_2012-2014RC28.png}
 \caption{Performance do modelo Rede Neural + MC Dropout para o índice RC28}
 \end{figure}
@@ -112,6 +115,7 @@ Finalmente, temos o modelo de Rede Neural Recorrente, um modelo sequencial:
 
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=0.9\columnwidth]{RNN_2012-2014RC28.png}
 \caption{Performance do modelo RNN para o índice RC28}
 \end{figure}
@@ -121,3 +125,7 @@ Finalmente, temos o modelo de Rede Neural Recorrente, um modelo sequencial:
 
 Dos resultados obtidos podemos perceber que a acurácia dos modelos aumenta sensivalmente para o índice RC28, isso se dá pelo fato que essa é uma medida na qual naturalmente está envolvido menos ruído e incerteza que as outras duas. Analisando os valores da métrica R2, os melhores modelos atingiram valores próximos de $0$.
 
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../quali"
+%%% End:
