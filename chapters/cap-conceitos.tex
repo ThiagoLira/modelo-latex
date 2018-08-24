@@ -71,10 +71,10 @@ Será experimentado um modelo sequencial e um modelo não-sequencial que se arme
 Uma maneira de implementar uma Rede Neural Bayesiana é usar a técnica Monte Carlo Dropout. Dessa maneira aproximando uma rede neural comum a um processo estocástico sem muitas mudanças no seu código. Usaremos o MC Dropout em uma rede neural clássica (não-sequencial) e em uma RNN (sequencial) para ver como o calculo dessa incerteza auxilia no domínio do problema.
 
 \subsection{Modelo Sequencial}
-Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando um desses modelos. O modelo selecionado é de uma classe de modelos que se chamam Redes Neurais Recorrentes, ilustrado a seguir:
+Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
 \\
 
-
+\subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
 
 Como podemos ver na imagem, a entrada $x$, ao lado do estado interno $W$, são usados para gerar uma predição. Essa por sua vez é comparada com o nosso dado real para que se calcule um erro. O estado $W$ é calculado em cada iteração e usado no cálculo da próxima predição. De modo que esse estado é capaz de transmitir temporalmente ao longo do treinamento informações de dados anteriores.
@@ -93,16 +93,30 @@ Essa imagem mostra exatamente o mesmo modelo da imagem anterior, porém, agora v
 Como já explicado anteriormente, nossos dados de entrada e saída não estão necessariamente pareados perfeitamente dia a dia. Portanto, foi necessário achar intervalos de tempo nos dados onde existe esse pareamento. Isso reduz drasticamente quais períodos representados nos dados realmente podem ser usados para treinar um desses modelos.
 
 
-
-\subsection{Modelo não-sequencial}
-
-
-
-Iremos comparar os resultados da RNN com diveros modelos estáticos, ou seja, que não tem a capacidade de modelar nenhuma característica temporal dos nossos dados. Assim como no caso das RNNs, esses modelos funcionam pelo pareamento de entradas e saídas. Porém, nesses modelos, a saída depende unicamente de sua entrada correspondente, o modelo não transmite um estado interno ao longo do treinamento.
-
-
+\section{Outros Modelos} 
 
 \subsubsection{Redes Neurais}
+
+
+Redes neurais são aproximadores universais de funções. Se tivermos um problema
+de classificação onde queremos aprender uma função da forma $y = f^*(x)$, uma
+Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
+parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
+
+O modelo é uma composição de transformações lineares e não-lineares da forma: \\
+
+\[ f(x)=  \sigma(W*x + b) \]
+
+Onde sigma é alguma função não-linear como a função sigmóide. A computação da
+saída de uma rede neural então pode ser escrita como:
+
+\[   y = f_n \circ f_{n-1} \dots f_1(x)  \]
+
+Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
+$f_i$ cujos parâmetros são $W$ e $b$.
+
+\[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
+
 
 
 
@@ -110,10 +124,7 @@ Iremos comparar os resultados da RNN com diveros modelos estáticos, ou seja, qu
 É interessante notar que uma rede neural é equivalente a realizar uma regressão logística por neurônio. Sendo que uma rede neural com apenas um neurônio é uma regressão logística dos dados. A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
 
 
-
-
 %\input{tiks/NN.tex}
-
 
 
 Na imagem mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
@@ -125,27 +136,12 @@ Os modelos são também comparados com uma regressão linear. Que usa estimaçã
 
 \subsubsection{Random Forest}
 
-Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} são uma técnica no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
+Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
 
-%% ------------------------------------------------------------------------- %%
-\section{Algumas Referências}
-\label{sec:algumas_referencias}
 
-É muito recomendável a utilização de arquivos \emph{bibtex} para o gerenciamento
-de referências a trabalhos. Nesse sentido existem três plataformas gratuitas
-que permitem a busca de referências acadêmicas em formato bib: 
-\begin{itemize}
-	\item \emph{CiteULike} (patrocinados por Springer): \url{www.citeulike.org}
-	\item Coleção de bibliografia em Ciência da Computação: \url{liinwww.ira.uka.de/bibliography}
-	\item Google acadêmico (habilitar bibtex nas preferências): \url{scholar.google.com.br}
-\end{itemize}
-Lamentavelmente, ainda não existe um mecanismo de verificação ou validação das
-informações nessas plataformas. Portanto, é fortemente sugerido validar todas
-as informações de tal forma que as entradas bib estejam corretas.  Também, tome
-muito cuidado na padronização das referências bibliográficas: ou considere TODOS
-os nomes dos autores por extenso, ou TODOS os nomes dos autores abreviados.
-Evite misturas inapropriadas.
-
-Exemplos de referências com a tag:
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../quali"
+%%% End:
