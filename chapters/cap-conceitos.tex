@@ -28,13 +28,43 @@ E no campo de ML, as duas maneiras de se gerar predições são estimadores freq
 \subsection{Estimação por Log-verossimilhança}
 
 Um exemplo de estimação frequentista que será usada nesse trabalho é a de log-verossimilhança. 
-Ela segue o princípio de maximizar a verossimilhança dada uma amostra de dados. Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
+Ela segue o princípio de maximizar a verossimilhança (i.e. a probabilidade de
+termos observado $X$ dados os parâmetros $p(X | \theta)$). Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
 
-\[ \theta = \argmax_{\theta} p_{modelo}(X,\theta) \] 
+\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(X,\theta) \] 
 
 Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos temos: \\
 
-\[ \theta = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)},\theta) \]
+\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)},\theta) \]
+
+Maximizar a equação anterior é equivalente a minimizar a entropia-cruzada entre
+nossas anotações reais $y$ e as predições feitas pelo modelo $\hat{y}$
+\citep{dlbook}. \\
+
+A entropia de uma variável aleatória $X$ cuja função densidade
+de probabilidade seja $p(x)$ pode ser calculada por: \\
+
+\[ H(X)  = - \sum p(x_i)*\log p(x_i) \]
+
+Ou ainda:
+
+\[H(X) = - \mathop{\mathbb{E}}_p[\log p(X)] \]
+
+Com o operador $\mathop{\mathbb{E}}_p[X]$ representando o valor esperado da
+variável aleatória $X$ na distribuição $p$. \\
+
+Sejam $p,p_{modelo}$ duas funções de distribuição de probabilidade. A entropia-cruzada de $p_{modelo}$ em $p$ é definida pelo valor
+esperado da entropia de $p_{modelo}$ na distribuição $p$: \\
+
+\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x)] \]
+
+Se a distribuição $p_{modelo}$ for parametrizada pelo vetor $\theta$, a equação
+acima toma a forma: \\
+
+
+\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x | \theta)] \]
+
+Que é equivalente a equação da log-verossimilhança.  
 
 
 \subsection{Inferência Bayesiana em Machine Learning}
@@ -50,72 +80,19 @@ Finalmente, para realizar uma inferência devemos integrar por toda a distribui�
 Essa integral é geralmente intratável \citep{bayesml}, e portanto será usado uma técnica que aproxima uma inferência Bayesiana em redes neurais, o MC Dropout \citep{dropbayes}.
 
 %% ------------------------------------------------------------------------- %%
-\section{Escolha de Modelos}
 
 \subsection{Temporalidade dos Dados}
 
-Pela análise realizada na sessão anterior, podemos concluir que os dados não possuem nenhuma sazonalidade. O problema a ser resolvido para a modelagem desses dados é um problema de aprendizado supervisionado de regressão, e como explicado no início desse documento, devemos fornecer exemplos de entrada e saida para que possivelmente algum modelo aprenda um conjunto de fatores $\theta$ que consigam gerar com alguma acurária novas predições. É importante então sabermos que tipo de informação é útil para darmos como entrada para o modelo. No exemplo da predição de consumo de energia elétrica sabemos que é util para o modelo, além da entrada, ele também receber a \textbf{data} da mesma, pois como foi explicado, esses dados possuem sazonalidade anual. Para os dados de cimento já chegamos a conclusão que a data de uma medida é irrelevante. Porém não descartamos a possibilidade de medidas próximas temporalmente influenciarem uma mesma saída.
+Em um problema canônico de aprendizado supervisionado gostariamos de aprender
+uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
+dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
 
-Em um problema simples de aprendizado supervisionado gostariamos de aprender uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função dependa apenas de $x^*$ para que se gere uma predição. Para os dados em questão pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
-
-Ou seja, nossos dados podem ter sido gerados por uma distribuição de probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas T entradas. Para resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos sequenciais}. 
+Ou seja, nossos dados podem ter sido gerados por uma distribuição de probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos sequenciais}. 
 
 Iremos então experimentar com modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
 
 
-
-\subsection{Inferência Bayesiana}
-
-Será experimentado um modelo sequencial e um modelo não-sequencial que se armem de avanços recentes na área de Machine Learning para que os mesmos possam calcular probabilidades posteriores usando a lei de Bayes. Tais modelos usam uma filosofia diferente para o cálculo de suas predições, estas não sendo mais fruto de maximizar uma verossimilhança ou uma estimativa pontual (achar um conjunto de parâmetros $\theta$ que minimizem alguma métrica de erro). As chamadas Redes Neurais Bayesianas consideram seus parâmetros como distribuições de probabilidade, o que torna cada predição uma ação estocástica, permitindo que sejam calculadas variâncias para cada predição, podendo assim o engenheiro de dados calcular a incerteza do problema.
-
-Uma maneira de implementar uma Rede Neural Bayesiana é usar a técnica Monte Carlo Dropout. Dessa maneira aproximando uma rede neural comum a um processo estocástico sem muitas mudanças no seu código. Usaremos o MC Dropout em uma rede neural clássica (não-sequencial) e em uma RNN (sequencial) para ver como o calculo dessa incerteza auxilia no domínio do problema.
-
-\subsection{Modelo Sequencial}
-Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
-\\
-
-\subsection{Rede Neural Recorrente}
-% \input{tiks/RNNSimplified.tex}
-
-A família das Redes Neurais Recorrentes é composta por modelos especializados
-em processar dados sequenciais, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
-\textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
-sequência o estado da rede seja de certo modo propagado temporalmente. A equação
-a seguir ilustra como seria uma função com recorrência: \\
-
-\[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
-
-Nessa equação vemos que o vetor $h$ na iteração $t$ tem seu valor dependente
-desse mesmo vetor na última iteração. RNNs aprendem a usar esse vetores com
-essas propriedades como
-\say{resumos} das iterações passadas, e usam-nos ao lado da entrada e dos
-parâmetros para o cálculo da saída em cada iteração.
-
-\subsubsection{LSTM}
-
-LSTMs são um tipo de RNN que por meio de sua arquitetura permitem que sequências
-maiores sejam processadas sem que o fluxo dos gradientes pela rede se torne
-problemático. 
-
-
-
-Como podemos ver na imagem, a entrada $x$, ao lado do estado interno $W$, são usados para gerar uma predição. Essa por sua vez é comparada com o nosso dado real para que se calcule um erro. O estado $W$ é calculado em cada iteração e usado no cálculo da próxima predição. De modo que esse estado é capaz de transmitir temporalmente ao longo do treinamento informações de dados anteriores.
-\\
-
-Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots ) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo dessa natureza busca resolver um problema de classifição, onde a próxima palavra a ser prevista pelo modelo é uma entre todas as possibilidades de um certo vocabulário. No caso do domínio em questão desejamamos resolver um problema de regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos, precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo de entrada tem um exemplo pareado de saída. Basicamente redes neurais recorrentes funcionam recebendo um exemplo de entrada, criando uma representação interna com o mesmo e então gerando uma saída e comparando essa saída com o exemplo de saída real, gerando um erro. Finalmente, esse erro é propagado para alterar seus parâmetros (com o fim de achar um conjunto de parâmetros que gere boas previsões). Podemos vizualizar esse modelo também ao longo do tempo na imagem a seguir:
-
-
-% \input{tiks/RRNSimplifiedUnrolled.tex}
-
-
-Essa imagem mostra exatamente o mesmo modelo da imagem anterior, porém, agora visualizamos o modelo a cada iteração temporal. O estado W é usado como entrada juntamente com o proximo $x_i$ para uma nova iteração.
-
-\bigskip
-
-Como já explicado anteriormente, nossos dados de entrada e saída não estão necessariamente pareados perfeitamente dia a dia. Portanto, foi necessário achar intervalos de tempo nos dados onde existe esse pareamento. Isso reduz drasticamente quais períodos representados nos dados realmente podem ser usados para treinar um desses modelos.
-
-
-\section{Outros Modelos} 
+\section{Modelos Usados} 
 
 \subsubsection{Redes Neurais}
 
@@ -167,9 +144,69 @@ Os modelos são também comparados com uma regressão linear. Que usa estimaçã
 Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
+\subsection{Modelo Sequencial}
+Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
+\\
+
+\subsection{Rede Neural Recorrente}
+% \input{tiks/RNNSimplified.tex}
+
+A família das Redes Neurais Recorrentes é composta por modelos especializados
+em processar dados sequenciais, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
+\textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
+sequência o estado da rede seja de certo modo propagado temporalmente. A equação
+a seguir ilustra como seria uma função com recorrência: \\
+
+\[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
+
+Nessa equação vemos que o vetor $h$ na iteração $t$ tem seu valor dependente
+desse mesmo vetor na última iteração. RNNs aprendem a usar esse vetores com
+essas propriedades como
+\say{resumos} das iterações passadas, e usam-nos ao lado da entrada e dos
+parâmetros para o cálculo da saída em cada iteração.
+
+Como podemos ver na imagem, a entrada $x$, ao lado do estado interno $W$, são usados para gerar uma predição. Essa por sua vez é comparada com o nosso dado real para que se calcule um erro. O estado $W$ é calculado em cada iteração e usado no cálculo da próxima predição. De modo que esse estado é capaz de transmitir temporalmente ao longo do treinamento informações de dados anteriores.
+\\
+
+Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots ) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo dessa natureza busca resolver um problema de classifição, onde a próxima palavra a ser prevista pelo modelo é uma entre todas as possibilidades de um certo vocabulário. No caso do domínio em questão desejamamos resolver um problema de regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos, precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo de entrada tem um exemplo pareado de saída. Basicamente redes neurais recorrentes funcionam recebendo um exemplo de entrada, criando uma representação interna com o mesmo e então gerando uma saída e comparando essa saída com o exemplo de saída real, gerando um erro. Finalmente, esse erro é propagado para alterar seus parâmetros (com o fim de achar um conjunto de parâmetros que gere boas previsões). Podemos vizualizar esse modelo também ao longo do tempo na imagem a seguir:
+
+
+% \input{tiks/RRNSimplifiedUnrolled.tex}
+
+
+Essa imagem mostra exatamente o mesmo modelo da imagem anterior, porém, agora visualizamos o modelo a cada iteração temporal. O estado W é usado como entrada juntamente com o proximo $x_i$ para uma nova iteração.
+
+\bigskip
+
+Como já explicado anteriormente, nossos dados de entrada e saída não estão necessariamente pareados perfeitamente dia a dia. Portanto, foi necessário achar intervalos de tempo nos dados onde existe esse pareamento. Isso reduz drasticamente quais períodos representados nos dados realmente podem ser usados para treinar um desses modelos.
+
+
+\subsubsection{LSTM}
+
+LSTMs são um tipo de RNN que por meio de sua arquitetura permitem que sequências
+maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
+numericamente problemático (i.e. tendendo a 0 ou a infinito).
+
+O diagrama a seguir ilustra o fluxo dos sinais dentro de uma célula de LSTM: \\
+
+\begin{center}
+\input{chapters/lstm.tex}
+\end{center}
+
+As equações que regem o funcionamento da LSTM na iteração temporal $t$ são: \\
+
+
+\[f_t = \sigma_g(W_fx_t + U_fh_{t-1} + b_f)\]
+\[i_t = \sigma_g(W_ix_t + U_ih_{t-1} + b_i)\]
+\[o_t = \sigma_g(W_ox_t + U_oh_{t-1} + b_o)\]
+\[c_t = f_t \circ + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
+\[h_t = o_t \circ \sigma_h(c_t)\]
+
+
 
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../quali"
+%%% bibtex-file-path: "../bibliografia"
 %%% End:
