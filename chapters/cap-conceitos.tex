@@ -31,11 +31,11 @@ Um exemplo de estimação frequentista que será usada nesse trabalho é a de lo
 Ela segue o princípio de maximizar a verossimilhança (i.e. a probabilidade de
 termos observado $X$ dados os parâmetros $p(X | \theta)$). Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
 
-\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(X,\theta) \] 
+\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(X;\theta) \] 
 
 Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos temos: \\
 
-\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)},\theta) \]
+\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)};\theta) \]
 
 Maximizar a equação anterior é equivalente a minimizar a entropia-cruzada entre
 nossas anotações reais $y$ e as predições feitas pelo modelo $\hat{y}$
@@ -62,7 +62,7 @@ Se a distribuição $p_{modelo}$ for parametrizada pelo vetor $\theta$, a equaç
 acima toma a forma: \\
 
 
-\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x | \theta)] \]
+\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x ; \theta)] \]
 
 Que é equivalente a equação da log-verossimilhança.  
 
