@@ -21,12 +21,12 @@ Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo 
 
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML, cabe então uma breve elaboração das diferenças entre os dois grandes \textit{aproacches} da estatística.\\
 
-Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probailidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
 E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
 \subsection{Estimação por Log-verossimilhança}
-
+ 
 Um exemplo de estimação frequentista que será usada nesse trabalho é a de log-verossimilhança. 
 Ela segue o princípio de maximizar a verossimilhança (i.e. a probabilidade de
 termos observado $X$ dados os parâmetros $p(X | \theta)$). Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
@@ -71,7 +71,11 @@ nesse trabalho.
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
-O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas. Em uma análise frequentista estima-se um valor de $\theta$ e então todas as predições são feitas a partir desse valor. No caso Baysiano se consideram todos os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar um grau de certeza \textbf{anterior} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal $p(X,Y | \theta)$, a chamada verossimilhança. 
+O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas.
+Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
+predições são feitas a partir desse valor. No caso Baysiano se consideram todos
+os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
+um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal $p(X,Y | \theta)$, a chamada verossimilhança. 
 
 \[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(X)}   \]
 
@@ -87,7 +91,7 @@ Dropout \citep{dropbayes}. \\
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
 probabilidade $p$. Pode-se demonstrar que isso é equivalente a considerar os
-parâmetros $W$ com uma distribuição anterior $W \sim \mathcal{N}(0,\,I)$. Se realizam então $B$ computações estocásticas de uma mesma
+parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,I)$. Se realizam então $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
   dessa medida é calculada então pela variância amostral de $Y^*$.
 
