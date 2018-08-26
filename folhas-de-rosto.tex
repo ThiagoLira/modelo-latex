@@ -38,10 +38,11 @@
 
 % A definição deste ambiente está no pacote imeusp; se você não
 % carregar esse pacote, precisa cuidar desta página manualmente.
-\begin{dedicatoria}
-Esta seção é opcional e fica numa página separada; ela pode ser usada para
-uma dedicatória ou epígrafe.
-\end{dedicatoria}
+
+% \begin{dedicatoria}
+% Esta seção é opcional e fica numa página separada; ela pode ser usada para
+% uma dedicatória ou epígrafe.
+% \end{dedicatoria}
 
 % Após a capa e as páginas de rosto, começamos a numerar as páginas; com isso,
 % podemos também reabilitar links para números de páginas no pacote hyperref.
@@ -56,13 +57,14 @@ uma dedicatória ou epígrafe.
 % esta página. A epígrafe, obviamente, é opcional; é possível colocar
 % epígrafes em todos os capítulos. O comando "\chapter*" faz esta seção
 % não ser incluída no sumário.
-\chapter*{Agradecimentos}
-\epigrafe{Do. Or do not. There is no try.}{Mestre Yoda}
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto. Texto opcional.
+% \chapter*{Agradecimentos}
+% \epigrafe{Do. Or do not. There is no try.}{Mestre Yoda}
+% 
+% Texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto. Texto opcional.
 
 % O resumo é obrigatório, em português e inglês. Este comando também gera
 % automaticamente a referência para o próprio documento, conforme as normas
@@ -128,7 +130,7 @@ text text text.
 %\chapter*{Lista de Símbolos}
 {\let\cleardoublepage\relax \addvspace{55pt plus 15pt minus 15pt} \chapter*{Lista de Símbolos} }
 \begin{tabular}{rl}
-        $\theta$    & Conjunto de Parâmetros de algum modelo Estatístico\\
+        $\theta$    & Vetor de parâmetros de algum modelo Estatístico\\
         $\mathcal{N}(\mu,\,\sigma^{2})$      & Distribuição Normal com média $\mu$  e desvio-padrão $\sigma$\\
         $\Psi$      & Transformada de Fourier de $\psi$\\
 \end{tabular}

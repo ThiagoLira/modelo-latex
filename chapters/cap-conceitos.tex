@@ -56,15 +56,17 @@ variável aleatória $X$ na distribuição $p$. \\
 Sejam $p,p_{modelo}$ duas funções de distribuição de probabilidade. A entropia-cruzada de $p_{modelo}$ em $p$ é definida pelo valor
 esperado da entropia de $p_{modelo}$ na distribuição $p$: \\
 
-\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x)] \]
+\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x)] \]
 
 Se a distribuição $p_{modelo}$ for parametrizada pelo vetor $\theta$, a equação
 acima toma a forma: \\
 
 
-\[H(p,q) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x ; \theta)] \]
+\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x ; \theta)] \]
 
-Que é equivalente a equação da log-verossimilhança.  
+Minimizar essa equação é equivalente a maximizar a equação da
+log-verossimilhança. Esse será o objetivo (função de custo) dos modelos de rede neural usados
+nesse trabalho.  
 
 
 \subsection{Inferência Bayesiana em Machine Learning}
@@ -77,7 +79,17 @@ Finalmente, para realizar uma inferência devemos integrar por toda a distribui�
 
 \[ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta \]
 
-Essa integral é geralmente intratável \citep{bayesml}, e portanto será usado uma técnica que aproxima uma inferência Bayesiana em redes neurais, o MC Dropout \citep{dropbayes}.
+Essa integral é geralmente intratável pela dificuldade de se calcular
+analiticamente $p(\theta | X,Y)$ \citep{ubertime}, e portanto será usada uma
+técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
+Dropout \citep{dropbayes}. \\
+
+O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
+neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
+probabilidade $p$. Pode-se demonstrar que isso é equivalente a considerar os
+parâmetros $W$ com uma distribuição anterior $W \sim \mathcal{N}(0,\,I)$. Se realizam então $B$ computações estocásticas de uma mesma
+saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
+  dessa medida é calculada então pela variância amostral de $Y^*$.
 
 %% ------------------------------------------------------------------------- %%
 
