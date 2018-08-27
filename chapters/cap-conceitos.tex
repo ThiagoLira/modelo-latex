@@ -171,17 +171,26 @@ A família das Redes Neurais Recorrentes é composta por modelos especializados
 em processar dados sequenciais, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
 \textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
 sequência o estado da rede seja de certo modo propagado temporalmente. A equação
-a seguir ilustra como seria uma função com recorrência: \\
+a seguir ilustra uma função com recorrência: \\
 
 \[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
 
-Nessa equação vemos que o vetor $h$ na iteração $t$ tem seu valor dependente
-desse mesmo vetor na última iteração. RNNs aprendem a usar esse vetores com
-essas propriedades como
-\say{resumos} das iterações passadas, e usam-nos ao lado da entrada e dos
-parâmetros para o cálculo da saída em cada iteração.
+Nessa equação notamos que na iteração $t$ o valor do vetor $h$ depende de
+$h_{t-1}$.RNNs aprendem a usar esse vetores como esse como
+\say{resumos} das iterações passadas. Desse modo , o modelo ganha a capacidade
+de quase arbitrariamente usar informações passadas da sequência para o calculo
+de uma saída. 
 
-Como podemos ver na imagem, a entrada $x$, ao lado do estado interno $W$, são usados para gerar uma predição. Essa por sua vez é comparada com o nosso dado real para que se calcule um erro. O estado $W$ é calculado em cada iteração e usado no cálculo da próxima predição. De modo que esse estado é capaz de transmitir temporalmente ao longo do treinamento informações de dados anteriores.
+%%%
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\columnwidth]{rnn.png}
+\caption{Grafo de Computação de uma RNN genérica \citep{dlbook}}
+\end{figure}
+%%%
+
+Como podemos ver na grafo de computação, a entrada $x$, ao lado do estado
+interno $h$, são usados para calcular um novo estado. 
 \\
 
 Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots ) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo dessa natureza busca resolver um problema de classifição, onde a próxima palavra a ser prevista pelo modelo é uma entre todas as possibilidades de um certo vocabulário. No caso do domínio em questão desejamamos resolver um problema de regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos, precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo de entrada tem um exemplo pareado de saída. Basicamente redes neurais recorrentes funcionam recebendo um exemplo de entrada, criando uma representação interna com o mesmo e então gerando uma saída e comparando essa saída com o exemplo de saída real, gerando um erro. Finalmente, esse erro é propagado para alterar seus parâmetros (com o fim de achar um conjunto de parâmetros que gere boas previsões). Podemos vizualizar esse modelo também ao longo do tempo na imagem a seguir:
