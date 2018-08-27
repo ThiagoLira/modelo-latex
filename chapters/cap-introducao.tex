@@ -32,7 +32,7 @@ Nessa sessão será feito um breve resumo da produção de cimento, usando como 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\columnwidth]{cimento.png}
-\caption{Representação das Diversas Etapas da produção de Cimento \\ Imagem retirada de \citet{cementroadmap}}
+\caption{Representação das Diversas Etapas da produção de Cimento \citep{cementroadmap}}
 \end{figure}
 
 
@@ -40,14 +40,14 @@ As etapas de produção serão explicadas por número como indicado na imagem: \
 
 \begin{itemize}
 
-\item[] 1) Depósitos ricos em $CaCO_3$ são mineirados para extração desse químico. Normalmente a planta é próxima da mina.
-\item[] 2) O material extraido é triturado em pedaços de até 10cm. Diferentes materiais são misturados ao resultado da tritura, de modo a manter a composição química desejada. 
-\item[] 3) A farinha crua é pré-aquecida para que depois no forno as reações químicas aconteçam mais rápido. 
-\item[] 4) O cálcio é transformado em cao por meio de reações químicas.  
-\item[] 5) O material é introduzido ao forno, atingindo temperaturas de até $1450^\circ$C, transformando a farinha em clínquer. O clínquer é resfriado após a saída do forno. 
-\item[] 6) O clínquer então é misturado com outros componentes que formam o cimento.
-\item[] 7) A mistura é então moída.
-\item[] 8) O material é empacotado, estocado e eventualmente expedido para entrega.
+\item[1] Depósitos ricos em $CaCO_3$ são mineirados para extração desse químico. Normalmente a planta é próxima da mina.
+\item[2] O material extraido é triturado em pedaços de até 10cm. Diferentes materiais são misturados ao resultado da tritura, de modo a manter a composição química desejada. 
+\item[3] A farinha crua é pré-aquecida para que depois no forno as reações químicas aconteçam mais rápido. 
+\item[4] O cálcio é transformado em cao por meio de reações químicas.  
+\item[5] O material é introduzido ao forno, atingindo temperaturas de até $1450^\circ$C, transformando a farinha em clínquer. O clínquer é resfriado após a saída do forno. 
+\item[6] O clínquer então é misturado com outros componentes que formam o cimento.
+\item[7] A mistura é então moída.
+\item[8] O material é empacotado, estocado e eventualmente expedido para entrega.
 
 \end{itemize}
 
@@ -56,17 +56,21 @@ As etapas de produção serão explicadas por número como indicado na imagem: \
 \section{Objetivos}
 \label{sec:objetivo}
 
-Esse trabalho tenta ir além de publicações recentes como \citet{cementnn1}, \citet{cementnn2} e \citet{cementml} usando métodos de DL que recentemente tem chamado atenção não só em NLP e Visão Computacional, como em tarefas de regressão dos mais diversos domínios (\cite{ubertime} \cite{lstmbr} \cite{energylstm}). 
+Esse trabalho tenta ir além de publicações recentes como \citet{cementnn1},
+\citet{cementnn2} e \citet{cementml} usando métodos de DL que tem
+obtido excelentes resultados em tarefas de
+regressão com dados sequenciais. Esse trabalho irá reproduzir modelos
+apresentados e usados em \cite{ubertime}, \cite{lstmbr} e \cite{energylstm}), onde
+técnicas de DL são usadas para modelagem de dados de demanda de carros e de energia elétrica. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:conceitos}, apresentamos os conceitos ... Finalmente, no
-Capítulo~\ref{cap:conclusoes} discutimos algumas conclusões obtidas neste
-trabalho. Analisamos as vantagens e desvantagens do método proposto ... 
+No Capítulo~\ref{cap:conceitos}, apresentamos os conceitos de Aprendizado de
+Máquina, estatística frequentista e bayesiana, além de uma breve explicação
+de cada modelo usado. 
 
-As sequências testadas no trabalho estão disponíveis no Apêndice \ref{ape:sequencias}.
 
 
 %%% Local Variables:

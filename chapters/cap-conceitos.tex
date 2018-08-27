@@ -68,6 +68,21 @@ Minimizar essa equação é equivalente a maximizar a equação da
 log-verossimilhança. Esse será o objetivo (função de custo) dos modelos de rede neural usados
 nesse trabalho.  
 
+\subsection{Métrica R-quadrado}
+Como teste da acurácia dos modelos foi usada a métrica R-quadrado. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
+
+\[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
+
+\[SS_{tot} = \sum (y - \hat{y})^2\]
+
+\[SS_{res} = \sum (y - \bar{y})^2\]
+
+\[ \bar{y} = \frac{1}{n} \sum y\]
+
+% \justify
+Para essa métrica, o modelo pode performar arbitrariamente mal, com esse valor
+podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
+indicando um modelo ideal.\\
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
@@ -87,6 +102,8 @@ Essa integral é geralmente intratável pela dificuldade de se calcular
 analiticamente $p(\theta | X,Y)$ \citep{ubertime}, e portanto será usada uma
 técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
 Dropout \citep{dropbayes}. \\
+
+%\input{chapters/dropout.tex}
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
@@ -113,7 +130,7 @@ Iremos então experimentar com modelos sequenciais e não-sequencias para testar
 \subsubsection{Redes Neurais}
 
 
-Redes neurais são aproximadores universais de funções. Se tivermos um problema
+Redes neurais são aproximadores universais de funções \citep{nnuni}. Se tivermos um problema
 de classificação onde queremos aprender uma função da forma $y = f^*(x)$, uma
 Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
 parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
@@ -208,7 +225,7 @@ Como já explicado anteriormente, nossos dados de entrada e saída não estão n
 
 \subsubsection{LSTM}
 
-LSTMs são um tipo de RNN que por meio de sua arquitetura permitem que sequências
+LSTMs \citep{lstm} são um tipo de RNN que por meio de sua arquitetura permitem que sequências
 maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
 numericamente problemático (i.e. tendendo a 0 ou a infinito).
 
@@ -227,6 +244,45 @@ As equações que regem o funcionamento da LSTM na iteração temporal $t$ são:
 \[c_t = f_t \circ + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
 \[h_t = o_t \circ \sigma_h(c_t)\]
 
+
+\subsubsection{Rede Encoder-Decoder}
+
+Redes Encoder-Decoder são usadas para modelagem de sequência para
+sequência, ou seja, para receber dados sequênciais como entrada e gerar
+sequências como saída. Esses modelos possuem duas partes, ambas compostas por
+RNNs. \\
+
+\begin{figure}[H]
+\centering
+\input{chapters/encdec.tex}
+\caption{ Diagrama de Rede Encoder-Decoder.\\ Retirado de \cite{encdec}}
+
+\end{figure}
+  
+O \textbf{encoder} é uma RNN que busca receber uma sequência de entrada de
+tamanho arbitrário e gerar uma representação como saída, o seu estado interno,
+representando em marrom no diagrama acima. O \textbf{decoder} então recebe essa representação interna (também chamada
+de \textit{embedding}) e usa-a para gerar saídas sequencialmente, podendo
+então gerar essas sequências de duas formas: O decoder pode usar as suas proprias saídas
+como entrada para gerar a saída da próxima iteração temporal, ou então usar dados de treinamento como
+entradas, essa última forma chamada de \textit{teacher forcing}. 
+
+
+
+
+\subsubsection{Modelo Encoder-Decoder-Forecaster}
+
+Iremos reproduzir nesse trabalho o modelo proposto em \cite{ubertime}. A
+arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende embeddings da
+série temporal e então uma rede \textbf{forecaster} que usa esses embeddings ao lado de
+variáveis exógenas a série temporal para realizar predições.  
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\columnwidth]{uber.png}
+\caption{Arquitetura do modelo proposto por \cite{ubertime}}
+\end{figure}
 
 
 

@@ -70,39 +70,22 @@
 % automaticamente a referência para o próprio documento, conforme as normas
 % sugeridas da USP
 \begin{resumo}{port}
-Elemento obrigatório, constituído de uma sequência de frases concisas e
-objetivas, em forma de texto.  Deve apresentar os objetivos, métodos empregados,
-resultados e conclusões.  O resumo deve ser redigido em parágrafo único, conter
-no máximo 500 palavras e ser seguido dos termos representativos do conteúdo do
-trabalho (palavras-chave). Deve ser precedido da referência do documento.
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto.
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto.
+Esse trabalho reproduz modelos de Deep Learning usados em problemas de
+regressão em dados sequenciais. Num primeiro momento esses modelos serão
+aplicados em um domínio que recentemente ganhou atenção de acadêmicos e Data
+Scientists: Produção de Cimento. Trabalhos recentes aplicando modelos
+estatísticos nessa área não usaram o estado-da-arte de modelos sequenciais para
+modelagem de séries temporais. Os dados foram cedidos pela multinacional
+Intercement e foram primeiro tratados e então usados para treinamento desses
+modelos. A performance é então comparada entre modelos clássicos como redes
+neurais e árvores de decisão e modelos sequenciais como LSTMs e modelos
+profundos Bayesianos. 
 \end{resumo}
 
 % O resumo é obrigatório, em português e inglês. Este comando também gera
 % automaticamente a referência para o próprio documento, conforme as normas
 % sugeridas da USP
 \begin{resumo}{eng}
-Elemento obrigatório, elaborado com as mesmas características do resumo em
-língua portuguesa. De acordo com o Regimento da Pós-Graduação da USP (Artigo
-99), deve ser redigido em inglês para fins de divulgação. É uma boa ideia usar
-o sítio \url{www.grammarly.com} na preparação de textos em inglês.
-Text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text.
-Text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text.
 \end{resumo}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% LISTAS DE FIGURAS ETC. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,7 +115,7 @@ text text text.
 \begin{tabular}{rl}
         $\theta$    & Vetor de parâmetros de algum modelo Estatístico\\
         $\mathcal{N}(\mu,\,\sigma^{2})$      & Distribuição Normal com média $\mu$  e desvio-padrão $\sigma$\\
-        $\Psi$      & Transformada de Fourier de $\psi$\\
+        $f(x ; \theta)$      & Função em $x$ parametrizada por $\theta$\\
 \end{tabular}
 
 % Listas criadas automaticamente
@@ -149,17 +132,17 @@ text text text.
 % pois o índice é opcional). É comum colocar esses itens no final do documento,
 % junto com o comando \printindex, mas em alguns casos isso torna necessário
 % executar texindy (ou makeindex) mais de uma vez, então colocar aqui é melhor.
-\index{Inglês|see{Língua estrangeira}}
-\index{Figuras|see{Floats}}
-\index{Tabelas|see{Floats}}
-\index{Código-fonte|see{Floats}}
-\index{Subcaptions|see{Subfiguras}}
-\index{Sublegendas|see{Subfiguras}}
-\index{Equações|see{Modo Matemático}}
-\index{Fórmulas|see{Modo Matemático}}
-\index{Rodapé, notas|see{Notas de rodapé}}
-\index{Captions|see{Legendas}}
-\index{Versão original|see{Tese/Dissertação, versões}}
-\index{Versão corrigida|see{Tese/Dissertação, versões}}
-\index{Palavras estrangeiras|see{Língua estrangeira}}
-\index{Floats!Algoritmo|see{Floats, Ordem}}
+% \index{Inglês|see{Língua estrangeira}}
+% \index{Figuras|see{Floats}}
+% \index{Tabelas|see{Floats}}
+% \index{Código-fonte|see{Floats}}
+% \index{Subcaptions|see{Subfiguras}}
+% \index{Sublegendas|see{Subfiguras}}
+% \index{Equações|see{Modo Matemático}}
+% \index{Fórmulas|see{Modo Matemático}}
+% \index{Rodapé, notas|see{Notas de rodapé}}
+% \index{Captions|see{Legendas}}
+% \index{Versão original|see{Tese/Dissertação, versões}}
+% \index{Versão corrigida|see{Tese/Dissertação, versões}}
+% \index{Palavras estrangeiras|see{Língua estrangeira}}
+% \index{Floats!Algoritmo|see{Floats, Ordem}}
