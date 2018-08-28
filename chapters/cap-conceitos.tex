@@ -11,7 +11,7 @@ Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionad
 
 \subsection{Aprendizado Supervisionado}
 
-Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores $x$ são fornecidas anotacoes $y$, e desejamos então criar predições de anotacoes $y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio da busca pelo conjunto de parânetros $\theta$ que minimizem o erro na família de distribuições $p(y | x,\theta)$.
+Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores $x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes $y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio da busca pelo conjunto de parânetros $\theta$ que minimizem o erro na família de distribuições $p(y | x,\theta)$.
 
 \subsection{Aprendizado Não Supervisionado}
 
@@ -68,21 +68,34 @@ Minimizar essa equação é equivalente a maximizar a equação da
 log-verossimilhança. Esse será o objetivo (função de custo) dos modelos de rede neural usados
 nesse trabalho.  
 
-\subsection{Métrica R-quadrado}
+\subsection{Métricas de Acurácia}
+
+\subsubsection{R-quadrado}
 Como teste da acurácia dos modelos foi usada a métrica R-quadrado. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
 
 \[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
 
-\[SS_{tot} = \sum (y - \hat{y})^2\]
+\[SS_{tot} = \sum^n_{i=1} (y_i- \hat{y_i})^2\]
 
-\[SS_{res} = \sum (y - \bar{y})^2\]
+\[SS_{res} = \sum^n_{i=1} (y_i - \bar{y})^2\]
 
-\[ \bar{y} = \frac{1}{n} \sum y\]
+\[ \bar{y} = \frac{1}{n} \sum^n_{i=1} y\]
 
 % \justify
 Para essa métrica, o modelo pode performar arbitrariamente mal, com esse valor
 podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
 indicando um modelo ideal.\\
+
+
+\subsubsection{MAE - Mean Absolute Error}
+
+O erro médio absoluto é uma medida de diferença entre duas variáveis contínuas
+X e Y. Ele é dado por: \\
+
+\[MAE = \sum^n_{i=1}\frac{\abs{x_i - y_i}}{n}\]
+
+Essa métrica é uma medida absoluta. E quanto maior esse valor pior o modelo está performando.
+
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
@@ -235,25 +248,32 @@ O diagrama a seguir ilustra o fluxo dos sinais dentro de uma célula de LSTM: \\
 \input{chapters/lstm.tex}
 \end{center}
 
-Uma rede LSTM possui 4 conjuntos de parâmetros internamente. O sinal
-$c_t$ está conectado diretamente na entrada e na saída da rede, e tem seu valor
-dependente de $i_t$ e $f_t$. Por meio do treinamento a rede pode aprender que
-tipo de informação é útil para ser propaga pela via $c_t$, aprendendo a
-\say{lembrar} e \say{esquecer} de acordo com o problema em questão.
-\\
 
-As equações que ditam o funcionamento da LSTM na iteração temporal $t$ são: \\
-
+Uma rede LSTM possui três \say{portas}. Cada porta possui duas matrizes $W,U$ e um
+vetor $b$ de parâmetros. Uma iteração da LSTM começa com o cálculo dos sinais
+$o_t,i_t,f_t$.\\
 
 \[f_t = \sigma_g(W_fx_t + U_fh_{t-1} + b_f)\]
 \[i_t = \sigma_g(W_ix_t + U_ih_{t-1} + b_i)\]
 \[o_t = \sigma_g(W_ox_t + U_oh_{t-1} + b_o)\]
 
+O diferencial de uma LSTM é a propagação do sinal $c_t$, a célula de memória.
+Esse valor depende de $f_t$ e $i_t$, que influenciam em como o valor da
+célula de memória será atualizado na presente iteração. A equação a seguir
+mostra como o valor da célula de memória é calculado. Onde $\circ$ é o produto Hadamard, ou apenas multiplição entrada por entrada de
+duas matrizes ou vetores. \\
 
-É nessa equação que a rede atualiza a sua célula de memória, apagando ou
-propagando alguma informação para a proxima iteração temporal. \\
+\[c_t = f_t \circ c_{t-1} + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
 
-\[c_t = f_t \circ + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
+Nota-se que $f_t$
+define quando de valor antigo da célula de memória deve participar no cálculo do
+seu novo valor. 
+Da mesma maneira $i_t$ define quanto da nova entrada deve ser usada no cálculo desse valor.
+Em outras palavras, as portas $i_t$ e $f_t$ definem o quanto a LSTM deve,
+respectivamente, \say{lembrar} e \say{esquecer}.
+
+
+O novo estado da LSTM é então calculado por: \\
 \[h_t = o_t \circ \sigma_h(c_t)\]
 
 
@@ -267,7 +287,7 @@ RNNs. \\
 \begin{figure}[H]
 \centering
 \input{chapters/encdec.tex}
-\caption{ Diagrama de Rede Encoder-Decoder.\\ Retirado de \cite{encdec}}
+\caption{ Diagrama de Rede Encoder-Decoder.\\ Modificado de \cite{encdec}}
 
 \end{figure}
   
@@ -277,7 +297,10 @@ representando em marrom no diagrama acima. O \textbf{decoder} então recebe essa
 de \textit{embedding}) e usa-a para gerar saídas sequencialmente, podendo
 então gerar essas sequências de duas formas: O decoder pode usar as suas proprias saídas
 como entrada para gerar a saída da próxima iteração temporal, ou então usar dados de treinamento como
-entradas, essa última forma chamada de \textit{teacher forcing}. 
+entradas, essa última forma chamada de \textit{teacher forcing}. No diagrama
+está indicado o embedding entre o decoder e o encoder. Esse embedding é apenas
+um vetor (cuja dimensão é um hiper-parâmetro de treinamento) que resume a
+informação sequencial lida pelo encoder e a transmite para o decoder. 
 
 
 
@@ -295,6 +318,27 @@ variáveis exógenas a série temporal para realizar predições.
 \includegraphics[width=0.9\columnwidth]{uber.png}
 \caption{Arquitetura do modelo proposto por \cite{ubertime}}
 \end{figure}
+
+
+Durante o pré-treinamento a rede encoder-decoder consome sequências de $F$ dias
+da série temporal. O encoder cria uma representação vetorial $h$ depois de
+receber como entrada os primeiros $T$ ($T < F$) dias da sequência. Então, $h$ é usado como
+inicialização do estado interno do decoder, e esse então consume mais $F - T$
+entradas da sequência. Para o decoder, se em uma iteração sua entrada é $X_i$,
+então sua saída será comparada com $X_{i+1}$, e esse erro é propagado após lidas
+todas as entradas para que a representação $h$ proveniente do encoder possa se
+tornar mais informativa.
+
+
+Esse modelo também possui outra característica importante. Todas as camadas da
+redes neurais que compõe o encoder, o decoder e o forecaster possuem
+Dropout com probabilidade $p$. Ou seja, podemos usar a técnica do Monte
+Carlo Dropout para estimar a variância de cada predição feita por esse modelo. \\
+
+
+
+
+
 
 
 
