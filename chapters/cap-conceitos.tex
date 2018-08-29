@@ -127,13 +127,13 @@ Dropout \citep{dropbayes}. \\
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
 probabilidade $p$. Pode-se demonstrar que isso é equivalente a considerar os
-parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,I)$. Se realizam então $B$ computações estocásticas de uma mesma
+parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,\sigma^2)$. Se realizam então $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
   dessa medida é calculada então pela variância amostral de $Y^*$.
 
 %% ------------------------------------------------------------------------- %%
 
-\subsection{Temporalidade dos Dados}
+\subsection{Sequencialidade dos Dados}
 
 Em um problema canônico de aprendizado supervisionado gostariamos de aprender
 uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
@@ -354,6 +354,8 @@ Esse modelo também possui outra característica importante. Todas as camadas da
 redes neurais que compõe o encoder, o decoder e o forecaster possuem
 Dropout com probabilidade $p$. Ou seja, podemos usar a técnica do Monte
 Carlo Dropout para estimar a variância de cada predição feita por esse modelo. \\
+
+
 
 
 
