@@ -21,7 +21,7 @@ Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muit
 A seguir vemos para todos os dataframes, para cada uma de suas colunas, quantos
 dias possuem dados faltantes. Para não poluir essa sessão do trabalho, iremos
 reproduzir apenas a tabela referente aos dados de expedição, com as demais
-tabelas estando presentes no Apêndice. \\
+tabelas estando presentes no Apêndice~\ref{ape:tables}. \\
 
 \captionof{table}{Dias com dados faltantes para cada parâmetro de Expedição}
 \begin{center}
@@ -59,7 +59,9 @@ CO2     &  3629
 
 
 \subsection{Resample dos dados}
-Para maior facilidade de manuseio dos dados. Foi necessário realizar um \textbf{resample}. Os dados foram modificados para que entradas realizadas no mesmo dia sejam unidas tirando por exemplo a sua média. E dias sem dados foram criados como placeholders para facilidade de vizualiação dos dados. A seguir são reproduzidas as contagens de dados após o resample.
+Para maior facilidade de manuseio dos dados foi necessário realizar um
+\textbf{resample}. Os dados foram modificados para que entradas realizadas no
+mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem dados foram criados como placeholders para facilidade de vizualiação dos dados. A seguir são reproduzidas as contagens de dados após o resample.
 
 
 \begin{itemize}
@@ -76,11 +78,21 @@ Para maior facilidade de manuseio dos dados. Foi necessário realizar um \textbf
 
 \section{Testes de Sazonalidade}
 
-Diversas publicações recentes estudam a eficácia de modelos de Deep Learning para predição de séries temporais, como consumo de energia elétrica \citep{lstmbr}. Os dados estudados nesse documento são séries temporais dado que são indexados pelo tempo, porém, resta analisar características temporais desses dados. No exemplo do consumo de energia elétrica, poderiamos notar que, ao longo de vários anos presentes nos dados, o consumo de energia de uma certa residência aumenta em determinado mês. Isso seria um fator útil que um modelo poderia aprender para a predição futura do consumo dessa residência. Dados que não possuem nenhuma característica temporal (i.e. a ordem não importa) seriam por exemplo provenientes de um estudo do salário recebido por uma amostra da população dados fatores como gênero, escolaridade e idade. No primeiro exemplo temos um caso de \textbf{sazonalidade} nos dados, algo que pode ser analisado em séries temporais com testes de análise espectral e auto-correlação. Para os dados desse problema, iremos testar a sazonalidade dos preditores de dureza do cimento.
+Diversas publicações recentes estudam a eficácia de modelos de Deep Learning
+para predição de séries temporais, como consumo de energia elétrica
+\citep{lstmbr}. Os dados estudados nesse documento são séries temporais dado que
+são indexados pelo tempo, porém, resta analisar características temporais desses
+dados. Como exemplo, \cite{lstmbr} usaram a informação do mês atual como
+parâmetro para prever o consume de energia elétrica. Dados que não possuem nenhuma característica temporal (i.e. a ordem não importa) seriam por exemplo provenientes de um estudo do salário recebido por uma amostra da população dados fatores como gênero, escolaridade e idade. No primeiro exemplo temos um caso de \textbf{sazonalidade} nos dados, algo que pode ser analisado em séries temporais com testes de análise espectral e auto-correlação. Para os dados desse problema, iremos testar a sazonalidade dos preditores de dureza do cimento.
 
 \subsection{Análise Espectral}
 
-Uma maneira de testar sazonalidade de dados indexados temporalmente é usar a técnica de Transformada de Fourier, onde podemos estudar quais frequencias dentro de um espectro podem ser usadas para decompor um sinal (i.e. nossos dados). Para essa análise usamos os índices de dureza contidos nos dados de expedição, de 2008 até 2014 e descartamos a parte imaginária da análise já que nossos dados não possuem parte complexa. Seguem os resultados:
+Uma maneira de testar sazonalidade de dados indexados temporalmente é usar a
+técnica de Transformada de Fourier \citep{spec}, onde podemos estudar quais
+frequencias dentro de um espectro podem ser usadas para decompor um sinal (i.e.
+nossos dados). Para essa análise usamos os índices de dureza contidos nos dados
+de expedição, de 2008 até 2014 e descartamos a parte imaginária da análise já
+que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
 
 \begin{figure}[H]
 \centering

@@ -19,7 +19,9 @@ Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo 
 
 \section{Estatística Frequentista e Estatística Bayesiana}
 
-Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML, cabe então uma breve elaboração das diferenças entre os dois grandes \textit{aproacches} da estatística.\\
+Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
+cabe então uma breve elaboração das diferenças entre os dois grandes
+\textit{aproacches} da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
@@ -27,7 +29,8 @@ E no campo de ML, as duas maneiras de se gerar predições são estimadores freq
 
 \subsection{Estimação por Log-verossimilhança}
  
-Um exemplo de estimação frequentista que será usada nesse trabalho é a de log-verossimilhança. 
+Um exemplo de estimação frequentista que será usada nesse trabalho é a de
+log-verossimilhança \citep{dlbook}. 
 Ela segue o princípio de maximizar a verossimilhança (i.e. a probabilidade de
 termos observado $X$ dados os parâmetros $p(X | \theta)$). Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
 
@@ -65,13 +68,13 @@ acima toma a forma: \\
 \[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x ; \theta)] \]
 
 Minimizar essa equação é equivalente a maximizar a equação da
-log-verossimilhança. Esse será o objetivo (função de custo) dos modelos de rede neural usados
+log-verossimilhança \citep{dlbook}. Esse será o objetivo (função de custo) dos modelos de rede neural usados
 nesse trabalho.  
 
 \subsection{Métricas de Acurácia}
 
 \subsubsection{R-quadrado}
-Como teste da acurácia dos modelos foi usada a métrica R-quadrado. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
+Como teste da acurácia dos modelos foi usada a métrica R-quadrado \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
 
 \[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
 
@@ -90,7 +93,7 @@ indicando um modelo ideal.\\
 \subsubsection{MAE - Mean Absolute Error}
 
 O erro médio absoluto é uma medida de diferença entre duas variáveis contínuas
-X e Y. Ele é dado por: \\
+X e Y \citep{cohen}. Ele é dado por: \\
 
 \[MAE = \sum^n_{i=1}\frac{\abs{x_i - y_i}}{n}\]
 
@@ -99,11 +102,14 @@ Essa métrica é uma medida absoluta. E quanto maior esse valor pior o modelo es
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
-O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas.
+O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Baysiano se consideram todos
 os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
-um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal $p(X,Y | \theta)$, a chamada verossimilhança. 
+um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
+consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para
+calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
+$p(X,Y | \theta)$, a chamada verossimilhança \citep{bayesml}. 
 
 \[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(X)}   \]
 
@@ -133,7 +139,11 @@ Em um problema canônico de aprendizado supervisionado gostariamos de aprender
 uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
 dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
 
-Ou seja, nossos dados podem ter sido gerados por uma distribuição de probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos sequenciais}. 
+Ou seja, nossos dados podem ter sido gerados por uma distribuição de
+probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots,
+x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para
+resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
+  sequenciais} \citep{dlbook}. 
 
 Iremos então experimentar com modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
 
@@ -178,7 +188,7 @@ A seguir está reproduzida uma rede neural simples com uma camada oculta e dois 
 %\input{tiks/NN.tex}
 
 
-Na imagem mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
+Na figura mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
 
 \bigskip
 \subsubsection{Regressão Linear}
@@ -198,7 +208,7 @@ Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar
 % \input{tiks/RNNSimplified.tex}
 
 A família das Redes Neurais Recorrentes é composta por modelos especializados
-em processar dados sequenciais, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
+em processar dados sequenciais \citep{dlbook}, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
 \textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
 sequência o estado da rede seja de certo modo propagado temporalmente. A equação
 a seguir ilustra uma função com recorrência: \\
@@ -216,22 +226,29 @@ de uma saída.
 \centering
 \includegraphics[width=0.9\columnwidth]{rnn.png}
 \caption{Grafo de Computação de uma RNN genérica \citep{dlbook}}
+\label{fig:rnngraph}
 \end{figure}
 %%%
 
-Como podemos ver na grafo de computação, a entrada $x$, ao lado do estado
+Como podemos ver na figura~\ref{fig:rnngraph}, a entrada $x$, ao lado do estado
 interno $h$, são usados para calcular um novo estado. 
 \\
 
-Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots ) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo dessa natureza busca resolver um problema de classifição, onde a próxima palavra a ser prevista pelo modelo é uma entre todas as possibilidades de um certo vocabulário. No caso do domínio em questão desejamamos resolver um problema de regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos, precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo de entrada tem um exemplo pareado de saída. Basicamente redes neurais recorrentes funcionam recebendo um exemplo de entrada, criando uma representação interna com o mesmo e então gerando uma saída e comparando essa saída com o exemplo de saída real, gerando um erro. Finalmente, esse erro é propagado para alterar seus parâmetros (com o fim de achar um conjunto de parâmetros que gere boas previsões). Podemos vizualizar esse modelo também ao longo do tempo na imagem a seguir:
+Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando
+estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots
+) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo
+dessa natureza busca resolver um problema de classifição, onde a próxima palavra
+a ser prevista pelo modelo é uma entre todas as possibilidades de um certo
+vocabulário. No caso do domínio em questão desejamamos resolver um problema de
+regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos,
+precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo
+de entrada tem um exemplo pareado de saída. Basicamente redes neurais
+recorrentes funcionam recebendo um exemplo de entrada, criando uma representação
+interna com o mesmo e então gerando uma saída e comparando essa saída com o
+exemplo de saída real, gerando um erro. Finalmente, esse erro é propagado para
+alterar seus parâmetros (com o fim de achar um conjunto de parâmetros que gere
+boas previsões). \\ 
 
-
-% \input{tiks/RRNSimplifiedUnrolled.tex}
-
-
-Essa imagem mostra exatamente o mesmo modelo da imagem anterior, porém, agora visualizamos o modelo a cada iteração temporal. O estado W é usado como entrada juntamente com o proximo $x_i$ para uma nova iteração.
-
-\bigskip
 
 Como já explicado anteriormente, nossos dados de entrada e saída não estão necessariamente pareados perfeitamente dia a dia. Portanto, foi necessário achar intervalos de tempo nos dados onde existe esse pareamento. Isso reduz drasticamente quais períodos representados nos dados realmente podem ser usados para treinar um desses modelos.
 
@@ -242,13 +259,16 @@ LSTMs \citep{lstm} são um tipo de RNN que por meio de sua arquitetura permitem 
 maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
 numericamente problemático (i.e. tendendo a 0 ou a infinito).
 
-O diagrama a seguir ilustra o fluxo dos sinais dentro de uma célula de LSTM: \\
 
-\begin{center}
+\begin{figure}
+\centering
+\caption{Diagrama da arquitetura de uma LSTM}
 \input{chapters/lstm.tex}
-\end{center}
+\label{fig:lstm}
+\end{figure}
 
 
+A figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
 Uma rede LSTM possui três \say{portas}. Cada porta possui duas matrizes $W,U$ e um
 vetor $b$ de parâmetros. Uma iteração da LSTM começa com o cálculo dos sinais
 $o_t,i_t,f_t$.\\
@@ -281,7 +301,7 @@ O novo estado da LSTM é então calculado por: \\
 
 Redes Encoder-Decoder são usadas para modelagem de sequência para
 sequência, ou seja, para receber dados sequênciais como entrada e gerar
-sequências como saída. Esses modelos possuem duas partes, ambas compostas por
+sequências como saída \citep{dlbook}. Esses modelos possuem duas partes, ambas compostas por
 RNNs. \\
 
 \begin{figure}[H]
