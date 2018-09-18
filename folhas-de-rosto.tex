@@ -70,16 +70,16 @@
 % automaticamente a referência para o próprio documento, conforme as normas
 % sugeridas da USP
 \begin{resumo}{port}
-Esse trabalho reproduz modelos de Deep Learning usados em problemas de
+Esse trabalho estuda a aplicação de modelos de Deep Learning usados em problemas de
 regressão em dados sequenciais. Num primeiro momento esses modelos serão
 aplicados em um domínio que recentemente ganhou atenção de acadêmicos e Data
 Scientists: Produção de Cimento. Trabalhos recentes aplicando modelos
-estatísticos nessa área não usaram o estado-da-arte de modelos sequenciais para
-modelagem de séries temporais. Os dados foram cedidos pela multinacional
+estatísticos nessa área se valeram de uma abordagem distinta de modelos sequenciais para
+modelagem de séries temporais. Os dados foram cedidos pela empresa
 Intercement e foram primeiro tratados e então usados para treinamento desses
 modelos. A performance é então comparada entre modelos clássicos como redes
-neurais e árvores de decisão e modelos sequenciais como LSTMs e modelos
-profundos Bayesianos. 
+neurais e árvores de decisão e modelos sequenciais como LSTMs. Alguns modelos
+são acompanhados de métodos Bayesianos para estimações de incerteza.
 \end{resumo}
 
 % O resumo é obrigatório, em português e inglês. Este comando também gera
@@ -97,13 +97,16 @@ profundos Bayesianos.
 % Listas criadas manualmente
 \chapter*{Lista de Abreviaturas}
 \begin{tabular}{rl}
-        ML         & Aprendizado de Máquina (\emph{Machine Learning})\\
+        ML         & Aprendizado Automático (\emph{Machine Learning})\\
         DL         & Aprendizado Profundo (\emph{Deep Learning})\\
+  MSE          & Erro Quadrático Médio (\emph{Mean Squared Error})\\
 	ABNT         & Associação Brasileira de Normas Técnicas\\
 	URL          & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
 	IME          & Instituto de Matemática e Estatística\\
 	USP          & Universidade de São Paulo
 \end{tabular}
+
+\newpage
 
 % Normalmente, "\chapter*" faz o novo capítulo iniciar em uma nova página.
 % Como cada uma destas listas é muito curta, não faz muito sentido fazer
@@ -114,13 +117,17 @@ profundos Bayesianos.
 {\let\cleardoublepage\relax \addvspace{55pt plus 15pt minus 15pt} \chapter*{Lista de Símbolos} }
 \begin{tabular}{rl}
         $\theta$    & Vetor de parâmetros de algum modelo Estatístico\\
-        $\mathcal{N}(\mu,\,\sigma^{2})$      & Distribuição Normal com média $\mu$  e desvio-padrão $\sigma$\\
+        $\mathcal{N}(x; \mu,\,\sigma^{2})$      & A variável aleatória $x$ é distribuída normalmente com média $\mu$ e desvio-padrão $\sigma$\\
         $f(x ; \theta)$      & Função em $x$ parametrizada por $\theta$\\
 \end{tabular}
+
+\newpage
 
 % Listas criadas automaticamente
 %\listoffigures
 {\let\cleardoublepage\relax \addvspace{55pt plus 15pt minus 15pt} \listoffigures }
+
+\newpage
 
 %\listoftables
 {\let\cleardoublepage\relax \addvspace{55pt plus 15pt minus 15pt} \listoftables }

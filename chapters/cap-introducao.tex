@@ -5,7 +5,12 @@
 
 A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado pela indústria de construção civil nas ultimas décadas \citep{cementml}. Os custos de manutenção são da ordem de bilhões de dólares, e portanto, a capacidade da previsão de propriedades do cimento desde a sua produção ganha grande importância. Une-se a isso a presença cada vez maior de métodos de ML em domínios diversos da engenharia e ciência e surge então a tentativa de usar algoritmos de aprendizado também para esse domínio (\cite{cementnn1}, \cite{cementnn2}). \\ 
 
-Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos 10 anos de dados de diversas etapas da prodsução de cimento do complexo de Cajati, uma das plantas da empresa. Esse trabalho é um estudo com a análise desses dados, desde a sua limpeza até uma criação de modelos preditivos. \\
+Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de
+Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos
+10 anos de dados de diversas etapas da prodsução de cimento do complexo de
+Cajati, uma das plantas da empresa. Esse trabalho é um estudo com a análise
+desses dados, desde o seu pré-processamento até uma criação de modelos
+preditivos e a investigação de sua acurácia. \\
 
 
 Os dados são medições de diversos parâmetros em meio ao processo do fabricação do cimento. Eles são divididos em diversas planilhas para diferentes etapas da produção de cimento, são elas, em ordem no processo:
@@ -19,9 +24,16 @@ Os dados são medições de diversos parâmetros em meio ao processo do fabrica�
 \end{itemize}
 
 
-Esse trabalho irá aplicar métodos modernos de ML e DP para a modelagem desses dados. Dado que o problema em questão é de \textbf{regressão}, i.e. queremos prever valores numéricos, saímos do domínio canônico onde são aplicados métodos de DL, como por por exemplo NLP ou visão computacional. Nesse trabalho serão reproduzidos modelos propostos por \citet{ubertime} e \citet{energylstm} para problemas de regressão.
+Esse trabalho irá aplicar métodos modernos de ML e DP para a modelagem desses dados. Dado que o problema em questão é de \textbf{regressão}, i.e. queremos prever valores numéricos, saímos do domínio canônico onde são aplicados métodos de DL, como por por exemplo NLP ou visão computacional. Nesse trabalho serão estudados modelos propostos por \citet{ubertime} e \citet{energylstm} para problemas de regressão.
 
+\section {Motivação}
 
+Esse trabalho tenta ir além de publicações recentes como \citet{cementnn1},
+\citet{cementnn2} e \citet{cementml}, usando métodos de DL que tem
+obtido excelentes resultados em tarefas de
+regressão com dados sequenciais. Esse trabalho irá reproduzir modelos
+apresentados e usados em \cite{ubertime}, \cite{lstmbr} e \cite{energylstm}, onde
+técnicas de DL são usadas para modelagem de dados de demanda de carros e de energia elétrica. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Produção de Cimento}
@@ -40,10 +52,10 @@ As etapas de produção serão explicadas por número como indicado na imagem: \
 
 \begin{itemize}
 
-\item[1] Depósitos ricos em $CaCO_3$ são mineirados para extração desse químico. Normalmente a planta é próxima da mina.
+\item[1] Depósitos ricos em carbonato de cálcio são mineirados para extração desse químico. Normalmente a planta é próxima da mina.
 \item[2] O material extraido é triturado em pedaços de até 10cm. Diferentes materiais são misturados ao resultado da tritura, de modo a manter a composição química desejada. 
 \item[3] A farinha crua é pré-aquecida para que depois no forno as reações químicas aconteçam mais rápido. 
-\item[4] O cálcio é transformado em cao por meio de reações químicas.  
+\item[4] O cálcio é transformado em CaO por meio de reações químicas.  
 \item[5] O material é introduzido ao forno, atingindo temperaturas de até $1450^\circ$C, transformando a farinha em clínquer. O clínquer é resfriado após a saída do forno. 
 \item[6] O clínquer então é misturado com outros componentes que formam o cimento.
 \item[7] A mistura é então moída.
@@ -51,17 +63,14 @@ As etapas de produção serão explicadas por número como indicado na imagem: \
 
 \end{itemize}
 
+\subsection{Índice de Dureza de Cimento Portland}
+
+TO-DO TEXTO TEXTO 
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
 \label{sec:objetivo}
 
-Esse trabalho tenta ir além de publicações recentes como \citet{cementnn1},
-\citet{cementnn2} e \citet{cementml}, usando métodos de DL que tem
-obtido excelentes resultados em tarefas de
-regressão com dados sequenciais. Esse trabalho irá reproduzir modelos
-apresentados e usados em \cite{ubertime}, \cite{lstmbr} e \cite{energylstm}), onde
-técnicas de DL são usadas para modelagem de dados de demanda de carros e de energia elétrica. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Organização do Trabalho}
@@ -71,7 +80,7 @@ No Capítulo~\ref{cap:conceitos}, apresentamos os conceitos de Aprendizado de
 Máquina, estatística frequentista e bayesiana, além de uma breve explicação
 de cada modelo usado. No Capítulo~\ref{cap:estudodados} é mostrado de que
 maneiras os dados foram tradados e modificados para facilidade de sua modelagem.
-No Capítulo~\ref{cap:resultados} constam 
+No Capítulo~\ref{cap:resultados} constam os resultados dos ensaios feitos com os dados. 
 
 
 

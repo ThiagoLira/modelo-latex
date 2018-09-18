@@ -3,77 +3,124 @@
 \label{cap:conceitos}
 
 
-\section{Machine Learning}
+\section{Aprendizado Automático}
 
-O campo de Machine Learning (ML) é uma ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
+O campo de Aprendizado Automático (Machine Learning - ML) é uma ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
 
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 \subsection{Aprendizado Supervisionado}
 
-Aprendizado Supervisionado consiste a grosso modo em aprender uma distribuição de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores $x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes $y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio da busca pelo conjunto de parânetros $\theta$ que minimizem o erro na família de distribuições $p(y | x,\theta)$.
+Aprendizado Supervisionado consiste do ponto de vista estatístico em aprender uma distribuição
+de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores
+$x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes
+$y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio
+da busca pelo conjunto de parâmetros $\theta$ que minimizem o erro na família de
+distribuições $p(y | x;\theta)$, i.e. parametrizadas por $\theta$.
 
 \subsection{Aprendizado Não Supervisionado}
 
-Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos também diversos exemplos de vetores aleatórios $x$ e podemos estar estudando alguma propriedade importante dessa distribuição.
+Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo
+anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos
+também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma propriedade importante dessa distribuição.
 
 \section{Estatística Frequentista e Estatística Bayesiana}
 
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
-cabe então uma breve elaboração das diferenças entre os dois grandes
-\textit{aproacches} da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
+cabe então uma breve elaboração das diferenças entre as duas principais da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
 
-Digamos que exista um evento aleatório que tenha um resultado com probabilidade $p$ de acontecer. Intuitivamente, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+Digamos que exista um evento aleatório que tenha um resultado com probabilidade
+$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
 E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
 \subsection{Estimação por Log-verossimilhança}
  
 Um exemplo de estimação frequentista que será usada nesse trabalho é a de
-log-verossimilhança \citep{dlbook}. 
-Ela segue o princípio de maximizar a verossimilhança (i.e. a probabilidade de
-termos observado $X$ dados os parâmetros $p(X | \theta)$). Ou seja, dada uma matriz de dados $X$ e um conjunto de parâmetros $\theta$, a estimador de máxima verossimilhança de $\theta$ é dado por: \\
+log-verossimilhança \citep{dlbook}. O desenvolvimento a seguir será feito para o
+caso de distribuições de probabilidade que modelam problemas de aprendizado
+\textbf{supervisionado}, e.g. $p(y|x)$. 
+Essa estimação segue o princípio de maximizar a verossimilhança i.e. a probabilidade de
+termos observado nossos dados \textit{com as anotações corretas}, parametrizada pelos parâmetros $\theta$: $p(y|x ; \theta)$.
+Ou seja, dada uma matriz de dados $X$, suas anotações $Y$ e um conjunto de parâmetros $\theta$, o estimador de máxima verossimilhança de $\theta$ é dado por: \\
 
-\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(X;\theta) \] 
+\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(Y | X;\theta) \] 
 
-Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos temos: \\
+Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos obtem-se: \\
 
-\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(x^{(i)};\theta) \]
+\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(y^{(i)}| x^{(i)};\theta) \]
 
-Maximizar a equação anterior é equivalente a minimizar a entropia-cruzada entre
+Maximizar a equação anterior é equivalente a minimizar a \textit{entropia-cruzada} entre
 nossas anotações reais $y$ e as predições feitas pelo modelo $\hat{y}$
 \citep{dlbook}. \\
 
-A entropia de uma variável aleatória $X$ cuja função densidade
-de probabilidade seja $p(x)$ pode ser calculada por: \\
+Continuando com o caso de de aprendizado supervisionado, a \textit{entropia de uma variável aleatória} $y | x$ cuja função densidade
+de probabilidade seja $p(y | x)$ pode ser calculada por \citep{shannon2001mathematical}: \\
 
-\[ H(X)  = - \sum p(x_i)*\log p(x_i) \]
+\[ H(y | x)  = - \sum^m_{i=1} p(y_i | x_i)*\log p(y_i | x_i) \]
 
 Ou ainda:
 
-\[H(X) = - \mathop{\mathbb{E}}_p[\log p(X)] \]
+\[H(y | x) = - \mathop{\mathbb{E}}_p[\log p(y | x)] \]
 
-Com o operador $\mathop{\mathbb{E}}_p[X]$ representando o valor esperado da
-variável aleatória $X$ na distribuição $p$. \\
+Com o operador $\mathop{\mathbb{E}}_p[x]$ representando o valor esperado da
+variável aleatória $x$ na distribuição $p$. \\
 
-Sejam $p,p_{modelo}$ duas funções de distribuição de probabilidade. A entropia-cruzada de $p_{modelo}$ em $p$ é definida pelo valor
-esperado da entropia de $p_{modelo}$ na distribuição $p$: \\
+Sejam $p,p_{modelo}$ duas funções de distribuição de probabilidade. A \textit{entropia-cruzada} de $p_{modelo}$ em $p$ é definida pelo valor
+esperado da entropia de $p_{modelo}$ na distribuição $p$ \citep{bayesml}: \\
 
-\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x)] \]
+\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(y | x)] \]
 
 Se a distribuição $p_{modelo}$ for parametrizada pelo vetor $\theta$, a equação
 acima toma a forma: \\
 
 
-\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(x ; \theta)] \]
+\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(y | x ; \theta)] \]
 
 Minimizar essa equação é equivalente a maximizar a equação da
-log-verossimilhança \citep{dlbook}. Esse será o objetivo (função de custo) dos modelos de rede neural usados
-nesse trabalho.  
+log-verossimilhança \citep{dlbook}. A sessão~\ref{sec:reglog} irá mostrar o caso
+específico de estimação por log-verossimilhança para problemas de regressão.  
 
-\subsection{Métricas de Acurácia}
+\subsubsection{Estimação por Log-verossimilhança para Regressão}
+\label{sec:reglog}
+Nos modelos usados nesse trabalho, a equação que irá ditar o \textbf{erro} a ser
+minimizado pelos algoritmos é o MSE (explicado na sessão~\ref{sec:MSE}). Porém,
+é simples mostrar intuitivamente que minimizar o MSE entre os valores previstos
+e os dados de treino pode ser considerado uma estimação por maximização de
+verossimilhança \citep{dlbook}. É possível explicar uma regressão linear na ótica de maximizar uma verossimilhança:
+\\
 
-\subsubsection{R-quadrado}
+Desejamos criar um modelo linear que explica a relação entre duas variáveis
+$x$ e $y$ em um modelo da forma $y = \theta X + \epsilon$, onde $\epsilon
+\sim \mathcal{N}(\epsilon;0,\,\sigma^2)$ e $\sigma$ é suposto conhecido.\\
+
+Considera-se que esse modelo está produzindo uma distribuição condicional
+$p(y|x)$ (assim como a maior parte dos problema de aprendizado supervisionado). \\ 
+
+Define-se então, para esse modelo, $p(y|x) =
+\mathcal{N}(y ; \hat{y}(x,\theta),\sigma^2)$, pois foi assumido que o ruído $\epsilon$
+segue uma distribuição normal. Nota-se que a média da gaussiana é a previsão do
+modelo. \\
+
+A log-verossimilhança do modelo é dada por: \\
+
+\[ LV =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)\]
+
+
+E como definimos a distribuição gerada pelo modelo como $
+\mathcal{N}(y ; \hat{y}(x,\theta),\sigma^2)$, então usando a definição da
+distribuição normal: \\
+
+\[LV = -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
+  \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2} \]
+
+Essa equação, ao ser otimizada, chega na mesma estimação de parâmetros $\theta$
+que usar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na sessão~\ref{sec:MSE}.\\
+
+
+\section{Métricas de Acurácia}
+
+\subsection{R-quadrado}
 Como teste da acurácia dos modelos foi usada a métrica R-quadrado \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
 
 \[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
@@ -90,21 +137,84 @@ podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
 indicando um modelo ideal.\\
 
 
-\subsubsection{MAE - Mean Absolute Error}
-
-O erro médio absoluto é uma medida de diferença entre duas variáveis contínuas
+\subsection{Erro Quadrático Médio}
+\label{sec:MSE}
+O erro quadrático médio (em inglês, MSE) é uma medida de diferença entre duas variáveis contínuas
 X e Y \citep{cohen}. Ele é dado por: \\
 
-\[MAE = \sum^n_{i=1}\frac{\abs{x_i - y_i}}{n}\]
+\[MSE = \sum^n_{i=1}\frac{(x_i - y_i)^2}{n}\]
 
 Essa métrica é uma medida absoluta. E quanto maior esse valor pior o modelo está performando.
+
+
+
+%% ------------------------------------------------------------------------- %%
+
+\section{Sequencialidade dos Dados}
+
+Em um problema canônico de aprendizado supervisionado gostariamos de aprender
+uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
+dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
+
+Ou seja, nossos dados podem ter sido gerados por uma distribuição de
+probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots,
+x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para
+resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
+  sequenciais} \citep{dlbook}. 
+
+Iremos então experimentar com modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
+
+
+\section{Modelos Usados} 
+
+\subsection{Redes Neurais}
+
+
+Redes neurais são aproximadores universais de funções \citep{nnuni}. Dado um problema
+de classificação onde se deseja aprender uma função da forma $y = f^*(x)$, uma
+Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
+parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
+
+O modelo é uma composição de funções que unem uma transformação linear e
+a aplicação de uma função não-linear $\sigma$: \\
+
+\[ f(x)=  \sigma(W*x + b) \]
+
+A computação da saída de uma rede neural então pode ser escrita como:
+
+\[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
+
+Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
+$f_i$ cujos parâmetros são $W$ e $b$. Portanto, para a i-ésima camada da rede
+sua saída sera da forma: 
+
+\[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
+
+Onde $a_{i-1}$ é a saída da camada anterior, também chamada de
+\textbf{ativação}. A saída dessa camada é então a sua ativação $a_i$. \\ 
+
+Vale notar que uma saída $y$ calculada por uma rede neural depende unicamente dos
+seus parâmetros e da entrada $x$. Isso não será verdade para os modelos
+\textbf{sequenciais} que também serão usados nesse trabalho, onde o estado
+interno de computação desses modelos é usado como entrada para uma próxima
+iteração \citep{dlbook}. \\
+
+A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
+
+
+%\input{tiks/NN.tex}
+
+
+Na figura mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
+
+\bigskip
 
 
 \subsection{Inferência Bayesiana em Machine Learning}
 
 O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
-predições são feitas a partir desse valor. No caso Baysiano se consideram todos
+predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
 os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
 um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
 consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para
@@ -131,76 +241,17 @@ parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,\sigma^2
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
   dessa medida é calculada então pela variância amostral de $Y^*$.
 
-%% ------------------------------------------------------------------------- %%
 
-\subsection{Sequencialidade dos Dados}
-
-Em um problema canônico de aprendizado supervisionado gostariamos de aprender
-uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
-dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
-
-Ou seja, nossos dados podem ter sido gerados por uma distribuição de
-probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots,
-x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para
-resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
-  sequenciais} \citep{dlbook}. 
-
-Iremos então experimentar com modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
-
-
-\section{Modelos Usados} 
-
-\subsubsection{Redes Neurais}
-
-
-Redes neurais são aproximadores universais de funções \citep{nnuni}. Se tivermos um problema
-de classificação onde queremos aprender uma função da forma $y = f^*(x)$, uma
-Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
-parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
-
-O modelo é uma composição de funções que unem uma transformação linear e
-a aplicação de uma função não-linear $\sigma$: \\
-
-\[ f(x)=  \sigma(W*x + b) \]
-
-A computação da saída de uma rede neural então pode ser escrita como:
-
-\[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
-
-Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
-$f_i$ cujos parâmetros são $W$ e $b$. Portanto, para a i-ésima camada da rede
-sua saída sera da forma: 
-
-\[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
-
-Onde $a_{i-1}$ é a saída da camada anterior, também chamada de
-\textbf{ativação}. A saída dessa camada é então a sua ativação $a_i$. \\ 
-
-Vale notar que uma saída $y$ calculada por uma rede neural depende unicamente dos
-seus parâmetros e da entrada $x$. Isso não será verdade para os modelos
-\textbf{sequenciais} que também serão usados nesse trabalho, onde o estado
-interno de computação desses modelos é usado como entrada para uma próxima
-iteração. \\
-
-A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
-
-
-%\input{tiks/NN.tex}
-
-
-Na figura mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
-
-\bigskip
-\subsubsection{Regressão Linear}
+\subsection{Regressão Linear}
 Os modelos são também comparados com uma regressão linear. Que usa estimação por mínimos quadrados para calcular um peso para cada parâmetro de entrada. De modo que a soma ponderada por esses pesos possa aproximar nosso alvo.
 
 
-\subsubsection{Random Forest}
+\subsection{Random Forest}
 
 Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
-\subsection{Modelo Sequencial}
+\section{Modelos Sequenciais}
 Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
 \\
 
@@ -257,9 +308,7 @@ Como já explicado anteriormente, nossos dados de entrada e saída não estão n
 
 LSTMs \citep{lstm} são um tipo de RNN que por meio de sua arquitetura permitem que sequências
 maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
-numericamente problemático (i.e. tendendo a 0 ou a infinito).
-
-
+numericamente problemático (i.e. tendendo a 0 ou a infinito). A figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
 \begin{figure}
 \centering
 \caption{Diagrama da arquitetura de uma LSTM}
@@ -268,7 +317,6 @@ numericamente problemático (i.e. tendendo a 0 ou a infinito).
 \end{figure}
 
 
-A figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
 Uma rede LSTM possui três \say{portas}. Cada porta possui duas matrizes $W,U$ e um
 vetor $b$ de parâmetros. Uma iteração da LSTM começa com o cálculo dos sinais
 $o_t,i_t,f_t$.\\
