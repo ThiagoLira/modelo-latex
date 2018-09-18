@@ -11,12 +11,16 @@ Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionad
 
 \subsection{Aprendizado Supervisionado}
 
-Aprendizado Supervisionado consiste do ponto de vista estatístico em aprender uma distribuição
-de probabilidade do tipo $p(y | x)$, ou seja, para diversos exemplos de vetores
+Aprendizado Supervisionado consiste, do ponto de vista estatístico. em aprender uma distribuição
+de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
+entrada $x$ associados a uma anotação $y$. Gostariamos de modelar essa relação
+entre dados e anotacoes para que possamos anotar novos dados inéditos para os modelos.
+
+
+ou seja, para diversos exemplos de vetores
 $x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes
-$y'$ para novas entradas $x'$. Muitos algoritmos resolvem esse problema por meio
-da busca pelo conjunto de parâmetros $\theta$ que minimizem o erro na família de
-distribuições $p(y | x;\theta)$, i.e. parametrizadas por $\theta$.
+$y'$ para novas entradas $x'$.
+
 
 \subsection{Aprendizado Não Supervisionado}
 
@@ -142,7 +146,7 @@ indicando um modelo ideal.\\
 O erro quadrático médio (em inglês, MSE) é uma medida de diferença entre duas variáveis contínuas
 X e Y \citep{cohen}. Ele é dado por: \\
 
-\[MSE = \sum^n_{i=1}\frac{(x_i - y_i)^2}{n}\]
+\[MSE = \sum^n_{i=1}\frac{(y_i - \hat{y_i})^2}{n}\]
 
 Essa métrica é uma medida absoluta. E quanto maior esse valor pior o modelo está performando.
 
@@ -173,19 +177,23 @@ Iremos então experimentar com modelos sequenciais e não-sequencias para testar
 Redes neurais são aproximadores universais de funções \citep{nnuni}. Dado um problema
 de classificação onde se deseja aprender uma função da forma $y = f^*(x)$, uma
 Rede Neural define um mapeamento $y = f(x ; \theta)$, onde $\theta$ é o vetor de
-parâmetros que serão aprendidos com o fim de minimizar o erro do aproximador.
+parâmetros que serão aprendidos com o fim de minimizar a diferença entre a
+distribuição empírica e essa distribuição gerada pelo modelo. Essa diferença pode
+ser minimizada pelo método da verossimilhança, assim como elaborado na sessão~\ref{sec:reglog}.\\
 
-O modelo é uma composição de funções que unem uma transformação linear e
+O modelo neural é uma composição de funções que unem uma transformação linear e
 a aplicação de uma função não-linear $\sigma$: \\
 
 \[ f(x)=  \sigma(W*x + b) \]
+
+Importante ressaltar que $W$ é uma matriz, assim como $x$ e $b$ são vetores. \\
 
 A computação da saída de uma rede neural então pode ser escrita como:
 
 \[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
 
 Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
-$f_i$ cujos parâmetros são $W$ e $b$. Portanto, para a i-ésima camada da rede
+$f_i$ cujos parâmetros são $W_i$ e $b_i$. Portanto, para a i-ésima camada da rede
 sua saída sera da forma: 
 
 \[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
@@ -221,7 +229,7 @@ consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para
 calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
 $p(X,Y | \theta)$, a chamada verossimilhança \citep{bayesml}. 
 
-\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(X)}   \]
+\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
 
 Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
 
@@ -236,7 +244,14 @@ Dropout \citep{dropbayes}. \\
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
-probabilidade $p$. Pode-se demonstrar que isso é equivalente a considerar os
+probabilidade $p$. Formalmente, para um vetor de ativações $a$ na saída de uma
+cada da rede neural, amostramos um vetor de \textit{máscara} $r$ de uma
+distribuição de Bernoulli cujo parâmetro é $p$, i.e. $r \sim Bernoulli(p)$.
+Finalmente, o novo vetor de ativações é calculado por $r * a$. O efeito desse
+processo é de zerar aleatoriamente entradas do vetor de ativação.
+\\
+
+Pode-se demonstrar que isso é equivalente a considerar os
 parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,\sigma^2)$. Se realizam então $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
   dessa medida é calculada então pela variância amostral de $Y^*$.
@@ -269,8 +284,12 @@ a seguir ilustra uma função com recorrência: \\
 Nessa equação notamos que na iteração $t$ o valor do vetor $h$ depende de
 $h_{t-1}$.RNNs aprendem a usar esse vetores como esse como
 \say{resumos} das iterações passadas. Desse modo , o modelo ganha a capacidade
-de quase arbitrariamente usar informações passadas da sequência para o calculo
-de uma saída. 
+de usar informações passadas da sequência para o calculo
+de uma saída. Essa capacidade porém começa a ser dificultada quando o modelo
+realiza muitas iterações temporais. Durante o aprendizado, sequências muito
+extensas criam problemas numéricos para o cálculo dos gradientes, esses podendo
+tomar valores muito pequenos ou muito grandes. Foram propostos outros modelos
+que não possuam esse problema, como o modelo LSTM, explicado na sessão~\ref{sec:lstm}. 
 
 %%%
 \begin{figure}[H]
@@ -281,8 +300,9 @@ de uma saída.
 \end{figure}
 %%%
 
-Como podemos ver na figura~\ref{fig:rnngraph}, a entrada $x$, ao lado do estado
-interno $h$, são usados para calcular um novo estado. 
+Como podemos ver na Figura~\ref{fig:rnngraph}, a entrada $x$, ao lado do estado
+interno $h$, são usados para calcular um novo estado. Nota-se que o vetor $h$,
+bem como os parâmetros internos da RNN, são divididos entre iterações temporais.
 \\
 
 Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando
@@ -305,10 +325,11 @@ Como já explicado anteriormente, nossos dados de entrada e saída não estão n
 
 
 \subsubsection{LSTM}
+\label{sec:lstm}
 
 LSTMs \citep{lstm} são um tipo de RNN que por meio de sua arquitetura permitem que sequências
 maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
-numericamente problemático (i.e. tendendo a 0 ou a infinito). A figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
+numericamente problemático (i.e. tendendo a 0 ou a infinito). A Figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
 \begin{figure}
 \centering
 \caption{Diagrama da arquitetura de uma LSTM}
