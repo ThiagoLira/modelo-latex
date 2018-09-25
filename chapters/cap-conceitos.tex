@@ -238,25 +238,33 @@ analiticamente $p(\theta | X,Y)$ \citep{ubertime}, e portanto será usada uma
 técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
 Dropout \citep{dropbayes}. \\
 
-%\input{chapters/dropout.tex}
+
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
-probabilidade $p$. Formalmente, para um vetor de ativações $a$ na saída de uma
+probabilidade $p$.\\
+
+\begin{figure}
+  \input{chapters/dropout.tex}
+  \label{fig:dropout}
+  \caption{Representacão do uso de Dropout em uma rede neural}
+\end{figure}
+
+Formalmente, para um vetor de ativações $a$ na saída de uma
 cada da rede neural, amostramos um vetor de \textit{máscara} $r$ de uma
 distribuição de Bernoulli cujo parâmetro é $p$, i.e. $r \sim Bernoulli(p)$.
 Finalmente, o novo vetor de ativações é calculado por $r * a$. O efeito desse
 processo é de zerar aleatoriamente entradas do vetor de ativação.
-\\
+\\ 
 
-Pode-se demonstrar que isso é equivalente a considerar os
-parâmetros $W$ com uma distribuição a priori $W \sim \mathcal{N}(0,\,\sigma^2)$. Se realizam então $B$ computações estocásticas de uma mesma
+\cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas do
+modelo equivale em aproximar numéricamente uma distribuição $q(\theta)$ que
+cumpriria o papel da distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
+
+Para o cálculo da incerteza das predições do modelo se realizam então $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
   dessa medida é calculada então pela variância amostral de $Y^*$.
 
-
-\subsection{Regressão Linear}
-Os modelos são também comparados com uma regressão linear. Que usa estimação por mínimos quadrados para calcular um peso para cada parâmetro de entrada. De modo que a soma ponderada por esses pesos possa aproximar nosso alvo.
 
 
 \subsection{Random Forest}
@@ -387,8 +395,14 @@ como entrada para gerar a saída da próxima iteração temporal, ou então usar
 entradas, essa última forma chamada de \textit{teacher forcing}. No diagrama
 está indicado o embedding entre o decoder e o encoder. Esse embedding é apenas
 um vetor (cuja dimensão é um hiper-parâmetro de treinamento) que resume a
-informação sequencial lida pelo encoder e a transmite para o decoder. 
+informação sequencial lida pelo encoder e a transmite para o decoder.\\
 
+Redes encoder-decoder são muito usadas para aprender \textit{representações} para os
+dados. Isso quer dizer que os embeddings da rede encoder-decoder são frutos de
+transformações no espaço das entradas que buscam extrair a informação mais útil
+para o objetivo do aprendizado. Podemos pensar nessas transformações como
+mudanças de coordenadas nas quais estamos representando os dados. A
+imagem~\ref{} ilustra essa ideia. \\
 
 
 
