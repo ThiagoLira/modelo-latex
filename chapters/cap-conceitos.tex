@@ -391,16 +391,21 @@ RNNs. \\
 O \textbf{encoder} é uma RNN que busca receber uma sequência de entrada de
 tamanho arbitrário e gerar uma representação como saída, o seu estado interno,
 representando em marrom no diagrama acima. O \textbf{decoder} então recebe essa representação interna (também chamada
-de \textit{codificacoes}) e usa-a para gerar saídas sequencialmente, podendo
+de \textit{codificação}) e usa-a para gerar saídas sequencialmente, podendo
 então gerar essas sequências de duas formas: O decoder pode usar as suas proprias saídas
 como entrada para gerar a saída da próxima iteração temporal, ou então usar dados de treinamento como
 entradas, essa última forma chamada de \textit{teacher forcing}. No diagrama
-está indicado o codificacoes entre o decoder e o encoder. Esse codificacoes é apenas
-um vetor (cuja dimensão é um hiper-parâmetro de treinamento) que resume a
-informação sequencial lida pelo encoder e a transmite para o decoder.\\
+está indicado o acoplamento entre o decoder e o encoder. Essa codificação é apenas
+um vetor (cuja dimensão é um \textit{hiper-parâmetro} de treinamento) que resume a
+informação sequencial lida pelo encoder e a transmite para o decoder.
+Hiper-parâmetros são parâmetros do problema de aprendizado que são definidos
+pelo programador e não fazem parte dos valores aprendidos pelo algoritmo de
+aprendizado. É comum que se realizem diversos experimentos com diferentes
+valores de hiper-parâmetros e se escolha os que geraram melhores resultados. 
+\\
 
 Redes encoder-decoder são muito usadas para aprender \textit{representações} para os
-dados. Isso quer dizer que os codificacoess da rede encoder-decoder são frutos de
+dados. Isso quer dizer que as codificações da rede encoder-decoder são frutos de
 transformações no espaço das entradas que buscam extrair a informação mais útil
 para o objetivo do aprendizado. Podemos pensar nessas transformações como
 mudanças de coordenadas nas quais estamos representando os dados. A
@@ -417,9 +422,9 @@ DL como redes encoder-decoder. \\
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
 Iremos reproduzir nesse trabalho o modelo proposto em \cite{ubertime}. A
-arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificacoess da
+arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
 série temporal (i.e. uma representacão que extraia informações úteis para o
-problema) e então uma rede \textbf{forecaster} que usa esses codificacoess ao lado de
+problema) e então uma rede \textbf{forecaster} que usa esses codificações ao lado de
 variáveis exógenas a série temporal para realizar predições.  
 
 
