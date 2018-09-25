@@ -5,19 +5,17 @@
 
 \section{Aprendizado Automático}
 
-O campo de Aprendizado Automático (Machine Learning - ML) é uma ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
+O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
 
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 \subsection{Aprendizado Supervisionado}
 
-Aprendizado Supervisionado consiste, do ponto de vista estatístico. em aprender uma distribuição
+Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
 de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
 entrada $x$ associados a uma anotação $y$. Gostariamos de modelar essa relação
-entre dados e anotacoes para que possamos anotar novos dados inéditos para os modelos.
-
-
-ou seja, para diversos exemplos de vetores
+entre dados e anotacoes para que possamos anotar novos dados inéditos para os
+modelos. Ou seja, para diversos exemplos de vetores
 $x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes
 $y'$ para novas entradas $x'$.
 
@@ -88,10 +86,11 @@ específico de estimação por log-verossimilhança para problemas de regressão
 \subsubsection{Estimação por Log-verossimilhança para Regressão}
 \label{sec:reglog}
 Nos modelos usados nesse trabalho, a equação que irá ditar o \textbf{erro} a ser
-minimizado pelos algoritmos é o MSE (explicado na sessão~\ref{sec:MSE}). Porém,
-é simples mostrar intuitivamente que minimizar o MSE entre os valores previstos
+minimizado pelos algoritmos é o MSE (explicado na sessão~\ref{sec:MSE}). 
+É simples mostrar intuitivamente que minimizar o MSE entre os valores previstos
 e os dados de treino pode ser considerado uma estimação por maximização de
-verossimilhança \citep{dlbook}. É possível explicar uma regressão linear na ótica de maximizar uma verossimilhança:
+verossimilhança \citep{dlbook}. É possível explicar uma regressão linear como
+uma maximização de verossimilhança:
 \\
 
 Desejamos criar um modelo linear que explica a relação entre duas variáveis
@@ -120,7 +119,6 @@ distribuição normal: \\
 
 Essa equação, ao ser otimizada, chega na mesma estimação de parâmetros $\theta$
 que usar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na sessão~\ref{sec:MSE}.\\
-
 
 \section{Métricas de Acurácia}
 
