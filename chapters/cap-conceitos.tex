@@ -372,6 +372,8 @@ O novo estado da LSTM é então calculado por: \\
 \[h_t = o_t \circ \sigma_h(c_t)\]
 
 
+
+
 \subsubsection{Rede Encoder-Decoder}
 
 Redes Encoder-Decoder são usadas para modelagem de sequência para
@@ -389,28 +391,35 @@ RNNs. \\
 O \textbf{encoder} é uma RNN que busca receber uma sequência de entrada de
 tamanho arbitrário e gerar uma representação como saída, o seu estado interno,
 representando em marrom no diagrama acima. O \textbf{decoder} então recebe essa representação interna (também chamada
-de \textit{embedding}) e usa-a para gerar saídas sequencialmente, podendo
+de \textit{acoplamento}) e usa-a para gerar saídas sequencialmente, podendo
 então gerar essas sequências de duas formas: O decoder pode usar as suas proprias saídas
 como entrada para gerar a saída da próxima iteração temporal, ou então usar dados de treinamento como
 entradas, essa última forma chamada de \textit{teacher forcing}. No diagrama
-está indicado o embedding entre o decoder e o encoder. Esse embedding é apenas
+está indicado o acoplamento entre o decoder e o encoder. Esse acoplamento é apenas
 um vetor (cuja dimensão é um hiper-parâmetro de treinamento) que resume a
 informação sequencial lida pelo encoder e a transmite para o decoder.\\
 
 Redes encoder-decoder são muito usadas para aprender \textit{representações} para os
-dados. Isso quer dizer que os embeddings da rede encoder-decoder são frutos de
+dados. Isso quer dizer que os acoplamentos da rede encoder-decoder são frutos de
 transformações no espaço das entradas que buscam extrair a informação mais útil
 para o objetivo do aprendizado. Podemos pensar nessas transformações como
 mudanças de coordenadas nas quais estamos representando os dados. A
-imagem~\ref{} ilustra essa ideia. \\
+imagem~\ref{} ilustra essa ideia. Justamente o problema de aprender
+representações estimulou desde 2006 uma redescoberta do DL \citep{dlbook}. Criar
+operacoes que transformem os dados de entrada de modo a facilitar o aprendizado
+pode levar anos se essa tarefa for colocada na mão de especialistas humanos
+\citep{dlbook}, então é uma capacidade valiosa proporcionada por algoritmos de
+DL como redes encoder-decoder. \\
+\\
 
 
 
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
 Iremos reproduzir nesse trabalho o modelo proposto em \cite{ubertime}. A
-arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende embeddings da
-série temporal e então uma rede \textbf{forecaster} que usa esses embeddings ao lado de
+arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende acoplamentos da
+série temporal (i.e. uma representacão que extraia informações úteis para o
+problema) e então uma rede \textbf{forecaster} que usa esses acoplamentos ao lado de
 variáveis exógenas a série temporal para realizar predições.  
 
 
@@ -434,7 +443,9 @@ tornar mais informativa.
 Esse modelo também possui outra característica importante. Todas as camadas da
 redes neurais que compõe o encoder, o decoder e o forecaster possuem
 Dropout com probabilidade $p$. Ou seja, podemos usar a técnica do Monte
-Carlo Dropout para estimar a variância de cada predição feita por esse modelo. \\
+Carlo Dropout para estimar a variância de cada predição feita por esse modelo. A
+rede então se torna um modelo bastante robusto para consumir séries temporais,
+assim realizando predições e ainda incertezas.\\
 
 
 
