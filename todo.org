@@ -1,0 +1,7 @@
+* Coisas a fazer na Quali
+** reescrever seção resultados
+** explicar como calcular incertezas modelo uber
+** 
+* Coisas a fazer nos dados da Intercement
+** refazer testes com modelos não-sequenciais usando apenas os dados de expedição 
+** matriz de confusão dos dados de expedição

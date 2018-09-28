@@ -4,14 +4,25 @@
 
 \section{Preparo dos Dados}
 
+
+Para treinar algum tipo de modelo preditivo com os dados, é necessário parear
+dados de entrada e de saída. Devido a dificuldades logísticas de se casar um
+mesmo lote de cimento em diferentes partes do processo (e.g. no forno e na
+expedição), num primeiro momento estudos serão feitos apenas para os dados de
+\textit{expedição de cimento}. Embora todos os conjuntos de dados tenham sido
+tratados e estudados, para algumas estatísticas serão reproduzidos aqui tabelas computadas dos
+dados de expedição. O restante das estatísticas podem ser encontradas no Apêndice~\ref{ape:tables}
+
 \subsection{Contagem de dias válidos}
 
-Para treinar algum tipo de modelo preditivo com os dados, é necessário parear dados de entrada e de saída. Para os diversos conjuntos de dados cedidos pela Intercement, os mesmos representam diferentes momentos da produção de cimento. Então ao usarmos algum desses dados como entrada para prever uma saída, devemos adicionar o delay temporal correspondente ao tempo que demora para entrada se tornar saída. Por exemplo, se tentarmos prever os dados de expedição com os dados de farinha, o delay apropriado é de 10 dias. No restante desse trabalho esse delay sempre foi considerado independente de quais dados estejam sendo usados.
+Os dados da Intercement, por questões logísticas, são anotados em frequencias
+diferentes. Os dados de Clínquer e Farinha são anotados por hora, já os de
+Expedição de Cimento são anotados por dia (esses representando uma média de
+diversos lotes experimentados).
 
-Também devemos notar o fato que a frequência na qual os dados de Clínquer, Farinha e Cimento Cru são anotados é bastante maior que a frequência temporal dos dados de expedição. O que também dificulta o pareamento. Por exemplo, temos dados de Clínquer a cada hora, sendo que os dados de expedição são anotados dia a dia. Portanto, foi necessário unir dados de um mesmo dia (tirando a média das suas entradas) para que fosse possível associar diferentes conjuntos de dados de um para um.
 \begin{enumerate}
     \item Os dados de  Clínquer possuem 3528 linhas de dados de 2936 dias distintos
-\item Os dados de  Expedição possuem 3650 linhas de dados de 2520 dias distintos
+\item Os dados de  Expedição de Cimento possuem 3650 linhas de dados de 2520 dias distintos
 \item Os dados de  Farinha possuem 3530 linhas de dados de 2937 dias distintos
 \item Os dados de  Cru possuem 3558 linhas de dados de 3558 dias distintos
 \end{enumerate}
@@ -19,9 +30,7 @@ Também devemos notar o fato que a frequência na qual os dados de Clínquer, Fa
 \subsection{Dados faltantes}
 Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muitas vezes não possuem alguma de suas colunas.
 A seguir vemos para todos os dataframes, para cada uma de suas colunas, quantos
-dias possuem dados faltantes. Para não poluir essa sessão do trabalho, iremos
-reproduzir apenas a tabela referente aos dados de expedição, com as demais
-tabelas estando presentes no Apêndice~\ref{ape:tables}. \\
+dias possuem dados faltantes. 
 
 \captionof{table}{Dias com dados faltantes para cada parâmetro de Expedição de Cimento}
 \begin{center}
@@ -56,11 +65,9 @@ CO2     &  3629
 
 
 
-
-
-\subsection{Resample dos dados}
-Para maior facilidade de manuseio dos dados foi necessário realizar um
-\textbf{resample}. Os dados foram modificados para que entradas realizadas no
+\subsection{Reamostragem dos dados}
+Para maior facilidade de manuseio dos dados foi necessário realizar uma
+\textbf{reamostragem}. Os dados foram modificados para que entradas realizadas no
 mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem dados foram criados como placeholders para facilidade de vizualiação dos dados. A seguir são reproduzidas as contagens de dados após o resample.
 
 
@@ -104,3 +111,6 @@ que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
 Podemos notar que a "energia" do sinal não possui picos em nenhuma frequência além da frequência zero, que seria a potência média do sinal, ou seja, uma componente que não depende do tempo. Então, afirmamos que esses dados não possuem sazonalidade mensal ou anual. O que significa que a média e a variância desses indicadores não possuem trends e.g. alguma mudança similar todo mês de Janeiro.
 
 
+\section{Autocorrelação entre colunas}
+
+\subsubsection{Matriz de Confusão}
