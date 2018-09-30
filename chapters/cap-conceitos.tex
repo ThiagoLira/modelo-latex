@@ -5,11 +5,32 @@
 
 \section{Aprendizado Automático}
 
-O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência da Computação que se arma de métodos estatísticos para criar sistemas que podem aprender (i.e. melhorar sua acurácia) através de dados.
+O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência
+da Computação que se arma de métodos estatísticos para criar sistemas que podem
+aprender (i.e. melhorar sua acurácia) através de dados. Um problema de ML possui
+as seguintes partes \citep{dlbook}: \\
 
+\begin{itemize}
+
+  
+\item A tarefa $T$, no caso dos dados da Intercement, um problema de regressão.
+  Onde desejamos estimar valores numéricos a partir de uma matriz de dados $X$ e
+  suas anotações numéricas $Y$.  
+  
+\item Uma métrica de performance $P$, que define a distância entre as predições
+  do modelo e os dados de treinamento. A teoria por trás desses métricas será explicada na seção~\ref{sec:metricas}.
+
+\item A experiência $E$, que define qual tipo de informação o modelo poderá usar
+  durante o treinamento. Explicaremos esse conceito na seção~\ref{sec:exp} 
+  
+\end{itemize}
+
+\subsection{Aprendizado}
+\label{sec:exp}
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
-\subsection{Aprendizado Supervisionado}
+
+\subsubsection{Aprendizado Supervisionado}
 
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
 de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
@@ -20,14 +41,18 @@ $x$ são fornecidas anotações $y$, e desejamos então criar predições de ano
 $y'$ para novas entradas $x'$.
 
 
-\subsection{Aprendizado Não Supervisionado}
+\subsubsection{Aprendizado Não Supervisionado}
 
 Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo
 anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos
 também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma propriedade importante dessa distribuição.
 
-\section{Estatística Frequentista e Estatística Bayesiana}
 
+
+\subsection{Métrica de Performance}
+\label{sec:metricas}
+\subsubsection{Estatística Frequentista e Estatística Bayesiana}
+ 
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
 cabe então uma breve elaboração das diferenças entre as duas principais da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
 
@@ -36,7 +61,7 @@ $p$ de acontecer. A visão frequentista de probabilidades diz que, se pudessemos
 
 E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
-\subsection{Estimação por Log-verossimilhança}
+\subsubsection{Estimação por Log-verossimilhança}
  
 Um exemplo de estimação frequentista que será usada nesse trabalho é a de
 log-verossimilhança \citep{dlbook}. O desenvolvimento a seguir será feito para o
@@ -120,9 +145,18 @@ distribuição normal: \\
 Essa equação, ao ser otimizada, chega na mesma estimação de parâmetros $\theta$
 que usar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na sessão~\ref{sec:MSE}.\\
 
-\section{Métricas de Acurácia}
+\subsection{Função de Custo}
 
-\subsection{R-quadrado}
+O \textit{aprendizado} de um modelo de ML consiste na busca por parâmetros que
+minimizem alguma \textit{função de custo}. Normalmente algum algoritmo baseado
+em gradientes aproxima os parâmetros maximizando a verossimilhança das predições
+do modelo em relação aos dados observados. O que é equivalente a diminuir a
+entropia cruzada entre a distribuição empírica dos dados e a distribuição
+definida pelos parâmetros do modelo \citep{dlbook}. Nessa sessão iremos definir
+a função de custo usada em todos os modelos de regressão usados, bem como a
+métrica de acurácia, que testa a qualidade das predições dos modelos após o treinamento. \\
+
+\subsubsection{R-quadrado}
 Como teste da acurácia dos modelos foi usada a métrica R-quadrado \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
 
 \[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
@@ -139,7 +173,7 @@ podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
 indicando um modelo ideal.\\
 
 
-\subsection{Erro Quadrático Médio}
+\subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
 O erro quadrático médio (em inglês, MSE) é uma medida de diferença entre duas variáveis contínuas
 $\hat{y}$ e y \citep{cohen}. Ele é dado por: \\

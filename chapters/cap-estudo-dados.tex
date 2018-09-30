@@ -65,7 +65,7 @@ CO2     &  3629
 
 
 
-\subsection{Reamostragem dos dados}
+\section{Reamostragem dos dados}
 Para maior facilidade de manuseio dos dados foi necessário realizar uma
 \textbf{reamostragem}. Os dados foram modificados para que entradas realizadas no
 mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem dados foram criados como placeholders para facilidade de vizualiação dos dados. A seguir são reproduzidas as contagens de dados após o resample.
@@ -111,6 +111,48 @@ que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
 Podemos notar que a "energia" do sinal não possui picos em nenhuma frequência além da frequência zero, que seria a potência média do sinal, ou seja, uma componente que não depende do tempo. Então, afirmamos que esses dados não possuem sazonalidade mensal ou anual. O que significa que a média e a variância desses indicadores não possuem trends e.g. alguma mudança similar todo mês de Janeiro.
 
 
-\section{Autocorrelação entre colunas}
+\section{Correlação entre Colunas}
 
-\subsubsection{Matriz de Confusão}
+Vamos analisar agora a \textit{correlação} entre colunas dos dados de expedição
+de cimento. Usaremos sempre a \textit{correlação de Pearson} para os cálculos.
+\\
+Sejam dois vetores de
+dados $\{x_1,x_2, \dots , x_n\}$ e $\{y_1,y_2, \dots , y_n\}$, ambos com $n$ entradas. A correlação de Pearson $r$ é calculada
+por meio da seguinte fórmula, onde $\overline{x}$ denota a média amostral do
+vetor $X$: \\
+
+
+
+\[ r = \frac{{}\sum_{i=1}^{n} (x_i - \overline{x})(y_i - \overline{y})}
+{\sqrt{\sum_{i=1}^{n} (x_i - \overline{x})^2(y_i - \overline{y})^2}} \] 
+
+
+\bigskip
+
+
+A tabela~\ref{tb:corr3728} mostra correlação entre os índices de resistência dos dados de
+expedição de cimento. \\
+
+\begin{table}[H]
+\label{tb:corr3728}
+\centering
+\begin{tabular}{l|lll}
+\cline{2-4}
+\textbf{}                  & \multicolumn{1}{l|}{RC3} & \multicolumn{1}{l|}{RC7} & \multicolumn{1}{l|}{RC28} \\ \hline
+\multicolumn{1}{|l|}{RC3}  & 1                        & 0.734201                 & 0.388973                  \\ \cline{1-1}
+\multicolumn{1}{|l|}{RC7}  & 0.734201                 & 1                        & 0.484725                  \\ \cline{1-1}
+\multicolumn{1}{|l|}{RC28} & 0.388973                 & 0.484725                 & 1                         \\ \cline{1-1}
+\end{tabular}
+\caption{Correlação entre Índices de Resistência dos dados de
+  Expedição de Cimento}
+\end{table}
+
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../quali"
+%%% End:
