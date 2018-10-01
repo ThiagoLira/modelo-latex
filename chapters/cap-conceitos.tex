@@ -6,7 +6,7 @@
 \section{Aprendizado Automático}
 
 O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência
-da Computação que se arma de métodos estatísticos para criar sistemas que podem
+da Computação que utiliza métodos estatísticos para criar sistemas que possam
 aprender (i.e. melhorar sua acurácia) através de dados. Um problema de ML possui
 as seguintes partes \citep{dlbook}: \\
 
@@ -34,10 +34,10 @@ Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionad
 
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
 de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
-entrada $x$ associados a uma anotação $y$. Gostariamos de modelar essa relação
+entrada $x$ associados a uma anotação $y$ e gostariamos de modelar essa relação
 entre dados e anotações para que possamos anotar novos dados inéditos para os
 modelos. Ou seja, para diversos exemplos de vetores
-$x$ são fornecidas anotações $y$, e desejamos então criar predições de anotacoes
+$x$ são fornecidas anotações $y$, e desejamos então criar predições de anotações
 $y'$ para novas entradas $x'$.
 
 
@@ -54,10 +54,11 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \subsubsection{Estatística Frequentista e Estatística Bayesiana}
  
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
-cabe então uma breve elaboração das diferenças entre as duas principais da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
+cabe então uma breve elaboração das diferenças entre as duas principais
+vertentes da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade
-$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudessemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará de arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmologicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
 E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
@@ -73,7 +74,7 @@ Ou seja, dada uma matriz de dados $X$, suas anotações $Y$ e um conjunto de par
 
 \[ \hat{\theta} = \argmax_{\theta} p_{modelo}(Y | X;\theta) \] 
 
-Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos obtem-se: \\
+Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos obtém-se: \\
 
 \[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(y^{(i)}| x^{(i)};\theta) \]
 
@@ -143,7 +144,7 @@ distribuição normal: \\
   \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2} \]
 
 Essa equação, ao ser otimizada, chega na mesma estimação de parâmetros $\theta$
-que usar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na sessão~\ref{sec:MSE}.\\
+que aplicar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na seção~\ref{sec:MSE}.\\
 
 \subsection{Função de Custo}
 
@@ -168,7 +169,7 @@ Como teste da acurácia dos modelos foi usada a métrica R-quadrado \citep{cohen
 \[ \bar{y} = \frac{1}{n} \sum^n_{i=1} y\]
 
 % \justify
-Para essa métrica, o modelo pode performar arbitrariamente mal, com esse valor
+Para essa métrica, o modelo pode ter um desempenho arbitrariamente ruim, com esse valor
 podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
 indicando um modelo ideal.\\
 
@@ -180,7 +181,8 @@ $\hat{y}$ e y \citep{cohen}. Ele é dado por: \\
 
 \[MSE = \sum^n_{i=1}\frac{(y_i - \hat{y_i})^2}{n}\]
 
-Essa métrica é uma medida absoluta. E quanto maior esse valor pior o modelo está performando.
+Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
+do modelo. \\
 
 
 
@@ -194,11 +196,11 @@ dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement 
 
 Ou seja, nossos dados podem ter sido gerados por uma distribuição de
 probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots,
-x_{t-T})$, onde uma saida $y$ é condicionada pelas últimas $T$ entradas. Para
+x_{t-T})$, onde uma saída $y$ é condicionada pelas últimas $T$ entradas. Para
 resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
   sequenciais} \citep{dlbook}. 
 
-Iremos então experimentar com modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
+Iremos então experimentar  modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
 
 
 \section{Modelos Usados} 
@@ -226,7 +228,7 @@ A computação da saída de uma rede neural então pode ser escrita como:
 
 Para uma rede neural de $n$ \textbf{camadas}. Onde cada camada será uma função
 $f_i$ cujos parâmetros são $W_i$ e $b_i$. Portanto, para a i-ésima camada da rede
-sua saída sera da forma: 
+sua saída será da forma: 
 
 \[ f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) \]
 
@@ -275,7 +277,7 @@ Dropout \citep{dropbayes}. \\
 
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
-neural, i.e. descartar ativações aleatóriamente entre duas camadas da rede com
+neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
 probabilidade $p$.\\
 
 \begin{figure}
@@ -285,14 +287,14 @@ probabilidade $p$.\\
 \end{figure}
 
 Formalmente, para um vetor de ativações $a$ na saída de uma
-cada da rede neural, amostramos um vetor de \textit{máscara} $r$ de uma
+camada da rede neural, amostramos um vetor de \textit{máscara} $r$ de uma
 distribuição de Bernoulli cujo parâmetro é $p$, i.e. $r \sim Bernoulli(p)$.
 Finalmente, o novo vetor de ativações é calculado por $r * a$. O efeito desse
 processo é de zerar aleatoriamente entradas do vetor de ativação.
 \\ 
 
 \cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas do
-modelo equivale em aproximar numéricamente uma distribuição $q(\theta)$ que
+modelo equivale em aproximar numericamente uma distribuição $q(\theta)$ que
 cumpriria o papel da distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
 
 Para o cálculo da incerteza das predições do modelo se realizam então $B$ computações estocásticas de uma mesma
@@ -313,7 +315,7 @@ Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
 
-A família das Redes Neurais Recorrentes é composta por modelos especializados
+A família das Redes Neurais Recorrentes (RNN) é composta por modelos especializados
 em processar dados sequenciais \citep{dlbook}, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
 \textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
 sequência o estado da rede seja de certo modo propagado temporalmente. A equação
@@ -322,9 +324,9 @@ a seguir ilustra uma função com recorrência: \\
 \[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
 
 Nessa equação notamos que na iteração $t$ o valor do vetor $h$ depende de
-$h_{t-1}$.RNNs aprendem a usar esse vetores como esse como
+$h_{t-1}$.RNNs aprendem a usar esse vetores como
 \say{resumos} das iterações passadas. Desse modo , o modelo ganha a capacidade
-de usar informações passadas da sequência para o calculo
+de usar informações passadas da sequência para o cálculo
 de uma saída. Essa capacidade porém começa a ser dificultada quando o modelo
 realiza muitas iterações temporais. Durante o aprendizado, sequências muito
 extensas criam problemas numéricos para o cálculo dos gradientes, esses podendo
@@ -395,7 +397,7 @@ duas matrizes ou vetores. \\
 \[c_t = f_t \circ c_{t-1} + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
 
 Nota-se que $f_t$
-define quando de valor antigo da célula de memória deve participar no cálculo do
+define quanto do valor antigo da célula de memória deve participar no cálculo do
 seu novo valor. 
 Da mesma maneira $i_t$ define quanto da nova entrada deve ser usada no cálculo desse valor.
 Em outras palavras, as portas $i_t$ e $f_t$ definem o quanto a LSTM deve,
@@ -411,7 +413,7 @@ O novo estado da LSTM é então calculado por: \\
 \subsubsection{Rede Encoder-Decoder}
 
 Redes Encoder-Decoder são usadas para modelagem de sequência para
-sequência, ou seja, para receber dados sequênciais como entrada e gerar
+sequência, ou seja, para receber dados sequenciais como entrada e gerar
 sequências como saída \citep{dlbook}. Esses modelos possuem duas partes, ambas compostas por
 RNNs. \\
 
@@ -424,9 +426,9 @@ RNNs. \\
   
 O \textbf{encoder} é uma RNN que busca receber uma sequência de entrada de
 tamanho arbitrário e gerar uma representação como saída, o seu estado interno,
-representando em marrom no diagrama acima. O \textbf{decoder} então recebe essa representação interna (também chamada
+representando em marrom no diagrama acima. O \textbf{Decoder} então recebe essa representação interna (também chamada
 de \textit{codificação}) e usa-a para gerar saídas sequencialmente, podendo
-então gerar essas sequências de duas formas: O decoder pode usar as suas proprias saídas
+então gerar essas sequências de duas formas: O Decoder pode usar as suas próprias saídas
 como entrada para gerar a saída da próxima iteração temporal, ou então usar dados de treinamento como
 entradas, essa última forma chamada de \textit{teacher forcing}. No diagrama
 está indicado o acoplamento entre o decoder e o encoder. Essa codificação é apenas
@@ -445,7 +447,7 @@ para o objetivo do aprendizado. Podemos pensar nessas transformações como
 mudanças de coordenadas nas quais estamos representando os dados. A
 imagem~\ref{} ilustra essa ideia. Justamente o problema de aprender
 representações estimulou desde 2006 uma redescoberta do DL \citep{dlbook}. Criar
-operacoes que transformem os dados de entrada de modo a facilitar o aprendizado
+operações que transformem os dados de entrada de modo a facilitar o aprendizado
 pode levar anos se essa tarefa for colocada na mão de especialistas humanos
 \citep{dlbook}, então é uma capacidade valiosa proporcionada por algoritmos de
 DL como redes encoder-decoder. \\
@@ -458,7 +460,7 @@ DL como redes encoder-decoder. \\
 Iremos reproduzir nesse trabalho o modelo proposto em \cite{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
 série temporal (i.e. uma representacão que extraia informações úteis para o
-problema) e então uma rede \textbf{forecaster} que usa esses codificações ao lado de
+problema) e então uma rede \textbf{forecaster} que usa essas codificações ao lado de
 variáveis exógenas a série temporal para realizar predições.  
 
 
@@ -484,7 +486,7 @@ redes neurais que compõe o encoder, o decoder e o forecaster possuem
 Dropout com probabilidade $p$. Ou seja, podemos usar a técnica do Monte
 Carlo Dropout para estimar a variância de cada predição feita por esse modelo. A
 rede então se torna um modelo bastante robusto para consumir séries temporais,
-assim realizando predições e ainda incertezas.\\
+assim realizando predições e incertezas.\\
 
 
 

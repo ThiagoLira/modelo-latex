@@ -29,7 +29,7 @@ diversos lotes experimentados).
 
 \subsection{Dados faltantes}
 Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muitas vezes não possuem alguma de suas colunas.
-A seguir vemos para todos os dataframes, para cada uma de suas colunas, quantos
+A seguir vemos para todas as tabelas de dados, para cada uma de suas colunas, quantos
 dias possuem dados faltantes. 
 
 \captionof{table}{Dias com dados faltantes para cada parâmetro de Expedição de Cimento}
@@ -68,7 +68,9 @@ CO2     &  3629
 \section{Reamostragem dos dados}
 Para maior facilidade de manuseio dos dados foi necessário realizar uma
 \textbf{reamostragem}. Os dados foram modificados para que entradas realizadas no
-mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem dados foram criados como placeholders para facilidade de vizualiação dos dados. A seguir são reproduzidas as contagens de dados após o resample.
+mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem
+dados foram criados como placeholders para facilidade de visualização dos dados.
+A seguir são reproduzidas as contagens de dados após a reamostragem.
 
 
 \begin{itemize}
@@ -90,13 +92,13 @@ para predição de séries temporais, como consumo de energia elétrica
 \citep{lstmbr}. Os dados estudados nesse documento são séries temporais dado que
 são indexados pelo tempo, porém, resta analisar características temporais desses
 dados. Como exemplo, \cite{lstmbr} usaram a informação do mês atual como
-parâmetro para prever o consume de energia elétrica. Dados que não possuem nenhuma característica temporal (i.e. a ordem não importa) seriam por exemplo provenientes de um estudo do salário recebido por uma amostra da população dados fatores como gênero, escolaridade e idade. No primeiro exemplo temos um caso de \textbf{sazonalidade} nos dados, algo que pode ser analisado em séries temporais com testes de análise espectral e auto-correlação. Para os dados desse problema, iremos testar a sazonalidade dos preditores de dureza do cimento.
+parâmetro para prever o consumo de energia elétrica. Dados que não possuem nenhuma característica temporal (i.e. a ordem não importa) seriam por exemplo provenientes de um estudo do salário recebido por uma amostra da população dados fatores como gênero, escolaridade e idade. No primeiro exemplo temos um caso de \textbf{sazonalidade} nos dados, algo que pode ser analisado em séries temporais com testes de análise espectral e auto-correlação. Para os dados desse problema, iremos testar a sazonalidade dos preditores de dureza do cimento.
 
 \subsection{Análise Espectral}
 
 Uma maneira de testar sazonalidade de dados indexados temporalmente é usar a
 técnica de Transformada de Fourier \citep{spec}, onde podemos estudar quais
-frequencias dentro de um espectro podem ser usadas para decompor um sinal (i.e.
+frequências dentro de um espectro podem ser usadas para decompor um sinal (i.e.
 nossos dados). Para essa análise usamos os índices de dureza contidos nos dados
 de expedição, de 2008 até 2014 e descartamos a parte imaginária da análise já
 que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
@@ -108,7 +110,7 @@ que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
 \end{figure}
 
 
-Podemos notar que a "energia" do sinal não possui picos em nenhuma frequência além da frequência zero, que seria a potência média do sinal, ou seja, uma componente que não depende do tempo. Então, afirmamos que esses dados não possuem sazonalidade mensal ou anual. O que significa que a média e a variância desses indicadores não possuem trends e.g. alguma mudança similar todo mês de Janeiro.
+Podemos notar que a "energia" do sinal não possui picos em nenhuma frequência além da frequência zero, que seria a potência média do sinal, ou seja, uma componente que não depende do tempo. Então, afirmamos que esses dados não possuem sazonalidade mensal ou anual. O que significa que a média e a variância desses indicadores não possuem tendências e.g. alguma mudança similar todo mês de Janeiro.
 
 
 \section{Correlação entre Colunas}

@@ -3,7 +3,7 @@
 \label{cap:introducao}
 
 
-A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado pela indústria de construção civil nas ultimas décadas \citep{cementml}. Os custos de manutenção são da ordem de bilhões de dólares e portanto, a capacidade da previsão de propriedades do cimento desde a sua produção ganha grande importância. Une-se a isso a presença cada vez maior de métodos de ML em domínios diversos da engenharia e ciência e surge então a tentativa de usar algoritmos de aprendizado também para esse domínio (\cite{cementnn1}, \cite{cementnn2}). \\ 
+A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado pela indústria de construção civil nas últimas décadas \citep{cementml}. Os custos de manutenção são da ordem de bilhões de dólares e portanto, a capacidade da previsão de propriedades do cimento desde a sua produção ganha grande importância. Une-se a isso a presença cada vez maior de métodos de ML em domínios diversos da engenharia e ciência e surge então a tentativa de usar algoritmos de aprendizado também para esse domínio (\cite{cementnn1}, \cite{cementnn2}). \\ 
 
 Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de
 Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos
@@ -13,7 +13,7 @@ desses dados, desde o seu pré-processamento até uma criação de modelos
 preditivos e a investigação de sua acurácia. \\
 
 
-Os dados são medições de diversos parâmetros em meio ao processo do fabricação do cimento. Eles são divididos em diversas planilhas para diferentes etapas da produção de cimento, são elas, em ordem no processo:
+Os dados são medições de diversos parâmetros em meio ao processo de fabricação do cimento. Eles são divididos em diversas planilhas para diferentes etapas da produção de cimento, são elas, em ordem no processo:
 
 \begin{itemize}
         \item Cimento Cru
@@ -24,22 +24,25 @@ Os dados são medições de diversos parâmetros em meio ao processo do fabrica�
 \end{itemize}
 
 
-Esse trabalho irá aplicar métodos modernos de ML e DP para a modelagem desses dados. Dado que o problema em questão é de \textbf{regressão}, i.e. queremos prever valores numéricos, saímos do domínio canônico onde são aplicados métodos de DL, como por por exemplo NLP ou visão computacional. Nesse trabalho serão estudados modelos propostos por \citet{ubertime} e \citet{energylstm} para problemas de regressão.
+Esse trabalho irá aplicar métodos modernos de ML e DP para a modelagem desses
+dados. Dado que o problema em questão é de \textbf{regressão}, i.e. queremos
+prever valores numéricos, saímos do domínio canônico onde são aplicados métodos
+de DL, como por por exemplo processamento de linguagem natural ou visão computacional. Nesse trabalho serão estudados modelos propostos por \citet{ubertime} e \citet{energylstm} para problemas de regressão.
 
 \section {Motivação}
 
-Esse trabalho tenta ir além de publicações recentes como \citet{cementnn1},
-\citet{cementnn2} e \citet{cementml}, usando métodos de DL que tem
+Esse trabalho tenta ir além de publicações recentes como \cite{cementnn1},
+\cite{cementnn2} e \cite{cementml}, usando métodos de DL que tem
 obtido excelentes resultados em tarefas de
 regressão com dados sequenciais. Esse trabalho irá reproduzir modelos
-apresentados e usados em \cite{ubertime}, \cite{lstmbr} e \cite{energylstm}, onde
+apresentados e usados em \cite{ubertime}, \cite{lstmbr} e \cite{energylstm}, em que
 técnicas de DL são usadas para modelagem de dados de demanda de carros e de energia elétrica. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Produção de Cimento}
 \label{sec:producao}
 
-Nessa sessão será feito um breve resumo da produção de cimento, usando como base a figura a seguir: \\ 
+Nessa seção será feito um breve resumo da produção de cimento, usando como base a figura a seguir: \\ 
 
 \begin{figure}[H]
 \centering
