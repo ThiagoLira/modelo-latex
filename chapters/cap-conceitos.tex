@@ -501,7 +501,7 @@ rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: 
  \[ y| W \sim \mathcal{N}( f^W(x),\,\sigma^2)\]
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
- Bayesiana para marginalizar os parâmetros e calcular a distrituição $p(y^* | x^*)$, e também
+ Bayesiana para marginalizar os parâmetros e calcular a distribuição $p(y^* | x^*)$, e também
  explicamos como aproximar esse cálculo usando a técnica do MC Dropout. A
  variância dessa distribuição quantifica a incerteza das predições
  \citep{dropbayes}, e pode ser decomposta usando a lei da variância total: \\
@@ -518,7 +518,13 @@ nossa ignorância em relação aos parâmetros do modelo, referida como
 \textit{incerteza do modelo}. $\sigma^2$ seria então o \textit{ruído inerente} ao
 processo gerador de dados.
  
+A estimativa de $Var(f^W(x^*))$ se dá pela técnica do MC Dropout, a variância
+será aproximada pela variância amostral de $B$ predições estocásticas calculadas
+na rede com camadas de Dropout ativadas. Seja $\{y^*_{(1)},y^*_{(2)}, \dots
+y^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{yˆ*}$ sua
+média amostral, temos: \\
 
+\[   Var(f^W(x^*))  = \frac{1}{B}\sum^B_{B=1}(y^*_{(B)} - \hat{yˆ*})^2  \]
 
 
 

@@ -5,3 +5,4 @@
 * Coisas a fazer nos dados da Intercement
 ** refazer testes com modelos não-sequenciais usando apenas os dados de expedição 
 ** matriz de confusão dos dados de expedição
+   
