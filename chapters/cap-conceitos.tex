@@ -501,9 +501,8 @@ rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: 
  \[ y| W \sim \mathcal{N}( f^W(x),\,\sigma^2)\]
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
- Bayesiana para marginalizar os parâmetros e calcular a distribuição $p(y^* | x^*)$, e também
- explicamos como aproximar esse cálculo usando a técnica do MC Dropout. A
- variância dessa distribuição quantifica a incerteza das predições
+ Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^* | x^*)$
+ A variância dessa distribuição quantifica a incerteza das predições
  \citep{dropbayes}, e pode ser decomposta usando a lei da variância total: \\
 
 
@@ -518,17 +517,29 @@ nossa ignorância em relação aos parâmetros do modelo, referida como
 \textit{incerteza do modelo}. $\sigma^2$ seria então o \textit{ruído inerente} ao
 processo gerador de dados.
  
-A estimativa de $Var(f^W(x^*))$ se dá pela técnica do MC Dropout, a variância
+A estimativa de $Var(f^W(x^*))$ se dá pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
-na rede com camadas de Dropout ativadas. Seja $\{y^*_{(1)},y^*_{(2)}, \dots
-y^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{yˆ*}$ sua
+na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)},\hat{y}^*_{(2)}, \dots
+\hat{y}^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{y}^*$ sua
 média amostral, temos: \\
 
-\[   Var(f^W(x^*))  = \frac{1}{B}\sum^B_{B=1}(y^*_{(B)} - \hat{yˆ*})^2  \]
+\[   Var(f^W(x^*))  = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
 
 
+O ruído inerente das medidas é estimado usando os \textit{dados de validação},
+i.e. aqueles não
+usados durante o treinamento. Como
+proposto por \citep{ubertime}, sejam $(X',Y')$ nossos dados de validação, com
+$V$ entradas. Esses dados são independentes do nosso modelo
+treinado $f^W(.)$, então podemos usa-los para estimar o ruído inerente do
+modelo: \\
 
+\[ \hat{\sigma}^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2 \]
 
+Finalmente, sejam nossa incerteza do modelo $\eta_1^2$ e o ruído inerente
+$\eta^2_2$, calcula-se a incerteza total do modelo por: \\
+
+\[  \eta_{tot} = \sqrt{  \eta_1^2 + \eta_2^2 }  \]
 
 
 
