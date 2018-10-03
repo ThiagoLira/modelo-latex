@@ -253,7 +253,7 @@ Na figura mostramos como seria uma rede que usa como parâmetros alguns dos dado
 
 
 \subsection{Inferência Bayesiana em Machine Learning}
-
+\label{sec:bayesinf}
 O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
@@ -487,6 +487,39 @@ Dropout com probabilidade $p$. Ou seja, podemos usar a técnica do Monte
 Carlo Dropout para estimar a variância de cada predição feita por esse modelo. A
 rede então se torna um modelo bastante robusto para consumir séries temporais,
 assim realizando predições e incertezas.\\
+
+
+Essa capacidade do modelo o torna mais interessante do que meramente usar uma
+rede LSTM para o problema de regressão. Agora iremos definir como a informação
+de incerteza pode ser calculada usando esse modelo. \\
+
+Na seção~\ref{sec:reglog} definimos um problema de regressão linear sob o ponto
+de vista Bayesiano. De maneira similar, seja a distribuição gerada por esse
+modelo $p(y | f^W(x))$. Onde $f^W$ denota a saída da
+rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: \\
+
+ \[ y| W \sim \mathcal{N}( f^W(x),\,\sigma^2)\]
+
+ Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
+ Bayesiana para marginalizar os parâmetros e calcular a distrituição $p(y^* | x^*)$, e também
+ explicamos como aproximar esse cálculo usando a técnica do MC Dropout. A
+ variância dessa distribuição quantifica a incerteza das predições
+ \citep{dropbayes}, e pode ser decomposta usando a lei da variância total: \\
+
+
+ %%%
+ %%% nao omitir esse passo da derivação
+ %%%
+\[ Var(y^* | x^*) = Var(f^W(x^*)) + \sigma^2 \] 
+
+
+Vemos que nossa incerteza é decomposta em dois termos. $Var(f^W(x^*))$ denota a
+nossa ignorância em relação aos parâmetros do modelo, referida como
+\textit{incerteza do modelo}. $\sigma^2$ seria então o \textit{ruído inerente} ao
+processo gerador de dados.
+ 
+
+
 
 
 
