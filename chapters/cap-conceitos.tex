@@ -244,10 +244,11 @@ iteração \citep{dlbook}. \\
 A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
 
 
-%\input{tiks/NN.tex}
+\input{chapters/NN.tex}
 
 
-Na figura mostramos como seria uma rede que usa como parâmetros alguns dos dados de Farinha para modelar os índices RC3 e RC7 dos dados de expedição.
+Na figura mostramos como seria uma rede que usa os índices RC3 e RC7 para
+modelar como saída o índice RC28. \\  
 
 \bigskip
 
@@ -371,13 +372,19 @@ Como já explicado anteriormente, nossos dados de entrada e saída não estão n
 
 LSTMs \citep{lstm} são um tipo de RNN que por meio de sua arquitetura permitem que sequências
 maiores sejam processadas sem que o fluxo dos gradientes propagados pela rede se torne
-numericamente problemático (i.e. tendendo a 0 ou a infinito). A Figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. \\
+numericamente problemático (i.e. tendendo a 0 ou a infinito). A
+Figura~\ref{fig:lstm} ilustra o fluxo dos sinais em uma LSTM. Observa-se que a
+entrada $x_t$ e o antigo estado $h_{t-1}$ são usados para o cálculo de diversos \textit{gates} ou \say{portas}, e
+finalmente um novo estado $h_t$ é gerado.\\
+
 \begin{figure}
 \centering
 \caption{Diagrama da arquitetura de uma LSTM}
 \input{chapters/lstm.tex}
 \label{fig:lstm}
 \end{figure}
+
+
 
 
 Uma rede LSTM possui três \say{portas}. Cada porta possui duas matrizes $W,U$ e um
@@ -498,17 +505,20 @@ de vista Bayesiano. De maneira similar, seja a distribuição gerada por esse
 modelo $p(y | f^W(x))$. Onde $f^W$ denota a saída da
 rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: \\
 
- \[ y| W \sim \mathcal{N}( f^W(x),\,\sigma^2)\]
+ \[ y| W \sim \mathcal{N}(y ;  f^W(x),\,\sigma^2)\]
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
- Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^* | x^*)$
+ Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^* | x^*)$.
  A variância dessa distribuição quantifica a incerteza das predições
- \citep{dropbayes}, e pode ser decomposta usando a lei da variância total: \\
+ \citep{dropbayes}, e pode ser decomposta usando a lei da variância total \citep{ubertime}: \\
 
 
- %%%
- %%% nao omitir esse passo da derivação
- %%%
+
+\[ Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] +
+  \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \]
+
+Ou ainda: \\ 
+ 
 \[ Var(y^* | x^*) = Var(f^W(x^*)) + \sigma^2 \] 
 
 

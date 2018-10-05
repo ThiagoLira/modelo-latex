@@ -32,19 +32,19 @@
 
 \node[fit=(int2) (it) (ot) (ft), draw, inner sep=0pt] (fit) {};
 
-\draw[<-] (fit.west|-int2) coordinate (aux)--++(180:7mm) node[left]{$x_t$};
+\draw[<-] (fit.west|-int2) coordinate (aux)--++(180:7mm) node[left]{$x_t,h_{t-1}$};
 \draw[<-] ([yshift=1mm]aux)--++(135:7mm);
 \draw[<-] ([yshift=-1mm]aux)--++(-135:7mm);
 
-\draw[<-] (fit.north-|it) coordinate (aux)--++(90:7mm) node[above]{$x_t$};
+\draw[<-] (fit.north-|it) coordinate (aux)--++(90:7mm) node[above]{$x_t,h_{t-1}$};
 \draw[<-] ([xshift=1mm]aux)--++(45:7mm);
 \draw[<-] ([xshift=-1mm]aux)--++(135:7mm);
 
-\draw[<-] (fit.north-|ot) coordinate (aux)--++(90:7mm) node[above]{$x_t$};
+\draw[<-] (fit.north-|ot) coordinate (aux)--++(90:7mm) node[above]{$x_t,h_{t-1}$};
 \draw[<-] ([xshift=1mm]aux)--++(45:7mm);
 \draw[<-] ([xshift=-1mm]aux)--++(135:7mm);
 
-\draw[<-] (fit.south-|ft) coordinate (aux)--++(-90:7mm) node[below]{$x_t$};
+\draw[<-] (fit.south-|ft) coordinate (aux)--++(-90:7mm) node[below]{$x_t,h_{t-1}$};
 \draw[<-] ([xshift=1mm]aux)--++(-45:7mm);
 \draw[<-] ([xshift=-1mm]aux)--++(-135:7mm);
 \end{tikzpicture}
