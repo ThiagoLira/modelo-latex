@@ -21,28 +21,44 @@ Os testes foram realizados com modelos sequenciais e não sequenciais. Para ambo
 as classes de modelos os dados foram transformados para possuirem variância
 unitária e média 0. Os índices RC3 e RC7 foram usados como entrada e o índice
 RC28 foi usado como saída. Os dados foram divididos em
-\textit{treino}, \textit{teste} e \textit{validação}. Usamos os dados de treino
-e teste para treinar os
-modelos, e os de validação apenas para avaliar o seu erro. O
-gráfico~\ref{fig:divrc28} mostra essa divisão. Lembramos que apenas os dados de
+\textit{treino}, \textit{validação}. Usamos os dados de treino 
+para treinar os
+modelos, e os de validação apenas para avaliar o seu erro. Os
+gráficos~\ref{fig:divrc3}, \ref{fig:divrc7} e \ref{fig:divrc28} mostram essa divisão. Lembramos que apenas os dados de
 validação são inéditos para os modelos, com eles avaliamos a capacidade de
 generalização dos modelos. 
 
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=0.9\columnwidth]{dataset_splitRC28.png}
+  \includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC3.png}
+\caption{Divisão do dataset para a saída RC3, os pontos azuis foram usados para
+treino e os pontos laranjas usados para validação.}
+  \label{fig:divrc3}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC7.png}
+\caption{Divisão do dataset para a saída RC3, os pontos azuis foram usados para
+treino e os pontos laranjas usados para validação.}
+  \label{fig:divrc7}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC28.png}
 \caption{Divisão do dataset para a saída RC28, os pontos azuis foram usados para
 treino e os pontos laranjas usados para validação.}
   \label{fig:divrc28}
 \end{figure}
 
 
-
-
-
 Seguem então os resultados dos modelos não-sequenciais para esse experimento, os
-erros indicados são calculados pela métrica R2: \\
+erros indicados são calculados pela métrica R2, para efeito de comparação, por
+se tratar de uma métrica absoluta: \\
+
 
 
 
@@ -58,9 +74,11 @@ erros indicados são calculados pela métrica R2: \\
 E os resultados para o modelo Encoder-Decoder-Forecaster: \\
 
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\columnwidth]{exped_saco_2008-2015-2017encdecRC28.png}
+\caption{Comparação dos 3 modelos não-sequenciais na tarefa de regressão do índice RC28}
+\label{fig:3nseq}
+\end{figure}
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "../quali"
-%%% End:
 
