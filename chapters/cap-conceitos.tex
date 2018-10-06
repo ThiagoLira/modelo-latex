@@ -1,6 +1,6 @@
 %% ------------------------------------------------------------------------- %%
 \chapter{Conceitos}
-\label{cap:conceitos}
+l\label{cap:conceitos}
 
 
 \section{Aprendizado Automático}
@@ -133,18 +133,26 @@ modelo. \\
 
 A log-verossimilhança do modelo é dada por: \\
 
-\[ LV =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)\]
+\begin{equation}
+  \label{eq:lv}
+LV =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)
+\end{equation}
 
-
-E como definimos a distribuição gerada pelo modelo como $
-\mathcal{N}(y ; \hat{y}(x,\theta),\sigma^2)$, então usando a definição da
-distribuição normal: \\
+E como definimos a distribuição gerada pelo modelo como $\mathcal{N}(y ;
+\hat{y}(x,\theta),\sigma^2)$, então aplicando a definição da
+distribuição normal na equação~\ref{eq:lv} chegamos em: \\
 
 \[LV = -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
   \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2} \]
 
-Essa equação, ao ser otimizada, chega na mesma estimação de parâmetros $\theta$
-que aplicar a equação do Erro Quadrático Médio \citep{dlbook}, explicada na seção~\ref{sec:MSE}.\\
+Observa-se que essa equação que calcula a verossimilhança para regressão possui o termo $(\hat{y_i}-y_i^2)$, a diferença
+quadrática entre as predições e os valores reais, o \textit{erro quadrático}. E
+de fato, no desenvolvimento desse projeto, usaremos o Erro Quadrático Médio
+(definido formalmente na seção~\ref{sec:MSE}) entre
+predições e valores reais para calcular o erro do nosso modelo e otimiza-lo.  
+E essa otimização pode ser interpretada como uma busca por parâmetros que
+maximizem a verossimilhança dos valores gerados pelo modelo frente os dados
+observados. \\ 
 
 \subsection{Função de Custo}
 
@@ -157,23 +165,6 @@ definida pelos parâmetros do modelo \citep{dlbook}. Nessa sessão iremos defini
 a função de custo usada em todos os modelos de regressão usados, bem como a
 métrica de acurácia, que testa a qualidade das predições dos modelos após o treinamento. \\
 
-\subsubsection{R-quadrado}
-Como teste da acurácia dos modelos foi usada a métrica R-quadrado \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
-
-\[R_2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
-
-\[SS_{tot} = \sum^n_{i=1} (y_i- \hat{y_i})^2\]
-
-\[SS_{res} = \sum^n_{i=1} (y_i - \bar{y})^2\]
-
-\[ \bar{y} = \frac{1}{n} \sum^n_{i=1} y\]
-
-% \justify
-Para essa métrica, o modelo pode ter um desempenho arbitrariamente ruim, com esse valor
-podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
-indicando um modelo ideal.\\
-
-
 \subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
 O erro quadrático médio (em inglês, MSE) é uma medida de diferença entre duas variáveis contínuas
@@ -183,6 +174,29 @@ $\hat{y}$ e y \citep{cohen}. Ele é dado por: \\
 
 Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
 do modelo. \\
+
+\subsubsection{R-quadrado}
+Como teste da acurácia dos modelos foi usada a métrica R-quadrado ($R^2$) \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
+
+\[R^2 = 1 - \frac{SS_{res}}{SS_{tot}}\]
+
+\[SS_{tot} = \sum^n_{i=1} (y_i- \hat{y_i})^2\]
+
+\[SS_{res} = \sum^n_{i=1} (y_i - \bar{y})^2\]
+
+\[ \bar{y} = \frac{1}{n} \sum^n_{i=1} y\]
+
+% \justify
+$SS_{res}$ mensura a quantidade de variância \textit{residual}, a
+variância entre os dados reais e as predições do modelo, i.e. a variância não
+explicada pelo modelo. $SS_{tot}$ cumpre o papel da variância \textit{total}. A métrica $R^2$
+então nos mostra quanto da variância dos dados é explicada pelo modelo. \\
+
+Para essa métrica, o modelo pode ter um desempenho arbitrariamente ruim, com esse valor
+podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
+indicando um modelo ideal.\\
+
+
 
 
 
@@ -243,11 +257,14 @@ iteração \citep{dlbook}. \\
 
 A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
 
+\begin{figure}
+  \centering
+  \label{fig:nn}
+  \input{chapters/NN.tex}
+  \caption{Um exemplo de Rede Neural no domínio dos dados da Intercement}
+\end{figure}
 
-\input{chapters/NN.tex}
-
-
-Na figura mostramos como seria uma rede que usa os índices RC3 e RC7 para
+Na Figura~\ref{fig:nn} mostramos como seria uma rede que usa os índices RC3 e RC7 para
 modelar como saída o índice RC28. \\  
 
 \bigskip
@@ -282,6 +299,7 @@ neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
 probabilidade $p$.\\
 
 \begin{figure}
+  \centering
   \input{chapters/dropout.tex}
   \label{fig:dropout}
   \caption{Representacão do uso de Dropout em uma rede neural}
@@ -296,7 +314,7 @@ processo é de zerar aleatoriamente entradas do vetor de ativação.
 
 \cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas do
 modelo equivale em aproximar numericamente uma distribuição $q(\theta)$ que
-cumpriria o papel da distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
+cumpriria o papel de aproximar a distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
 
 Para o cálculo da incerteza das predições do modelo se realizam então $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
@@ -505,7 +523,10 @@ de vista Bayesiano. De maneira similar, seja a distribuição gerada por esse
 modelo $p(y | f^W(x))$. Onde $f^W$ denota a saída da
 rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: \\
 
- \[ y| W \sim \mathcal{N}(y ;  f^W(x),\,\sigma^2)\]
+\begin{equation}
+  \label{eq:reg}
+ y| W \sim \mathcal{N}(y ;  f^W(x),\,\sigma^2)
+\end{equation}
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
  Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^* | x^*)$.
@@ -517,7 +538,8 @@ rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: 
 \[ Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] +
   \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \]
 
-Ou ainda: \\ 
+Usando a equação~\ref{eq:reg}, podemos substituir o primeiro termo dessa soma. O
+segundo termo será definido como $\sigma^2$: \\ 
  
 \[ Var(y^* | x^*) = Var(f^W(x^*)) + \sigma^2 \] 
 
