@@ -255,17 +255,16 @@ seus parâmetros e da entrada $x$. Isso não será verdade para os modelos
 interno de computação desses modelos é usado como entrada para uma próxima
 iteração \citep{dlbook}. \\
 
-A seguir está reproduzida uma rede neural simples com uma camada oculta e dois neurônios de saída.
+Na Figura~\ref{fig:nn} mostramos como seria uma rede que usa os índices RC3 e RC7 para
+modelar como saída o índice RC28. \\  
 
 \begin{figure}
   \centering
-  \label{fig:nn}
   \input{chapters/NN.tex}
   \caption{Um exemplo de Rede Neural no domínio dos dados da Intercement}
+  \label{fig:nn}
 \end{figure}
 
-Na Figura~\ref{fig:nn} mostramos como seria uma rede que usa os índices RC3 e RC7 para
-modelar como saída o índice RC28. \\  
 
 \bigskip
 
@@ -285,7 +284,11 @@ $p(X,Y | \theta)$, a chamada verossimilhança \citep{bayesml}.
 
 Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
 
-\[ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta \]
+
+\begin{equation}
+  \label{eq:int}
+p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
+\end{equation}
 
 Essa integral é geralmente intratável pela dificuldade de se calcular
 analiticamente $p(\theta | X,Y)$ \citep{ubertime}, e portanto será usada uma
@@ -469,14 +472,12 @@ Redes encoder-decoder são muito usadas para aprender \textit{representações} 
 dados. Isso quer dizer que as codificações da rede encoder-decoder são frutos de
 transformações no espaço das entradas que buscam extrair a informação mais útil
 para o objetivo do aprendizado. Podemos pensar nessas transformações como
-mudanças de coordenadas nas quais estamos representando os dados. A
-imagem~\ref{} ilustra essa ideia. Justamente o problema de aprender
+mudanças de coordenadas nas quais estamos representando os dados. Justamente o problema de aprender
 representações estimulou desde 2006 uma redescoberta do DL \citep{dlbook}. Criar
 operações que transformem os dados de entrada de modo a facilitar o aprendizado
 pode levar anos se essa tarefa for colocada na mão de especialistas humanos
 \citep{dlbook}, então é uma capacidade valiosa proporcionada por algoritmos de
 DL como redes encoder-decoder. \\
-\\
 
 
 
@@ -496,10 +497,10 @@ variáveis exógenas a série temporal para realizar predições.
 \end{figure}
 
 
-Durante o pré-treinamento a rede encoder-decoder consome sequências de $F$ dias
+Durante o pré-treinamento a rede encoder-decoder consome sequências de $F + T$ dias
 da série temporal. O encoder cria uma representação vetorial $h$ depois de
-receber como entrada os primeiros $T$ ($T < F$) dias da sequência. Então, $h$ é usado como
-inicialização do estado interno do decoder, e esse então consume mais $F - T$
+receber como entrada os primeiros $T$ dias da sequência. Então, $h$ é usado como
+inicialização do estado interno do decoder, e esse então consume mais $F$
 entradas da sequência. Para o decoder, se em uma iteração sua entrada é $X_i$,
 então sua saída será comparada com $X_{i+1}$, e esse erro é propagado após lidas
 todas as entradas para que a representação $h$ proveniente do encoder possa se
@@ -519,18 +520,19 @@ rede LSTM para o problema de regressão. Agora iremos definir como a informaçã
 de incerteza pode ser calculada usando esse modelo. \\
 
 Na seção~\ref{sec:reglog} definimos um problema de regressão linear sob o ponto
-de vista Bayesiano. De maneira similar, seja a distribuição gerada por esse
-modelo $p(y | f^W(x))$. Onde $f^W$ denota a saída da
-rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: \\
+de vista Bayesiano. Para esse problema assumimos a distribuição geradora de
+predições como $p(y |f^W(x))$. Onde $f^W(.)$ é a rede Encoder-Forecaster após o treino.
+Como estamos lidando com regressão, podemos especificar ainda essa distribuição
+como \citep{ubertime}:  
 
 \begin{equation}
   \label{eq:reg}
- y| W \sim \mathcal{N}(y ;  f^W(x),\,\sigma^2)
+ y| W \sim \mathcal{N}(f^W(x),\,\sigma^2)
 \end{equation}
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
- Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^* | x^*)$.
- A variância dessa distribuição quantifica a incerteza das predições
+ Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^*
+ | x^*)$ pela Integral~\ref{eq:int}. A variância dessa última distribuição quantifica a incerteza das predições
  \citep{dropbayes}, e pode ser decomposta usando a lei da variância total \citep{ubertime}: \\
 
 
@@ -538,7 +540,8 @@ rede Forecaster após o treino. Como estamos lidando com regressão, assume-se: 
 \[ Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] +
   \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \]
 
-Usando a equação~\ref{eq:reg}, podemos substituir o primeiro termo dessa soma. O
+Como o primeiro termo dessa soma dentro do operador do valor esperado segue uma distribuição normal
+(Equação~\ref{eq:reg}), podemos substituí-lo pela sua média. O
 segundo termo será definido como $\sigma^2$: \\ 
  
 \[ Var(y^* | x^*) = Var(f^W(x^*)) + \sigma^2 \] 
