@@ -316,7 +316,7 @@ processo é de zerar aleatoriamente entradas do vetor de ativação.
 \\ 
 
 \cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas do
-modelo equivale em aproximar numericamente uma distribuição $q(\theta)$ que
+modelo equivale em aproximar numericamente  a Integral~\ref{eq:int}, usando uma distribuição $q(\theta)$ que
 cumpriria o papel de aproximar a distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
 
 Para o cálculo da incerteza das predições do modelo se realizam então $B$ computações estocásticas de uma mesma
@@ -527,7 +527,7 @@ como \citep{ubertime}:
 
 \begin{equation}
   \label{eq:reg}
- y| W \sim \mathcal{N}(f^W(x),\,\sigma^2)
+ y| W \sim \mathcal{N}(y;f^W(x),\,\sigma^2)
 \end{equation}
 
  Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
