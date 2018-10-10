@@ -90,7 +90,32 @@
     urlcolor=cyan,
 }
 
-\usepackage{listings}
+\usepackage{empheq}
+\usepackage[many]{tcolorbox}
+\usepackage{relsize}
+\usetikzlibrary{positioning,backgrounds, fit, arrows.meta,shapes.arrows,shapes}
+\usepackage{lmodern}
+\usepackage{bm}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepackage{array,colortbl,xcolor}
+\usepgfplotslibrary{dateplot}
+\usepackage{setspace}
+\usepackage{etoolbox}
+\usepackage{xspace}
+\usepackage{tkz-euclide}
+\usepackage{tikz}
+\AtBeginEnvironment{quote}{\singlespacing}
+
+
+% definitions
+\input{definitions/colors}
+\input{definitions/styles}
+
+% new commands
+\input{tiks/all_new_commands.tex}
+
+
 \usetheme{metropolis}
 \urlstyle{same}
 \graphicspath{ {figuras/} }
@@ -121,8 +146,11 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 \end{frame}
 
 
+\section{Introdução}
+
 
 \begin{frame}
+\frametitle{Histórico}
 %%% A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado
 %%% pela indústria de construção civil nas últimas décadas (Taffese e Sistonen, 2017). Os
 %%% custos de manutenção são da ordem de bilhões de dólares e portanto, a capacidade da
@@ -136,6 +164,7 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 
 \begin{frame}
+\frametitle{Definição do Problema}
 %%% slide cimento foto do processo com numeros DECORA FDP
 \end{frame}
 
@@ -165,6 +194,7 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \begin{frame}
 %%% slide com tabela de correlação
+\frametitle{Tabela de Correlação}
 \begin{table}[H]
 \centering
 \begin{tabular}{l|lll}
@@ -183,26 +213,94 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \begin{frame}
 %%% slide com analise FFT só do RC28
+\frametitle{Análise de Periodicidade}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{FFT_RC28.png}
+\caption{Análise Espectral para preditor RC28}
+\end{figure}
+
 \end{frame}
 
 \begin{frame}
 %%% slide definindo aprendizado supervisionado/regressao
 \end{frame}
 
+
+\section{Modelos Escolhidos}
+
 \begin{frame}
 %%% slide mostrando rede neural (mesmo diagrama da quali)
+  \frametitle{Redes Neurais}
+  \begin{empheq}[box=\tcbhighmath]{align}
+    f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) 
+  \end{empheq}
+
+\begin{figure}
+  \centering
+  \input{chapters/NN.tex}
+  \label{fig:nn}
+\end{figure}
+
+
 \end{frame}
 
 \begin{frame}
-%%% slide definindo série temporal/sequencial
+  \frametitle{Séries Temporais}
+  \begin{empheq}[box=\tcbhighmath]{align}
+  p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
+  \end{empheq}
+  %%% slide definindo serie temporal
 \end{frame}
 
 \begin{frame}
+\frametitle{Modelos Sequenciais: RNNs}
 %%% slide definindo uma LSTM
+\begin{figure}[H]
+  \input{tiks/RNNSimplified.tex}
+  \caption{RNN genérica}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Modelos Sequenciais: RNNs}
+%%% slide definindo uma LSTM 2
+\begin{figure}[H]
+  \input{tiks/RRNSimplifiedUnrolled.tex}
+  \caption{RNN genérica através do tempo}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Modelos Sequenciais: LSTMs}
+%%% slide definindo uma LSTM 2
+  \resizebox{1\textwidth}{!}{
+    \input{chapters/lstm.tex}
+    }
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Modelos Sequenciais: Encoder-Decoder}
+%%% slide definindo uma LSTM 2
+\begin{figure}[H]
+\centering
+\input{chapters/encdec.tex}
+\caption{ Diagrama de Rede Encoder-Decoder}
+
+\end{figure}
+
 \end{frame}
 
 \begin{frame}
 %%% slide com modelo Uber
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{uber.png}
+\caption{Arquitetura do modelo Encoder-Decoder-Forecaster}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -210,8 +308,34 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 \end{frame}
 
 \begin{frame}
+  \frametitle{Dropout como Regularizador}
+  \centering
 %%% slide com dropout imagem da quali
+  \resizebox{1\textwidth}{!}{
+      \input{chapters/dropout.tex}
+    }
+
+    O Dropout força a rede neural a distribuir o aprendizado por todos os neurônios
+    
 \end{frame}
+
+\begin{frame}
+  \frametitle{Dropout como Inferência Bayesiana}
+%%% slide com dropout imagem da quali
+  É demonstrado que o Dropout pode ser interpretado como considerar uma
+  distribuição de probabilidade em todos os parâmetros do modelo.
+
+  Uma computação feedforward na rede é então uma amostragem dos parâmetros $W$
+  dentro de uma distribuição Normal: \\ 
+
+  
+  \begin{empheq}[box=\tcbhighmath]{align}
+    W \sim \mathcal{N}(W,\sigma^2)
+  \end{empheq}
+
+  
+\end{frame}
+
 
 \begin{frame}
 %%% slide do modelo da uber com zoom
