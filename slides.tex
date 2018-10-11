@@ -151,23 +151,30 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \begin{frame}
 \frametitle{Histórico}
-%%% A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado
-%%% pela indústria de construção civil nas últimas décadas (Taffese e Sistonen, 2017). Os
-%%% custos de manutenção são da ordem de bilhões de dólares e portanto, a capacidade da
-%%% previsão de propriedades do cimento desde a sua produção ganha grande importância.
-%%% Une-se a isso a presença cada vez maior de métodos de ML em domínios diversos da
-%%% engenharia e ciência e surge então a tentativa de usar algoritmos de aprendizado também
-%%% para esse domínio (Baykasoğlu et al., 2004, Öztaş et al., 2006).
-%%% slide cimento histrico 
+
+\begin{itemize}
+\item A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado
+pela indústria de construção civil nas últimas décadas.
+\item Custos de manutenção da ordem de bilhões de dólares dão importância
+  estratégica para previsão da resistência de cimento, possivelmente ainda
+  durante sua produção.
+\item Avanços recentes no campo do Deep Learning criaram ferramentas que
+  melhoram o estado da arte para modelagem de Séries Temporais
+\end{itemize}
+
 \end{frame}
 
 
 
 \begin{frame}
-\frametitle{Definição do Problema}
+\frametitle{Etapas da Produção de Cimento}
 %%% slide cimento foto do processo com numeros DECORA FDP
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{cimento.png}
+\caption{Representação das Diversas Etapas da produção de Cimento}
+\end{figure}
 \end{frame}
-
 
 \section{Análise dos Dados}
 
@@ -222,8 +229,24 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \end{frame}
 
+
 \begin{frame}
+  \frametitle{Definição do Problema}
 %%% slide definindo aprendizado supervisionado/regressao
+  \begin{itemize}
+    \item O problema de modelar o índice de Resistência é um problema de
+  \textbf{Aprendizado Supervisionado} de \textbf{Regressão}.
+    \item Queremos modelar uma função que aprenda com um conjunto de dados $\{(x_1,y_1)
+\dots , (x_n,y_n)\}$ e possa nos gerar anotações inéditas $y^*$ para novas
+entradas $x^*$.
+
+    \item O aprendizado busca em uma certa família de funções aquela que maximiza a
+      verossimilhança de uma distribuição implícita $p'(y | x)$ aprendida pelo modelo.
+    
+  \end{itemize}
+  
+
+  
 \end{frame}
 
 
@@ -247,6 +270,14 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \begin{frame}
   \frametitle{Séries Temporais}
+
+  \begin{itemize}
+\item Dados anotados temporalmente, normalmente em intervalos regulares. O passado de
+uma série pode trazer informação para prever o seu futuro.
+\item Agora nosso problema
+de aprendizado supervisionado leva em conta diversas anotações passadas. 
+    \end{itemize}
+  
   \begin{empheq}[box=\tcbhighmath]{align}
   p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
   \end{empheq}
@@ -315,7 +346,7 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
       \input{chapters/dropout.tex}
     }
 
-    O Dropout força a rede neural a distribuir o aprendizado por todos os neurônios
+    O Dropout força a rede neural a distribuir o aprendizado por todos os neurônios.
     
 \end{frame}
 
