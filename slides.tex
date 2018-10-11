@@ -321,21 +321,42 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 
 \begin{frame}
   \frametitle{Dropout como Inferência Bayesiana}
-%%% slide com dropout imagem da quali
+  %%% slide com dropout imagem da quali
+
   É demonstrado que o Dropout pode ser interpretado como considerar uma
   distribuição de probabilidade em todos os parâmetros do modelo.
 
-  Uma computação feedforward na rede é então uma amostragem dos parâmetros $W$
-  dentro de uma distribuição Normal: \\ 
-
-  
-  \begin{empheq}[box=\tcbhighmath]{align}
-    W \sim \mathcal{N}(W,\sigma^2)
+  \begin{empheq}[box=\tcbhighmath]{align*}
+  \hat{y} &= \hat{a}W_2 \\
+          &= (a * diag(\hat{\epsilon}_2))W_2 \\
+          &=   \sigma(\hat{x}W_1 + b) *(diag(\hat{\epsilon}_2)W_2) \\
+          &=   \sigma(x (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
+  \end{empheq}
+  Onde cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
+  uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição: \\
+  \begin{empheq}[box=\tcbhighmath]{align*}
+    \hat{\epsilon}^{i}_k \sim Bernoulli(p_k)
   \end{empheq}
 
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{Dropout como Inferência Bayesiana}
+  %%% slide com dropout imagem da quali
+  Definindo-se: \\
+  \begin{empheq}[box=\tcbhighmath]{align*}
+    \hat{W_1} &:= diag(\hat{\epsilon}_1)W_1 \\
+    \hat{W_2} &:= diag(\hat{\epsilon}_2)W_2
+  \end{empheq}
+Então podemos escrever a saída da rede neural como: \\
+  \begin{empheq}[box=\tcbhighmath]{align*}
+        \hat{y}  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =: f^{\hat{W}_1,\hat{W}_2,b}(x) \\
+\end{empheq}
+  
+
+  
+\end{frame}
 
 \begin{frame}
 %%% slide do modelo da uber com zoom
