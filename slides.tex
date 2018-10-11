@@ -327,10 +327,10 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
   distribuição de probabilidade em todos os parâmetros do modelo.
 
   \begin{empheq}[box=\tcbhighmath]{align*}
-  \hat{y} &= \hat{a}W_2 \\
+  y^* &= \hat{a}W_2 \\
           &= (a * diag(\hat{\epsilon}_2))W_2 \\
           &=   \sigma(\hat{x}W_1 + b) *(diag(\hat{\epsilon}_2)W_2) \\
-          &=   \sigma(x (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
+          &=   \sigma(x^* (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
   \end{empheq}
   Onde cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
   uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição: \\
@@ -351,12 +351,25 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
   \end{empheq}
 Então podemos escrever a saída da rede neural como: \\
   \begin{empheq}[box=\tcbhighmath]{align*}
-        \hat{y}  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =: f^{\hat{W}_1,\hat{W}_2,b}(x) \\
+        y^*  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =:
+        f^{\hat{W}_1,\hat{W}_2,b}(x^*) \\
 \end{empheq}
-  
-
-  
 \end{frame}
+
+\begin{frame}
+  \frametitle{Dropout como Inferência Bayesiana}
+  %%% slide com dropout imagem da quali
+
+  Dessa maneira, podemos estimar os dois primeiros momentos das predições de
+  maneira simples: \\
+  
+  \begin{empheq}[box=\tcbhighmath]{align*}
+   \widetilde{\mathbb{E}}[y^*] &= \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)} \\ 
+   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2 
+  \end{empheq}
+
+\end{frame}
+
 
 \begin{frame}
 %%% slide do modelo da uber com zoom
@@ -364,6 +377,16 @@ Então podemos escrever a saída da rede neural como: \\
 
 \begin{frame}
 %%% formulas de variancia no modelo uber
+
+  Finalmente, estimamos a incerteza do modelo usando o MC Dropout. E o ruído
+  inerente usando a variância amostral de um conjunto de dados de validação:\\ 
+
+  \begin{empheq}[box=\tcbhighmath]{align*}
+   \widetilde{\mathit{Var}}[f^W(x^*)]  &=
+   \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2 \\ 
+   \widetilde{\sigma}^2 &= \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2 
+  \end{empheq}
+
 \end{frame}
 
 \begin{frame}
