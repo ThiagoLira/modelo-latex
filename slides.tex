@@ -89,12 +89,13 @@
     filecolor=magenta,      
     urlcolor=cyan,
 }
-
+\usepackage{dirtytalk}
 \usepackage{empheq}
 \usepackage[many]{tcolorbox}
 \usepackage{relsize}
 \usetikzlibrary{positioning,backgrounds, fit, arrows.meta,shapes.arrows,shapes}
 \usepackage{lmodern}
+\usepackage{pgfgantt}
 \usepackage{bm}
 \usepackage[scale=2]{ccicons}
 \usepackage{pgfplots}
@@ -177,6 +178,7 @@ pela indústria de construção civil nas últimas décadas.
 \section{Análise dos Dados}
 
 \begin{frame}
+  \frametitle{Entradas presentes nos Dados}
 %%% plot com numero de entradas faltando nos dados 
 \begin{figure}[H]
 \centering
@@ -272,10 +274,12 @@ Mas desse jeito o modelo não estaria usando nenhuma informação temporal dos d
 uma série pode trazer informação para prever o seu futuro.
 \item Agora nosso problema
 de aprendizado supervisionado leva em conta diversas anotações passadas. A
-distribuição aprendida pelo modelo seria condicionada por diversas anotações
+função aprendida pelo modelo teria como entrada diversas anotações
 subsequentes passadas. 
   \begin{empheq}[box=\tcbhighmath]{align}
-  p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
+  &\mathnormal{f}(\textbf{x}_{t} ,\textbf{x}_{t -1} , \dots, \textbf{x}_{t-T}) =
+  \widehat{RC28_t} \\
+  &\textbf{x}_t = (RC3_t,RC7_t)
   \end{empheq}
 \item Os dados da Intercement não estavam anotados em intervalos regulares,
   então eles foram reamostrados em intervalos de 1 dia. Com dias
@@ -307,9 +311,18 @@ subsequentes passadas.
 \begin{frame}
 \frametitle{Modelos Sequenciais: RNNs}
 %%% slide definindo uma LSTM
+Função de recorrência:\\
+\bigskip
+\quad Para $t=\{1, \dots,T\}$ \\
+ \begin{empheq}[box=\tcbhighmath]{align}
+   \mathnormal{f}(\textbf{h}_{t-1},\textbf{x}_t) = \textbf{h}_t
+\end{empheq}
+\centering
 \begin{figure}[H]
-  \input{tiks/RNNSimplified.tex}
-  \caption{RNN genérica}
+\resizebox{0.3\textwidth}{!}{
+ \input{tiks/RNNSimplified.tex}
+}
+\caption{RNN genérica}
 \end{figure}
 \end{frame}
 
@@ -334,6 +347,30 @@ subsequentes passadas.
 \end{frame}
 
 \begin{frame}
+\frametitle{Modelos Sequenciais: LSTMs}
+
+A LSTM tem seu fluxo de informação regulado por diversos sinais, que agem como
+válvulas que permitem ao modelo aprender quanto é importante lembrar ou esquecer
+de dados passados e presentes.
+
+\begin{empheq}[box=\tcbhighmath]{align}
+  f_t &= \sigma_g(W_fx_t + U_fh_{t-1} + b_f) \\
+  i_t &= \sigma_g(W_ix_t + U_ih_{t-1} + b_i)\\
+  o_t &= \sigma_g(W_ox_t + U_oh_{t-1} + b_o)
+\end{empheq}
+O valor da cécula de memória é então calculado e usado para calcular o novo
+vetor de estado. 
+\begin{empheq}[box=\tcbhighmath]{align}
+c_t &= f_t \circ c_{t-1} + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c) \\
+h_t &= o_t \circ \sigma_h(c_t)  
+\end{empheq}
+
+
+\end{frame}
+
+
+
+\begin{frame}
 \frametitle{Modelos Sequenciais: Encoder-Decoder}
 %%% slide definindo uma LSTM 2
 Redes Encoder-Decoder são modelos poderosos para criar \textit{representações}
@@ -354,6 +391,7 @@ esse vetor. A esse vetor se dá o nome de \textit{embedding}.
 
 \begin{frame}
 %%% slide com modelo Uber
+\frametitle{Modelos Sequenciais: Encoder-Decoder-Forecaster}
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{uber.png}
@@ -483,16 +521,51 @@ Então podemos escrever a saída da rede neural como: \\
 
 
 \begin{frame}
-%%% resultados modelos não-sequenciais
+  %%% resultados nao sequenciais
+\frametitle{Modelos Não-Sequenciais: Resultados}  
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{exped_saco_2008-2012-2014RC28.png}
+\end{figure}
 \end{frame}
 
 
 \begin{frame}
-%%% preparacao dos dados para modelos de sequencia
+  \frametitle{Preparo dos Dados: Modelos Sequenciais}
+  %%% resultados modelos não-sequenciais
+  \begin{itemize}
+  \item Para a modelagem sequencial, os dados são separados em janelas. O tamanho
+    dessas janelas é um hiper-parâmetro, no caso, usamos janelas de 30 dias,
+    sempre pulando 1 dia entre o começo de cada janela.
+    
+  \item Cada exemplo de treinamento será então uma sequencia de 30 dias de dados dos
+    índices RC3 e RC7, e apenas uma anotação do índice RC28.
+  \item A ideia é que o modelo tenha uma predição para a medida RC28 \say{atual} de um lote de cimento
+    tendo como guia as medidas RC3 e RC7 atuais desse lote (exatamente como no
+    caso dos modelos não-sequenciais), bem como as medidas
+    dos ultimos 30 dias desses valores para outros lote.
+  \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Preparo dos Dados: Modelos Sequenciais}
+    \begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.3]{slides_windows}
+  \caption{Janelas subsequentes de 30 dias retiradas dos dados.}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}
 %%% resultados modelo uber
+\frametitle{Rede Encoder-Decoder-Forecaster: Resultados}  
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\columnwidth]{exped_saco_2008-2015-2017encdecRC28.png}
+\caption{Resultados da rede Encoder-Decoder-Forecaster na tarefa de regressão do índice RC28}
+\label{fig:3nseq}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -500,14 +573,90 @@ Então podemos escrever a saída da rede neural como: \\
 \end{frame}
 
 \begin{frame}
+  \frametitle{Cronograma de Pesquisa}
 %%% direção futura imagem do cronograma
+\begin{figure}[H]
+  \resizebox{1\textwidth}{!}{
+     \begin{ganttchart}[%Specs
+     y unit title=0.5cm,
+     y unit chart=0.7cm,
+     vgrid,hgrid,
+     title height=1,
+%     title/.style={fill=none},
+     title label font=\bfseries\footnotesize,
+     bar/.style={fill=blue},
+     bar height=0.7,
+%   progress label text={},
+     group right shift=0,
+     group top shift=0.7,
+     group height=.3,
+     group peaks width={0.2},
+     inline]{1}{24}
+     % labels
+
+
+     % Titulo da tabela e quantos quadradinhos vai ter no total
+     \gantttitle{2018-2019 - Mestrado}{24}\\
+
+     % primeira subdivisão de quadradinhos em anos, quantos quadradinhos tem por
+     % ano(precisa somar o mesmo que o valor
+     % que vc definiu em cima)
+    \gantttitle[]{2018}{12}                 
+    \gantttitle[]{2019}{12} \\              
+
+    %% subsubdivisão de quadradinhos em meses, tb precisa somar o total
+    %% desse jeito cada quadradinho conta como 1 semana de trabalho
+    %% 4 quadradinhos por mes
+    \gantttitle{Outubro}{4}                
+    \gantttitle{Novembro}{4}
+    \gantttitle{Dezembro}{4}
+    \gantttitle{Janeiro}{4}
+    \gantttitle{Fevereiro}{4}
+    \gantttitle{Março}{4}\\
+
+
+    %%% primeiro valor nos colchetes -> nome da tarefa
+    %% segundo e terceiro valores -> de qual quadradinho até qual quadradinho a
+    %% tarefa vai, de acordo com o numero de quadradinhos que vc definiu la em
+    %% cima
+    \ganttbar[inline=false]{Tarefa 1}{1}{4}\\
+    \ganttbar[inline=false]{Tarefa 2}{2}{6}\\ 
+    \ganttbar[inline=false]{Tarefa 3}{3}{8} \\
+    \ganttbar[inline=false]{Tarefa 4}{5}{10} \\
+    \ganttbar[inline=false]{Tarefa 5}{8}{12} \\
+    \ganttbar[inline=false]{Tarefa 6}{12}{20} \\
+    \ganttbar[inline=false]{Tarefa 7}{13}{21} \\
+    \ganttbar[inline=false]{Tarefa 8}{14}{24} \\
+
+
+
+    
+    
+  \end{ganttchart}
+  }
+\end{figure}
 \end{frame}
 
 
+\begin{frame}
+  \frametitle{Cronograma de Pesquisa}
+\begin{itemize}
+
+\item[1: ] Refazer Experimentos sem o delay temporal, apenas com os dados
+  de Expedição de Cimento
+\item[2: ] Usar modelo para outros dados de séries temporais (e.g. clima)
+\item[3: ] Nova compilação de resultados
+\item[4: ] Uso de dados de outras etapas da produção de concreto simultaneamente
+\item[5: ] Estudar alterações no modelo proposto pela Uber  
+\item[6: ] Experimentos com mudanças propostas 
+\item[7: ] Estudo e compilação de resultados
+\item[8: ] Escrita da tese 
 
 
+  
+\end{itemize}
 
-
+\end{frame}
 
 
 
