@@ -107,7 +107,6 @@
 \usepackage{tikz}
 \AtBeginEnvironment{quote}{\singlespacing}
 
-
 % definitions
 \input{definitions/colors}
 \input{definitions/styles}
@@ -181,7 +180,7 @@ pela indústria de construção civil nas últimas décadas.
 %%% plot com numero de entradas faltando nos dados 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.3]{slides_dados_faltando}
+\includegraphics[scale=0.3]{slides_dados_pct}
 \caption{Dados faltantes em cada coluna dos dados de Expedição de Cimento}
 \end{figure}
 
@@ -248,6 +247,40 @@ entradas $x^*$.
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{Definição do Problema}
+
+  \begin{itemize}
+\item Em um primeiro momento podemos criar triplas de treino $(RC3_i,RC7_i,RC28_i)$, e queremos
+  encontrar uma função: \\ 
+  \begin{empheq}[box=\tcbhighmath]{align}
+  \mathnormal{f}(RC3_i,RC7_i) = \widehat{RC28}_i 
+  \end{empheq}
+    \end{itemize}
+
+Mas desse jeito o modelo não estaria usando nenhuma informação temporal dos dados.
+    
+\end{frame}
+
+
+\begin{frame}
+ 
+  \frametitle{Séries Temporais}
+
+  \begin{itemize}
+\item Dados anotados temporalmente, normalmente em intervalos regulares. O passado de
+uma série pode trazer informação para prever o seu futuro.
+\item Agora nosso problema
+de aprendizado supervisionado leva em conta diversas anotações passadas. A
+distribuição aprendida pelo modelo seria condicionada por diversas anotações
+subsequentes passadas. 
+    \end{itemize}
+  
+  \begin{empheq}[box=\tcbhighmath]{align}
+  p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
+  \end{empheq}
+  %%% slide definindo serie temporal
+\end{frame}
 
 \section{Modelos Escolhidos}
 
@@ -255,7 +288,7 @@ entradas $x^*$.
 %%% slide mostrando rede neural (mesmo diagrama da quali)
   \frametitle{Redes Neurais}
   \begin{empheq}[box=\tcbhighmath]{align}
-    f_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) 
+    \mathnormal{f}_i (x)=  a_i = \sigma(W_i*a_{i-1} + b_i) 
   \end{empheq}
 
 \begin{figure}
@@ -267,21 +300,6 @@ entradas $x^*$.
 
 \end{frame}
 
-\begin{frame}
-  \frametitle{Séries Temporais}
-
-  \begin{itemize}
-\item Dados anotados temporalmente, normalmente em intervalos regulares. O passado de
-uma série pode trazer informação para prever o seu futuro.
-\item Agora nosso problema
-de aprendizado supervisionado leva em conta diversas anotações passadas. 
-    \end{itemize}
-  
-  \begin{empheq}[box=\tcbhighmath]{align}
-  p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
-  \end{empheq}
-  %%% slide definindo serie temporal
-\end{frame}
 
 \begin{frame}
 \frametitle{Modelos Sequenciais: RNNs}
@@ -395,7 +413,7 @@ Então podemos escrever a saída da rede neural como: \\
   
   \begin{empheq}[box=\tcbhighmath]{align*}
    \widetilde{\mathbb{E}}[y^*] &= \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)} \\ 
-   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2 
+   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
   \end{empheq}
 
 \end{frame}
