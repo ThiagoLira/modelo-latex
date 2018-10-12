@@ -61,7 +61,7 @@
 %\usecolortheme{crane}
 %\usecolortheme{dolphin}
 %\usecolortheme{dove}
-%\usecolortheme{fly}
+%\usecolorthGenteee! To passando esse fds prolongado aqui em Aspen né (quem só conhece no winter recomendo super vir no fall)eme{fly}
 %\usecolortheme{lily}
 %\usecolortheme{orchid}
 %\usecolortheme{rose}
@@ -129,7 +129,7 @@
 {
 Instituto de Matemática e Estatística - USP \\ % Your institution for the title page
 \medskip
-\textit{thlira15@gmail.com} % Your email address
+\textit{thlira@ime.usp.br} % Your email address
 }
 \date{\today} % Date, can be changed to a custom date
 
@@ -274,11 +274,14 @@ uma série pode trazer informação para prever o seu futuro.
 de aprendizado supervisionado leva em conta diversas anotações passadas. A
 distribuição aprendida pelo modelo seria condicionada por diversas anotações
 subsequentes passadas. 
-    \end{itemize}
-  
   \begin{empheq}[box=\tcbhighmath]{align}
   p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots, x_{t-T})
   \end{empheq}
+\item Os dados da Intercement não estavam anotados em intervalos regulares,
+  então eles foram reamostrados em intervalos de 1 dia. Com dias
+  vazios sendo preenchidos com zeros.
+    \end{itemize}
+  
   %%% slide definindo serie temporal
 \end{frame}
 
@@ -333,6 +336,13 @@ subsequentes passadas.
 \begin{frame}
 \frametitle{Modelos Sequenciais: Encoder-Decoder}
 %%% slide definindo uma LSTM 2
+Redes Encoder-Decoder são modelos poderosos para criar \textit{representações}
+de dados de entrada. A ideia é que esses modelos consigam gerar um vetor que
+sumarize esses dados, e depois consiga reproduzi-los apenas sendo guiado por
+esse vetor. A esse vetor se dá o nome de \textit{embedding}. 
+
+
+
 \begin{figure}[H]
 \centering
 \input{chapters/encdec.tex}
@@ -372,7 +382,9 @@ subsequentes passadas.
   %%% slide com dropout imagem da quali
 
   É demonstrado que o Dropout pode ser interpretado como considerar uma
-  distribuição de probabilidade em todos os parâmetros do modelo.
+  distribuição de probabilidade em todos os parâmetros do modelo. Vamos usar
+  como exemplo uma rede neural com uma camada oculta e dropout aplicado na
+  camada de entrada, e na camada oculta. \\ 
 
   \begin{empheq}[box=\tcbhighmath]{align*}
   y^* &= \hat{a}W_2 \\
@@ -380,14 +392,23 @@ subsequentes passadas.
           &=   \sigma(\hat{x}W_1 + b) *(diag(\hat{\epsilon}_2)W_2) \\
           &=   \sigma(x^* (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
   \end{empheq}
+
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Dropout como Inferência Bayesiana}
+  %%% slide com dropout imagem da quali
   Onde cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
   uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição: \\
   \begin{empheq}[box=\tcbhighmath]{align*}
     \hat{\epsilon}^{i}_k \sim Bernoulli(p_k)
   \end{empheq}
-
-  
 \end{frame}
+
+
 
 \begin{frame}
   \frametitle{Dropout como Inferência Bayesiana}
@@ -400,7 +421,7 @@ subsequentes passadas.
 Então podemos escrever a saída da rede neural como: \\
   \begin{empheq}[box=\tcbhighmath]{align*}
         y^*  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =:
-        f^{\hat{W}_1,\hat{W}_2,b}(x^*) \\
+        \mathnormal{f}^{\hat{W}_1,\hat{W}_2,b}(x^*) \\
 \end{empheq}
 \end{frame}
 
@@ -437,8 +458,37 @@ Então podemos escrever a saída da rede neural como: \\
 
 \end{frame}
 
+\section{Resultados}
+
+\begin{frame}
+  %%% Divisão do dataset
+  \frametitle{Preparo dos Dados}
+  \begin{itemize}
+    \item Dados foram divididos entre \textbf{treino} e \textbf{validação}.
+      Usamos os dados anotados de 2008 até 2015 para treinar os modelos e de
+      2016 em diante para valida-los, testando a sua capacidade de
+      generalização.
+      
+    \item Todos os dados foram transformados segundo a equação $\textbf{z} =
+      \frac{\textbf{x} - \mu}{\sigma}$, para que ficassem com média 0 e
+      variância unitária. Isso evitou efeitos indejados no treinamento dos modelos.
+      
+    \end{itemize}
+    \begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC3.png}
+\end{figure}
+
+\end{frame}
+
+
 \begin{frame}
 %%% resultados modelos não-sequenciais
+\end{frame}
+
+
+\begin{frame}
+%%% preparacao dos dados para modelos de sequencia
 \end{frame}
 
 \begin{frame}
