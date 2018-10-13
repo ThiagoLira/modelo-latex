@@ -117,7 +117,7 @@
 
 \usepackage{latexsym}
 \usepackage{amsmath}
-\usepackage{commath} 
+% \usepackage{commath} 
 \usepackage{amssymb}
 \usepackage{mathtools}
 
@@ -442,7 +442,34 @@ esse vetor. A esse vetor se dá o nome de \textit{embedding}.
 
 
 \begin{frame}
+  \frametitle{Machine Learning Bayesiano}
 %%% slide inferencia bayesiana com a integral e os caralho
+No caso Bayesiano considera-se uma distribuicao de probabilidade a priori
+$p(W)$ para todos os parametros. \\  
+
+Os dados não são considerados variáveis aleatórias e sim obvervacoes e então
+usamos a Lei de Bayes para calcular a probabilidade posterior dos valores dos
+parâmetros dado que os dados foram observados. Também usamos no cálculo a
+\textit{verossimilhanca} $p(Y | X, W)$. \\  
+
+\begin{empheq}[box=\tcbhighmath]{align*}
+  p(\theta | X,Y) = \frac{p(Y| X,W) p(W)}{p(Y)}  
+\end{empheq}
+\end{frame}
+\begin{frame}
+  \frametitle{Machine Learning Bayesiano}
+
+Finalmente, para realizar uma inferência devemos integrar por toda a
+distribuição $p(W)$ marginalizando esse parâmetro. \\
+Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
+\begin{empheq}[box=\tcbhighmath]{align*}
+p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(W | X,Y)  dW 
+\end{empheq}
+
+Essa integral é geralmente intratável pela dificuldade de se calcular
+analiticamente $p(W | X,Y)$ e portanto será usada uma
+técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
+Dropout.
 \end{frame}
 
 \begin{frame}
