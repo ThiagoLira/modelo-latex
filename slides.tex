@@ -169,6 +169,19 @@ pela indústria de construção civil nas últimas décadas.
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Objetivos}
+
+\begin{itemize}
+\item Estudar modelos recentes de Deep Learning para regressão em séries
+  temporais em um domínio inédito para essas técnicas. 
+\item Prever a resistência do cimento usando parâmetros gerados antes de esse
+  ensaio de resistência poder ser efetuado.
+  \item Modelar a incerteza dessas predições usando técnicas de Estatística
+    Bayesiana para Deep Learning.
+\end{itemize}
+
+\end{frame}
 
 \begin{frame}
 \frametitle{Etapas da Produção de Cimento}
@@ -193,6 +206,21 @@ pela indústria de construção civil nas últimas décadas.
 
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Índice de Resistência}
+%%% slide apenas do RC3,RC7 e RC28
+Medido em Quilopascais (kPa), é um ensaio realizado diversas vezes após a
+expedição de um lote de cimento da fábrica. $RCX$ denota o resultado do ensaio feito $X$ dias
+após a expedição do lote. \\
+\bigskip
+
+Na tabela usada para os primeiros experimentos com Deep Learning, possúimos
+entradas para os índices RC3, RC7 e RC28. \\
+
+  
+\end{frame}
+
 \begin{frame}
 %%% slide apenas do RC3,RC7 e RC28
 \begin{figure}[H]
@@ -202,7 +230,6 @@ pela indústria de construção civil nas últimas décadas.
 \end{figure}
 
 \end{frame}
-
 
 \begin{frame}
 %%% slide com tabela de correlação
@@ -700,7 +727,25 @@ Ao primeiro termo é dado o nome de incerteza do modelo, ao segundo o ruído ine
 \end{frame}
 
 \begin{frame}
-%%% conclusão até agora
+  %%% conclusão até agora
+  \frametitle{Conclusão até o momento}
+  \begin{itemize}
+    \item Não houveram grandes ganhos de performance em usar modelos de Deep
+      Learning nessa tarefa. Uma regressão linear também obteve
+      resultados satisfatórios.
+    \item A medida de incerteza não é robusta o suficiente para ser útil para
+      esse problema.
+      \item Apesar de serem dados indexados pelo tempo, a regressão não ganha em
+        precisão para o problema na modalidade \say{temporal}. 
+      \item Os dados não são estacionários, mas as mudanças de média/variância
+        ao longo dos anos possivelmente se dão por fatores exógenos e não
+        refletidos nos dados usados como entrada.
+      \item Provavelmente predições mais robustas podem ser feitas com o uso de
+        \textit{feature engineering}, i.e. aplicar conhecimentos específicos de
+        engenharia civil para modificar os dados para que se tornem mais
+        expressivos para o problema em questão.
+      \end{itemize} 
+      
 \end{frame}
 
 \begin{frame}
@@ -770,7 +815,7 @@ Ao primeiro termo é dado o nome de incerteza do modelo, ao segundo o ruído ine
 
 
 \begin{frame}
-  \frametitle{Cronograma de Pesquisa}
+  \frametitle{Tarefas}
 \begin{itemize}
 
 \item[1: ] Refazer Experimentos sem o delay temporal, apenas com os dados
