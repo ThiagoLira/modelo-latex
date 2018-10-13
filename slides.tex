@@ -115,6 +115,11 @@
 % new commands
 \input{tiks/all_new_commands.tex}
 
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{commath} 
+\usepackage{amssymb}
+\usepackage{mathtools}
 
 \usetheme{metropolis}
 \urlstyle{same}
@@ -461,6 +466,21 @@ Então podemos escrever a saída da rede neural como: \\
         y^*  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =:
         \mathnormal{f}^{\hat{W}_1,\hat{W}_2,b}(x^*) \\
 \end{empheq}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dropout como Inferência Bayesiana}
+  %%% slide com dropout imagem da quali
+  Considerando então os parâmetros do modelo como provenientes de uma
+  distribuição de probabilidade, o uso de Dropout em todas
+  as camadas da rede neural é uma aproximação por Monte Carlo da integral da
+  Inferência Variacional: \\
+  
+  \begin{empheq}[box=\tcbhighmath]{align*}
+    p(y^* | x^* , X,Y) &\approx  \int p(y^* | x^*,W)q(W)dW \\
+                       &\approx \frac{1}{T}\sum^T_{T=1}p(y^*| x^*, \hat{W} )
+  \end{empheq}
+
 \end{frame}
 
 \begin{frame}
