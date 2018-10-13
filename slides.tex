@@ -453,23 +453,38 @@ parâmetros dado que os dados foram observados. Também usamos no cálculo a
 \textit{verossimilhança} $p(Y | X, W)$. \\  
 
 \begin{empheq}[box=\tcbhighmath]{align*}
-  p(\theta | X,Y) = \frac{p(Y| X,W) p(W)}{p(Y)}  
+  p(W | X,Y) = \frac{p(Y| X,W) p(W)}{p(Y)}  
 \end{empheq}
 \end{frame}
 \begin{frame}
   \frametitle{Machine Learning Bayesiano}
 
-Finalmente, para realizar uma inferência devemos integrar por toda a
-distribuição $p(W)$ marginalizando esse parâmetro. \\
+Finalmente, para realizar uma inferência devemos integrar por todos os valores
+possíveis de $W$ marginalizando esse parâmetro. \\
 Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
 \begin{empheq}[box=\tcbhighmath]{align*}
-p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(W | X,Y)  dW 
+p(y^* | x^* , X,Y) = \int  p(y^* | x^*,W) p(W | X,Y)  dW 
 \end{empheq}
 
 Essa integral é geralmente intratável pela dificuldade de se calcular
-analiticamente $p(W | X,Y)$ e portanto será usada uma
-técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
-Dropout.
+analiticamente $p(W | X,Y)$ e portanto será usada a técnica de Inferência
+Variacional que busca aproximar a distribuição $p$ por uma outra distribuição
+$q$, a distribuição variacional, que seja fácil de se calcular analiticamente.
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine Learning Bayesiano}
+O objetivo a ser minimizado para aproximar essas duas distribuições pode ser
+calculado da seguinte maneira: \\ 
+
+\begin{empheq}[box=\tcbhighmath]{align*}
+ L_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) || p(W))
+\end{empheq}
+
+Onde KL denota a divergência Kullback–Leibler entre as distribuições q(W) e p(W). 
+
 \end{frame}
 
 \begin{frame}
@@ -485,11 +500,12 @@ Dropout.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Dropout como Inferência Bayesiana}
+  \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
 
-  É demonstrado que o Dropout pode ser interpretado como considerar uma
-  distribuição de probabilidade em todos os parâmetros do modelo. Vamos usar
+  O Dropout pode ser interpretado como uma implementação de uma Rede Neural
+  Bayesiana, ou seja uma Rede Neural com distribuições de probabilidade
+  definidas em todos os seus parâmetros. Vamos usar
   como exemplo uma rede neural com uma camada oculta e dropout aplicado na
   camada de entrada, e na camada oculta. \\ 
 
@@ -506,7 +522,7 @@ Dropout.
 
 
 \begin{frame}
-  \frametitle{Dropout como Inferência Bayesiana}
+  \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
   Onde cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
   uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição: \\
@@ -518,10 +534,11 @@ Dropout.
 
 
 \begin{frame}
-  \frametitle{Dropout como Inferência Bayesiana}
+  \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
   Definimos uma distribuição $\mathnormal{q}(W)$ de onde podemos amostrar
-  valores de $W$: \\  
+  valores de $W$, a literatura chama essa distribuição de Distribuição
+  Variacional, pois ela aproxima $P(W | X,Y)$: \\  
   \begin{empheq}[box=\tcbhighmath]{align*}
     \hat{W} &\sim \mathnormal{q}(W) \\
     \hat{W_1} &:= diag(\hat{\epsilon}_1)W_1 \\
@@ -537,7 +554,7 @@ Então podemos escrever a saída da rede neural como: \\
 \end{frame}
 
 \begin{frame}
-  \frametitle{Dropout como Inferência Bayesiana}
+  \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
   Considerando então os parâmetros do modelo como provenientes de uma
   distribuição de probabilidade, o uso de Dropout em todas
@@ -545,35 +562,54 @@ Então podemos escrever a saída da rede neural como: \\
   Inferência Variacional: \\
   
   \begin{empheq}[box=\tcbhighmath]{align*}
-    p(y^* | x^* , X,Y) &\approx  \int p(y^* | x^*,W)q(W)dW \\
-                       &\approx \frac{1}{T}\sum^T_{T=1}p(y^*| x^*, \hat{W} )
+    p(y^* | x^* , X,Y) &\approx  \int \log p(y^* | x^*,W)q(W)dW \\
+    &\approx \frac{1}{T}\sum^T_{T=1}\log p(y^*| x^*, \hat{W} )
   \end{empheq}
+
+  Vale notar que para um problema de Regressão a log-verossimilhança $\log p(y^* | x^*,W
+  )$ ou $\log p(y^* | \mathnormal{f}^{W}(x^*))$ pode ser calculada por
+  $(y^*- \mathnormal{f}^{W}(x^*))^2$. 
 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Dropout como Inferência Bayesiana}
+  \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
 
-  Dessa maneira, podemos estimar os dois primeiros momentos das predições de
-  maneira simples: \\
+  Dessa maneira, é trivial estimar o valor esperado e a variância de uma nova
+  anotação $y^*$, dado que estimamos a distribuição $p(y^* | x^*)$ usando a
+  distribuição variacional $q(y^* | x^*)$. Apenas
+  calculamos a média e variâncias amostrais desse distribuição. 
+
   
   \begin{empheq}[box=\tcbhighmath]{align*}
-   \widetilde{\mathbb{E}}[y^*] &= \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)} \\ 
-   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
+   \widetilde{\mathbb{E}}[y^*|x^*] &= \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)} \\ 
+   \widetilde{\mathit{Var}}[y^*| x^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
   \end{empheq}
 
 \end{frame}
 
 
 \begin{frame}
-%%% slide do modelo da uber com zoom
+  \frametitle{Incerteza no modelo Encoder-Decoder-Forecaster}
+A saída da parte de inferencia do modelo Encoder-Decoder-Forecaster é uma
+aproximação da distribuição $p(y^* | x^*)$. Para calcular sua variância (i.e.
+incerteza) usamos a lei da variância total: \\
+  
+  \begin{empheq}[box=\tcbhighmath]{align*}
+Var(y^* | x^*) &= Var[\mathop{\mathbb{E}}(y^* | W,x^*)] +
+\mathop{\mathbb{E}}[Var(y^* | W,x^*)] \\
+               &= Var[f^W(x^*)] + \sigma^2  
+\end{empheq}
+
+Ao primeiro termo é dado o nome de incerteza do modelo, ao segundo o ruído inerente.
+
 \end{frame}
 
 \begin{frame}
 %%% formulas de variancia no modelo uber
 
-  Finalmente, estimamos a incerteza do modelo usando o MC Dropout. E o ruído
+  Estimamos a incerteza do modelo usando o Monte Carlo Dropout. E o ruído
   inerente usando a variância amostral de um conjunto de dados de validação:\\ 
 
   \begin{empheq}[box=\tcbhighmath]{align*}
@@ -582,6 +618,13 @@ Então podemos escrever a saída da rede neural como: \\
    \widetilde{\sigma}^2 &= \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2 
   \end{empheq}
 
+  A incerteza total de cada predição $y^*$ é então calculada por: \\
+
+  \begin{empheq}[box=\tcbhighmath]{align*}
+  \eta_{tot} = \sqrt{\widetilde{\mathit{Var}}[f^W(x^*)] + \sigma^2}  
+    \end{empheq}
+  
+  
 \end{frame}
 
 \section{Resultados}
