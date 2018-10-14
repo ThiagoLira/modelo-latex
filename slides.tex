@@ -503,15 +503,18 @@ $q$, a distribuição variacional, que seja fácil de se calcular analiticamente
 
 \begin{frame}
   \frametitle{Machine Learning Bayesiano}
+  O objetivo da Inferência Variacional é então calcular uma boa aproximação de
+  $p(W | X,Y)$, $q^*(W)$, para então usa-la na integral da inferência: \\ 
+  \begin{empheq}[box=\tcbhighmath]{align*}
+    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,W) q^*(W)dW \\
+                       &= q^*(y^* | x^*)
+\end{empheq}
 O objetivo a ser minimizado para aproximar essas duas distribuições pode ser
 calculado da seguinte maneira: \\ 
-
 \begin{empheq}[box=\tcbhighmath]{align*}
  L_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) || p(W))
 \end{empheq}
-
 Onde KL denota a divergência Kullback–Leibler entre as distribuições q(W) e p(W). 
-
 \end{frame}
 
 \begin{frame}
@@ -564,8 +567,8 @@ Onde KL denota a divergência Kullback–Leibler entre as distribuições q(W) e
   \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
   Definimos uma distribuição $\mathnormal{q}(W)$ de onde podemos amostrar
-  valores de $W$, a literatura chama essa distribuição de Distribuição
-  Variacional, pois ela aproxima $P(W | X,Y)$: \\  
+  valores de $W$, a distribuição de Distribuição
+  Variacional, que aproxima $P(W | X,Y)$ \textbf{durante o treinamento}: \\  
   \begin{empheq}[box=\tcbhighmath]{align*}
     \hat{W} &\sim \mathnormal{q}(W) \\
     \hat{W_1} &:= diag(\hat{\epsilon}_1)W_1 \\
@@ -580,22 +583,36 @@ Então podemos escrever a saída da rede neural como: \\
 \end{empheq}
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Dropout como Inferência Variacional}
-  %%% slide com dropout imagem da quali
-  Considerando então os parâmetros do modelo como provenientes de uma
-  distribuição de probabilidade, o uso de Dropout em todas
-  as camadas da rede neural é uma aproximação por Monte Carlo da integral da
-  Inferência Variacional: \\
+  
+  Durante o treino amostramos valores de $q(W)$ e calculamos a função de custo.
+  Durante a propagação do erro usamos o mesmo valor de cada $\hat{W}$: \\
   
   \begin{empheq}[box=\tcbhighmath]{align*}
-    p(y^* | x^* , X,Y) &\approx  \int \log p(y^* | x^*,W)q(W)dW \\
-    &\approx \frac{1}{T}\sum^T_{T=1}\log p(y^*| x^*, \hat{W} )
+    L_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{\hat{W}_1,\hat{W}_2,b}(x_n))^2 + \boldsymbol{\alpha}\{W_1^2,W_2^2,b^2\}
   \end{empheq}
 
-  Vale notar que para um problema de Regressão a log-verossimilhança $\log p(y^* | x^*,W
-  )$ ou $\log p(y^* | \mathnormal{f}^{W}(x^*))$ pode ser calculada por
-  $(y^*- \mathnormal{f}^{W}(x^*))^2$. 
+  Essa função de custo é uma aproximação da integral que minimiza a
+  Divergência-KL para aproximar a distribuição $p(W | Y,X)$, e converge para
+  esse objetivo tornando a nova distribuição $q$ cada vez mais próxima de $p$. 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Dropout como Inferência Variacional}
+%%% slide com dropout imagem da quali
+Após o treino, para estimar a distribuição de probabilidade de uma predição usamos uma
+aproximação por Monte Carlo da integral da Inferência Variacional: 
+
+\begin{empheq}[box=\tcbhighmath]{align*}
+p(y^* | x^* , X,Y) &\approx  \int \log p(y^* | x^*,W)q(W)dW \\
+&\approx \frac{1}{T}\sum^T_{t=1}\log p(y^*| x^*, \hat{W}_t )
+\end{empheq}
+
+
+  
 
 \end{frame}
 
