@@ -1,8 +1,69 @@
-* Coisas a fazer na Quali
-** reescrever seção resultados
-** explicar como calcular incertezas modelo uber
-** 
-* Coisas a fazer nos dados da Intercement
-** refazer testes com modelos não-sequenciais usando apenas os dados de expedição 
-** matriz de confusão dos dados de expedição
+*  Nova Estrutura da Tese
+** Intro
+   Dados Intercement -> Apenas os de expedição por problemas com sincronizar dados de etapas diferentes.
    
+   Estado da arte: Papers regressão linear 
+
+   Pq serie temporal? Melhores resultados que modelagem "estática" segundo papers da área.
+   Modelo estático tem RMSE degradando com o passar do tempo e dados novos entrando.
+  (Application of the Static and Dynamic Models in Predicting the Future Strength of Portland Cements)
+   
+   Tecnicas recentes de Deep Learning: Modelagem de Séries Tempoarais com estimativa de incerteza
+
+   - Encoder Decoder Forecaster (2016)
+   - DeepAR (2015)
+   - Deep Factors (2018)
+
+     
+** Conceitos
+   
+   
+  Machine Learning
+   Aprendizado Sup. e N. Sup
+
+   Regressão (aprendizado supervisionado)
+   - Verossimilhança
+   - Log-verossimilhança
+     
+
+
+   Machine Learning Bayesiano
+   - Inferencia Variacional
+
+
+   Series Temporais 
+   
+** MODELOS
+
+  - Random Forest (melhor modelo "estatico")
+
+  - Regressão Linear 
+  + moving horizon series temporais 
+        modelo dinamico tem parametros recalculados a cada novo R28(estado da arte)
+        
+  - RNN/LSTM
+
+  - Encoder Decoder Forecaster
+
+  - Processo Gaussiano 
+
+  - deepAR
+
+  - deepFactors
+
+** Dados
+   distribuicoes empiricas de cada preditor (qq plot)
+   graficos de sazonalidade
+   dados faltantes
+
+** Resultados
+   
+   Para todos os modelos 1 ano de dev set, restante de train set (sem test set)
+   
+   Graficos de predições para o proximo ano (qual horizonte passado o modelo consome para prever o proximo dia?)
+   Graficos scatter de predições X valores corretos
+   
+
+
+
+
