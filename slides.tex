@@ -158,12 +158,14 @@ Instituto de Matemática e Estatística - USP \\ % Your institution for the titl
 \frametitle{Histórico}
 
 \begin{itemize}
+\item Avanços recentes no campo de Deep Learning forneceram ferramentas que
+  melhoram o estado da arte para modelagem de Séries Temporais.
+  \item Métodos de Machine Learning/Deep Learning estão sendo implementados nos
+    mais diversos domínios, antes com pouca presença de modelos estatísticos.
 \item A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado
 pela indústria de construção civil nas últimas décadas.
 \item Prever a resistência do Cimento ainda durante a sua produção amenizaria
   custos da ordem de bilhões de dólares para a indústria.
-\item Avanços recentes no campo de Deep Learning forneceram ferramentas que
-  melhoram o estado da arte para modelagem de Séries Temporais.
 \end{itemize}
 
 \end{frame}
@@ -194,6 +196,20 @@ pela indústria de construção civil nas últimas décadas.
 \end{frame}
 
 \section{Análise dos Dados}
+
+
+\begin{frame}
+  \frametitle{Uma visão geral dos Dados}
+  \begin{itemize}
+  \item Dados fornecidos de 4 etapas diferentes da produção na fábrica.
+  \item Dados cobrem o período de 2008 até 2017 da produção.
+    \item Pela dificuldade de \say{acompanhar} o mesmo lote de cimento em
+      diversas etapas da produção, usaremos apenas o conjunto final de dados, da
+      expedição do cimento ao final do processo.
+      \item Dados anotados quase diariamente com informações sobre presença de
+        compostos químicos e resultados de ensaios de resistência.
+    \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Entradas presentes nos Dados}
@@ -292,14 +308,15 @@ entradas $x^*$.
   \end{empheq}
     \end{itemize}
 
-Mas desse jeito o modelo não estaria usando nenhuma informação temporal dos dados.
+Mas desse jeito o modelo não estaria usando nenhuma informação temporal dos
+dados. \textbf{Não importa a ordem que o modelo veja os dados durante o aprendizado}.
     
 \end{frame}
 
 
 \begin{frame}
  
-  \frametitle{Séries Temporais}
+  \frametitle{Definição do Problema: Séries Temporais}
 
   \begin{itemize}
 \item Dados anotados temporalmente, normalmente em intervalos regulares. O passado de
@@ -339,6 +356,15 @@ subsequentes passadas.
 
 
 \section{Modelos Escolhidos}
+
+
+\begin{frame}
+  \frametitle{Tipos de Modelos}
+  \begin{itemize}
+  \item Modelos Não-Sequenciais
+  \item Modelos Sequenciais
+    \end{itemize}
+\end{frame}
 
 \begin{frame}
 %%% slide mostrando rede neural (mesmo diagrama da quali)
@@ -460,13 +486,26 @@ esse vetor. A esse vetor se dá o nome de \textit{embedding}.
     inédita e o \textit{embedding} gerado é usado como entrada de uma Rede Neural, a mesma então é
     treinada para prever a medida RC28 equivalente a última data vista na
     janela. 
-  
+ \item Cálculo de incerteza usando o Monte Carlo Dropout. 
   \end{itemize}
 
 \end{frame}
 
 
 
+\begin{frame}
+  \frametitle{Machine Learning Bayesiano}
+\begin{itemize}
+  \item Possibilidade de calcular distribuições de probabilidade das predições
+    com rigor matemático.
+  \item Porém, é um problema intratável para muitos modelos, e custoso.
+   \item É comum aproximarmos a inferencia com técnicas como o Monte Carlo
+     Dropout, que será explicado.
+  
+  \end{itemize}
+
+  
+\end{frame}
 
 \begin{frame}
   \frametitle{Machine Learning Bayesiano}
@@ -517,7 +556,9 @@ O objetivo a ser minimizado para aproximar essas duas distribuições pode ser
 calculado da seguinte maneira, essa fórmula é chamada de \textit{Variational 
   Lower Bound}: \\ 
 \begin{empheq}[box=\tcbhighmath]{align*}
-  \mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) || p(W))%  \leq \log p(Y|X) 
+  \mathcal{L}_{VI} &= \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W))
+  \\ 
+                   &\leq \log p(Y|X) 
 \end{empheq}
 % Onde KL denota a divergência Kullback–Leibler entre as distribuições q(W) e p(W). 
 \end{frame}
@@ -534,33 +575,13 @@ calculado da seguinte maneira, essa fórmula é chamada de \textit{Variational
     
 \end{frame}
 
-\begin{frame}
-  \frametitle{Dropout como Inferência Variacional}
-  %%% slide com dropout imagem da quali
-
-  O Dropout pode ser interpretado como uma implementação de uma Rede Neural
-  Bayesiana, ou seja uma Rede Neural com distribuições de probabilidade
-  definidas em todos os seus parâmetros. Vamos usar
-  como exemplo uma rede neural com uma camada oculta e dropout aplicado na
-  camada de entrada, e na camada oculta. \\ 
-
-  \begin{empheq}[box=\tcbhighmath]{align*}
-  y^* &= \hat{a}W_2 \\
-          &= (a * diag(\hat{\epsilon}_2))W_2 \\
-          &=   \sigma(\hat{x}W_1 + b) *(diag(\hat{\epsilon}_2)W_2) \\
-          &=   \sigma(x^* (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
-  \end{empheq}
-
-  
-\end{frame}
-
-
 
 \begin{frame}
   \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
-  Onde cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
-  uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição: \\
+  Cada vetor $\epsilon_k$ é uma realização de um vetor de 0s e 1s seguindo
+  uma distribuição de Bernoulli com probabilidade $p_k$ em cada posição, onde
+  podemos ter um $p_k$ para cada camada da Rede Neural: \\
   \begin{empheq}[box=\tcbhighmath]{align*}
     \hat{\epsilon}^{i}_k \sim Bernoulli(p_k)
   \end{empheq}
@@ -571,8 +592,34 @@ calculado da seguinte maneira, essa fórmula é chamada de \textit{Variational
 \begin{frame}
   \frametitle{Dropout como Inferência Variacional}
   %%% slide com dropout imagem da quali
+
+  O Dropout pode ser interpretado como uma implementação de uma Rede Neural
+  Bayesiana, ou seja uma Rede Neural com distribuições de probabilidade
+  definidas em todos os seus parâmetros. Vamos usar
+  como exemplo uma rede neural com uma camada oculta e \textbf{dropout aplicado na
+  camada de entrada, e na camada oculta}. \\ 
+
+  \begin{empheq}[box=\tcbhighmath]{align*}
+  \textbf{y} &= \hat{a}_{1}W_2 \\
+          &= (a_{1} * diag(\hat{\epsilon}_2))W_2 \\
+          &=   \sigma(\hat{\textbf{x}}W_1 + b) *(diag(\hat{\epsilon}_2)W_2) \\
+          &=   \sigma((\textbf{x}  * diag(\hat{\epsilon}_1))W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
+          &=   \sigma(\textbf{x}  * (diag(\hat{\epsilon}_1)W_1) + b) * (diag(\hat{\epsilon}_2)W_2) \\
+  \end{empheq}
+
+  
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+  \frametitle{Dropout como Inferência Variacional}
+  %%% slide com dropout imagem da quali
   Definimos uma distribuição $\mathnormal{q}(W)$ de onde podemos amostrar
-  valores de $W$, a distribuição de Distribuição
+  valores de $W$, a Distribuição
   Variacional, que aproxima $P(W | X,Y)$ \textbf{durante o treinamento}: \\  
   \begin{empheq}[box=\tcbhighmath]{align*}
     \hat{W} &\sim \mathnormal{q}(W) \\
@@ -583,8 +630,8 @@ calculado da seguinte maneira, essa fórmula é chamada de \textit{Variational
   
 Então podemos escrever a saída da rede neural como: \\
   \begin{empheq}[box=\tcbhighmath]{align*}
-        y^*  =   \sigma(x \hat{W}_1 + b) * \hat{W}_2 =:
-        \mathnormal{f}^{\hat{W}_1,\hat{W}_2,b}(x^*) 
+        \textbf{y}  =   \sigma(\textbf{x} \hat{W}_1 + b) * \hat{W}_2 =:
+        \mathnormal{f}^{\hat{W}_1,\hat{W}_2,b}(\textbf{x}) 
 \end{empheq}
 \end{frame}
 
@@ -613,7 +660,7 @@ aproximação por Monte Carlo da integral da Inferência Variacional:
 
 \begin{empheq}[box=\tcbhighmath]{align*}
 p(y^* | x^* , X,Y) &\approx  \int \log p(y^* | x^*,W)q^*(W)dW = q^*(y^* | x^*)  \\
-&\approx \frac{1}{T}\sum^T_{t=1}\log p(y^*| x^*, \hat{W}_t )
+&\approx \frac{1}{B}\sum^B_{b=1}\log p(y^*| x^*, \hat{W}_b )
 \end{empheq}
 \end{frame}
 

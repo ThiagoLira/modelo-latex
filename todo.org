@@ -1,6 +1,8 @@
 *  Nova Estrutura da Tese
 ** Intro
-   Dados Intercement -> Apenas os de expedição por problemas com sincronizar dados de etapas diferentes.
+
+   
+   Dados Intercement -> Apenas os de expedição de cimento por problemas com sincronizar dados de etapas diferentes.
    
    Estado da arte: Papers regressão linear 
 
@@ -10,11 +12,10 @@
    
    Tecnicas recentes de Deep Learning: Modelagem de Séries Tempoarais com estimativa de incerteza
 
-   - Encoder Decoder Forecaster (2016)
-   - DeepAR (2015)
-   - Deep Factors (2018)
+   1. Encoder Decoder Forecaster (2016)
+   2. DeepAR (2015)
+   3. Deep Factors (2018)
 
-     
 ** Conceitos
    
    
@@ -25,20 +26,19 @@
    - Verossimilhança
    - Log-verossimilhança
      
-
-
    Machine Learning Bayesiano
    - Inferencia Variacional
 
 
    Series Temporais 
    
+   
 ** MODELOS
 
   - Random Forest (melhor modelo "estatico")
 
   - Regressão Linear 
-  + moving horizon series temporais 
+  - moving horizon series temporais 
         modelo dinamico tem parametros recalculados a cada novo R28(estado da arte)
         
   - RNN/LSTM
@@ -48,14 +48,20 @@
   - Processo Gaussiano 
 
   - deepAR
-
+    
+    
+    
   - deepFactors
+    
 
+    
+    
 ** Dados
    distribuicoes empiricas de cada preditor (qq plot)
    graficos de sazonalidade
    dados faltantes
 
+   
 ** Resultados
    
    Para todos os modelos 1 ano de dev set, restante de train set (sem test set)
@@ -67,3 +73,4 @@
 
 
 
+   

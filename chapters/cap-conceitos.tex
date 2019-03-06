@@ -217,6 +217,9 @@ resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
 Iremos então experimentar  modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
 
 
+
+
+
 \section{Modelos Usados} 
 
 \subsection{Redes Neurais}
@@ -291,11 +294,21 @@ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta
 \end{equation}
 
 Essa integral é geralmente intratável pela dificuldade de se calcular
-analiticamente $p(\theta | X,Y)$ \citep{ubertime}, e portanto será usada uma
-técnica que aproxima uma inferência Bayesiana numericamente em redes neurais, o Monte Carlo
-Dropout \citep{dropbayes}. \\
+analiticamente $p(\theta | X,Y)$ \citep{ubertime}, devemos então tentar aproximar essa distribuição
+pela chamada distribuição variacional, $q^*(\theta)$, e então resolvermos numericamente a Integral~\ref{eq:int}.
+
+Esse processo se chama Inferência Variacional e seu objetivo (aproximar a distribuição variacional pela distribuição real $p(\theta | X,Y)$)
+é aproximado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound}: \\
+
+\begin{empheq}[box=\tcbhighmath]{align*}
+  \label {eq:ine}
+  \mathcal{L}_{VI} &= \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W))
+  \\ 
+                   &\leq \log p(Y|X) 
+\end{empheq}
 
 
+A Inferência Variacional pode ser aproximada em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
@@ -315,13 +328,13 @@ Finalmente, o novo vetor de ativações é calculado por $r * a$. O efeito desse
 processo é de zerar aleatoriamente entradas do vetor de ativação.
 \\ 
 
-\cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas do
-modelo equivale em aproximar numericamente  a Integral~\ref{eq:int}, usando uma distribuição $q(\theta)$ que
-cumpriria o papel de aproximar a distribuição intratável $p(\theta | X,Y)$ na inferência Bayesiana. \\
+\cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização do objetivo de treinamento também
+represente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
 
-Para o cálculo da incerteza das predições do modelo se realizam então $B$ computações estocásticas de uma mesma
+Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
+Por conseguinte, para o cálculo da incerteza das predições do modelo se realizam $B$ computações estocásticas de uma mesma
 saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
-  dessa medida é calculada então pela variância amostral de $Y^*$.
+dessa medida é calculada então pela variância amostral de $Y^*$. E sua média pela média amostral.
 
 
 
@@ -577,6 +590,11 @@ $\eta^2_2$, calcula-se a incerteza total do modelo por: \\
 \[  \eta_{tot} = \sqrt{  \eta_1^2 + \eta_2^2 }  \]
 
 
+
+\subsection{Modelo Auto-regressivo}
+
+
+\subsection{Modelo com Deep Factors}
 
 
 
