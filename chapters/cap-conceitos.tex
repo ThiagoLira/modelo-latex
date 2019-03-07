@@ -217,9 +217,6 @@ resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
 Iremos então experimentar  modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
 
 
-
-
-
 \section{Modelos Usados} 
 
 \subsection{Redes Neurais}
@@ -300,13 +297,15 @@ pela chamada distribuição variacional, $q^*(\theta)$, e então resolvermos num
 Esse processo se chama Inferência Variacional e seu objetivo (aproximar a distribuição variacional pela distribuição real $p(\theta | X,Y)$)
 é aproximado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound}: \\
 
-\begin{empheq}[box=\tcbhighmath]{align*}
+\begin{equation}
   \label {eq:ine}
-  \mathcal{L}_{VI} &= \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W))
-  \\ 
-                   &\leq \log p(Y|X) 
-\end{empheq}
+  mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W))
+\end{equation}
 
+\begin{equation}
+  \label {eq:ine}
+                   \leq \log p(Y|X) 
+\end{equation}
 
 A Inferência Variacional pode ser aproximada em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
 
@@ -591,10 +590,17 @@ $\eta^2_2$, calcula-se a incerteza total do modelo por: \\
 
 
 
-\subsection{Modelo Auto-regressivo}
+\subsection{Modelo DeepAR}
 
+O modelo \textit{DeepAR}, proposto em \cite{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
+i.e. que tem sua saída realimentada na entrada da iteração posterior. Por meio da função de verossimilhança binomial esse modelo é capaz
+de realizar predições probabilísticas. 
 
 \subsection{Modelo com Deep Factors}
+
+O modelo \textit{Deep Factors with Gaussian Process} \cite{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
+
+\subsubsection{Processo Gaussiano}
 
 
 
