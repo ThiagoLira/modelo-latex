@@ -31,7 +31,7 @@ Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionad
 
 
 \subsubsection{Aprendizado Supervisionado}
-
+\label{sec:apren} 
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
 de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
 entrada $x$ associados a uma anotação $y$ e gostariamos de modelar essa relação
@@ -51,9 +51,10 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \subsection{Definição do Problema}
 
 
-Queremos realizar uma predição de uma série temporal. Ou seja, dado valores passados queremos prever o comportamento da série num horizonte de tempo futuro finito. 
+Queremos realizar uma predição de uma série temporal. Ou seja, dado valores passados queremos prever o comportamento da série num horizonte de tempo futuro finito. Iremos alterar a formalização do tópico~\ref{sec:apren} condicionando então a distribuição a valores passados do objetivo $y$. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo de predição $y$ e de um vetor $\textbf{x}$ de parâmetros. Os dados de treinamento serão os pares $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ no intervalo de tempo $[t_o,T]$. Seja um horizonte finito de tempo $F$, $F > T$, os modelos devem aprender uma distribuição de probabilidade $p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T})$.
 
-Seja uma série temporal indexada por instantes de tempo $t$ (onde ocorrem medições por exemplo), para cada instante $t$ temos um par $(y,\textbf{x})$ 
+Cabe então fazermos a distinção entre modelos sequenciais e não-sequenciais \cite{dlbook}. Os modelos sequenciais irão usar a natureza temporal dos dados como descrita nesse tópico na modelagem e predições. Os modelos não-sequenciais irão tratar cada par $(\textbf{x},y)$ sem a sua anotação de tempo $t$.
+
 
 \subsection{Métrica de Performance}
 \label{sec:metricas}
@@ -208,20 +209,6 @@ indicando um modelo ideal.\\
 
 %% ------------------------------------------------------------------------- %%
 
-\section{Sequencialidade dos Dados}
-
-Em um problema canônico de aprendizado supervisionado gostariamos de aprender
-uma função $f$ tal que para um par inédito de dados $x^*,y^*$, a nossa função
-dependa apenas de $x^*$ para gerar uma predição. Para os dados da Intercement pode ser que um valor i.e. índice de dureza dependa não só da última entrada, mas de diversas entradas anteriores. 
-
-Ou seja, nossos dados podem ter sido gerados por uma distribuição de
-probabilidade da forma $p(y | x_{t} ,x_{t -1},x_{t -2},x_{t-3} , \dots,
-x_{t-T})$, onde uma saída $y$ é condicionada pelas últimas $T$ entradas. Para
-resolver um problema de aprendizado dessa natureza, devemos usar \textbf{modelos
-  sequenciais} \citep{dlbook}. 
-
-Iremos então experimentar  modelos sequenciais e não-sequencias para testar a acurária de ambos no problema em questão.
-
 
 \section{Modelos Usados} 
 
@@ -305,13 +292,10 @@ Esse processo se chama Inferência Variacional e seu objetivo (aproximar a distr
 
 \begin{equation}
   \label {eq:ine}
-  mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W))
+  \mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W)) \\
+                  \leq \log p(Y|X) 
 \end{equation}
 
-\begin{equation}
-  \label {eq:ine}
-                   \leq \log p(Y|X) 
-\end{equation}
 
 A Inferência Variacional pode ser aproximada em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
 
@@ -595,7 +579,6 @@ $\eta^2_2$, calcula-se a incerteza total do modelo por: \\
 \[  \eta_{tot} = \sqrt{  \eta_1^2 + \eta_2^2 }  \]
 
 
-
 \subsection{Modelo DeepAR}
 
 O modelo \textit{DeepAR}, proposto em \cite{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
@@ -610,10 +593,9 @@ O modelo \textit{Deep Factors with Gaussian Process} \cite{deepfactors} separa o
 
 
 
-
-
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../quali"
+%%% TeX-command-default: "latexmk"
 %%% bibtex-file-path: "../bibliografia"
 %%% End:
