@@ -144,15 +144,19 @@ A log-verossimilhança do modelo é dada por: \\
 
 \begin{equation}
   \label{eq:lv}
-LV =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)
+\mathcal{L} =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)
 \end{equation}
 
 E como definimos a distribuição gerada pelo modelo como $\mathcal{N}(y ;
 \hat{y}(x,\theta),\sigma^2)$, então aplicando a definição da
 distribuição normal na equação~\ref{eq:lv} chegamos em: \\
 
-\[LV = -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
-  \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2} \]
+
+\begin{equation}
+\label{eq:logver}
+  \mathcal{L}= -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
+  \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2}
+\end{equation}
 
 Observa-se que essa equação que calcula a verossimilhança para regressão possui o termo $(\hat{y_i}-y_i^2)$, a diferença
 quadrática entre as predições e os valores reais, o \textit{erro quadrático}. E
@@ -607,7 +611,7 @@ h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 
 Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
-A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão:
+A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver}:
 
 \[
 \mathcal{L}(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
@@ -619,10 +623,20 @@ A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saí
 
 \[ \sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma})) \]
 
-Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da verossimilhança: \\
+
+\subsubsection{Treinamento}
+
+O treinamento do modelo é feito pela maximização da log-verossimilhança: \\
 
 \[
- y^*_{i,t} \sim \mathcal{L}(y | \mu,\sigma) 
+\theta = argmax \sum_i{\log(\mathcal{L}(y_i))}
+\]
+
+
+Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaussiana determinada pela média e variância calculadas: \\
+
+\[
+ y^*_{i,t} \sim \mathcal{N}(\mu,\sigma) 
 \]
 
 \subsection{Modelo com Deep Factors}
@@ -684,6 +698,6 @@ O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Process
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../quali"
-%%% TeX-command-default: "make clean && latexmk"
+%%% TeX-command-default: "latexmk"
 %%% bibtex-file-path: "../bibliografia"
 %%% End:
