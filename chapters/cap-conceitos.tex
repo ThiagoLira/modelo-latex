@@ -640,11 +640,46 @@ Um Processo Gaussiano é descrito completamente pela sua função de média e su
 f(x) \sim \mathcal{GP}( m(x), K(x,x'))
 \]
 
-É comum que se escolha como função média apenas a constante 0 \cite{gpml}.  A função de covariância, as vezes chamada de Kernel, deve especificar a covariância entre os pares de variáveis aleatórias (i.e. os dados), para problemas de regressão é usual escolhermos um Kernel que relacione as distâncias das variáveis de entrada. Como por exemplo o \textit{quadrado da função exponencial}: \\
+É comum que se escolha como função média apenas a constante 0 \cite{gpml}.  A função de covariância, as vezes chamada de Kernel, deve especificar a covariância entre os pares de variáveis aleatórias (i.e. os dados), para problemas de regressão é usual escolhermos um Kernel que relacione uma medida de distância das variáveis de entrada. Como por exemplo o \textit{quadrado da função exponencial}: \\
 
 \[
-K(x,x') = \exp(-\frac{1}{2}\abs{x - x'}^2)
+  K(x,x') = \exp(-\frac{1}{2}\abs{x - x'}^2)
 \]
+
+
+\subsubsection{Modelo Generativo}
+
+O modelo Deep Factors então é composto por duas partes, a combinação linear de ambas é a saída do modelo i.e. a emissão de valores de saída amostrados: \\
+
+
+\[
+    \textbf{Gerador de ruído local: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
+\]
+
+O ruído é gerado por um Processo Gaussiano com média 0 e função de covariância exponencial. O Processo calcula incertezas em todos os pontos $x_{i,t}$ da série temporal $i$.
+  
+\[
+  \textbf{Gerador da parte fixa aprendida globalmente: }  f_{i,t} = W_ig_t(x_{i,t})
+\]
+A função $g_t$ é uma RNN, no caso desse trabalho uma célula LSTM, que recebe como entrada um certo número $T$ de passos da série temporal, e então emite como saída um horizonte finito $F$ de predições.
+\[
+  \textbf{Emissão: }  y^*_{i,t} \sim p(. | u_{i,t}) , u_{i,t} = r_{i,t} + f_{i,t}  
+\]
+
+\subsubsection{Treinamento}
+
+Como $p(. | u_{i,t})$ é distribuida normalmente, não precisamos de inferência para calcular a verossimilhança marginal do modelo, que é dada por: \\
+
+\[
+p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
+\]
+
+O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que minizem a log-verossimilhança conjunta dos dados: \\
+
+\[
+\theta = argmax \sum_i{\log(p(y_i))}
+\]
+
 
 %%% Local Variables:
 %%% mode: latex
