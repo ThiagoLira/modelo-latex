@@ -459,7 +459,7 @@ O novo estado da LSTM é então calculado por: \\
 
 
 \subsubsection{Rede Encoder-Decoder}
-
+\label{sec:encdec}
 Redes Encoder-Decoder são usadas para modelagem de sequência para
 sequência, ou seja, para receber dados sequenciais como entrada e gerar
 sequências como saída \citep{dlbook}. Esses modelos possuem duas partes, ambas compostas por
@@ -626,14 +626,27 @@ A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saí
 
 \subsubsection{Treinamento}
 
+
+
+O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{dig:dar} ilustra como o modelo se comporta em cada um desses momentos: \\
+
+
+TO-DO-IMAGEM \\
+
+
+O funcionamento do modelo é similar ao de uma rede Encoder-Decoder, como visto na Sessão~\ref{sec:encdec}, o modelo deve consumir intervalos de $F$ valores dos parâmetros da série temporal, essa seria a fase do \textit{encoding}, para então gerar $T$ anotações dos dados na fase do \textit{decoding}. Durante o treinamento o erro do modelo é calculado comparando-se uma anotação gerada durante a fase de encoding $y^{*}_{t}$ com o seu valor real $y_{t}$. \\
+
+Durante o \textbf{treinamento} o modelo recebe como entrada do instante $t$, o valor real da série no instante $t-1$. \\
+
+Durante a \textbf{validação} o modelo é \textbf{realimentado} com a anotação $y^{*}_{t-1}$ gerada na iteração anterior. \\ 
+
+
+
 O treinamento do modelo é feito pela maximização da log-verossimilhança: \\
 
 \[
-\theta = argmax \sum_i{\log(\mathcal{L}(y_i))}
+\theta = argmax \sum_i{\log(\mathcal{L}(y_i | \omega(h_{i})))}
 \]
-
-
-Seja uma série temporal de entrada Y, o modelo tem um modo de funcionamento durante o treino e durante a valida 
 
 
 Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaussiana determinada pela média e variância calculadas: \\
