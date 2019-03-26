@@ -58,8 +58,8 @@ Os dados da Intercement são anotados temporalmente, então podemos escolher tra
 Cabe então fazermos a distinção entre modelos sequenciais e não-sequenciais \cite{dlbook}. Os modelos sequenciais irão usar a natureza temporal dos dados como descrita nesse tópico na modelagem e predições. Os modelos não-sequenciais irão tratar cada par $(\textbf{x},y)$ sem a sua anotação de tempo $t$.
 
 
-\subsection{Métrica de Performance}
-\label{sec:metricas}
+\subsection{A Experiência}
+\label{sec:exp}
 \subsubsection{Estatística Frequentista e Estatística Bayesiana}
  
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
@@ -169,14 +169,10 @@ observados. \\
 
 \subsection{Função de Custo}
 
-O \textit{aprendizado} de um modelo de ML consiste na busca por parâmetros que
-minimizem alguma \textit{função de custo}. Normalmente algum algoritmo baseado
-em gradientes aproxima os parâmetros maximizando a verossimilhança das predições
-do modelo em relação aos dados observados. O que é equivalente a diminuir a
-entropia cruzada entre a distribuição empírica dos dados e a distribuição
-definida pelos parâmetros do modelo \citep{dlbook}. Nessa sessão iremos definir
-a função de custo usada em todos os modelos de regressão usados, bem como a
-métrica de acurácia, que testa a qualidade das predições dos modelos após o treinamento. \\
+A Função de Custo, derivada diretamente da verossimilhança,
+é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. \\
+
+Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
 \subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
@@ -187,6 +183,12 @@ $\hat{y}$ e y \citep{cohen}. Ele é dado por: \\
 
 Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
 do modelo. \\
+
+
+\subsection{Métrica de Acurácia}
+
+Diferentemente da funcão de custo, a métrica de acurácia não é usada para guiar a otimizacão do modelo,
+mas para testar as predições frente a realidade e avaliar sua qualidade. \\
 
 \subsubsection{R-quadrado}
 Como teste da acurácia dos modelos foi usada a métrica R-quadrado ($R^2$) \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
