@@ -7,7 +7,7 @@ l\label{cap:conceitos}
 
 O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência
 da Computação que utiliza métodos estatísticos para criar sistemas que possam
-aprender (i.e. melhorar sua acurácia) através de dados. Um problema de ML possui
+aprender a realizar uma determinada tarefa através de dados. Um problema de ML possui
 as seguintes partes \citep{dlbook}: \\
 
 \begin{itemize}
@@ -170,7 +170,7 @@ observados. \\
 \subsection{Função de Custo}
 
 A Função de Custo, derivada diretamente da verossimilhança,
-é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. \\
+é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:exp}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
 
 Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
@@ -719,7 +719,7 @@ Como $p(. | u_{i,t})$ é distribuida normalmente, não precisamos de inferência
 p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
 \]
 
-O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que minizem a log-verossimilhança conjunta dos dados: \\
+O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que minimizem a log-verossimilhança conjunta dos dados: \\
 
 \[
 \theta = argmax \sum_i{\log(p(y_i))}
