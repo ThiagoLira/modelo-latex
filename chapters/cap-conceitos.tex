@@ -211,6 +211,19 @@ podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
 indicando um modelo ideal.\\
 
 
+\subsubsection{Custo quantílico}
+
+O custo quantílico é usado na avaliacão de performance de predições temporais. \\
+Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(\rho)$, esse valor é definido por: \\
+
+\begin{equation}
+  \mathcal{QL}_{\rho}(y_{t},y^{*}_{t}(\rho)) =
+\begin{cases*}
+  2 \rho(y_{t} - y^{*}_{t}(\rho)) & se $ y_{t} - y^{*}_{t}(\rho) > 0$ \\
+  2 (1 - \rho)(y^{*}_{t}(\rho) - y_{t}) & se $y_{t} - y^{*}_{t}(\rho) \leq 0$
+\end{cases*}
+\end{equation}
+
 
 
 
