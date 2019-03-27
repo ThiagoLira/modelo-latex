@@ -58,8 +58,8 @@ Os dados da Intercement são anotados temporalmente, então podemos escolher tra
 Cabe então fazermos a distinção entre modelos sequenciais e não-sequenciais \cite{dlbook}. Os modelos sequenciais irão usar a natureza temporal dos dados como descrita nesse tópico na modelagem e predições. Os modelos não-sequenciais irão tratar cada par $(\textbf{x},y)$ sem a sua anotação de tempo $t$.
 
 
-\subsection{A Experiência}
-\label{sec:exp}
+\subsection{A Performance}
+\label{sec:metricas}
 \subsubsection{Estatística Frequentista e Estatística Bayesiana}
  
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
@@ -118,6 +118,21 @@ Minimizar essa equação é equivalente a maximizar a equação da
 log-verossimilhança \citep{dlbook}. A sessão~\ref{sec:reglog} irá mostrar o caso
 específico de estimação por log-verossimilhança para problemas de regressão.  
 
+
+
+\subsubsection{Divergência KL}
+
+A divergência KL, ou Kullback-Leibler, é uma medida de diferença entre duas distribuições de probabilidade (também chamada de Entropia Relativa). \\
+Essa medida pode ser definida pelo valor esperado da diferença logarítmica da probabilidade dos dados serem observados em uma distribuição ou na outra \citep{dlbook}. \\
+Sejam duas distribuições de probabilidade $p$ e $q$, bem como uma matriz de dados $X$: \\
+
+\[D_{KL}(p || q) = \mathop{\mathbb{E}}[\log p(x) - \log q(x)]​\]
+
+Ou em uma forma mais usual: \\
+
+\[D_{KL}(p||q) = \sum_{i=1}^{N}p(x_{i}) \log \frac{p(x_{i})}{q(x_{i})}​\]
+
+
 \subsubsection{Estimação por Log-verossimilhança para Regressão}
 \label{sec:reglog}
 Nos modelos usados nesse trabalho, a equação que irá ditar o \textbf{erro} a ser
@@ -170,7 +185,7 @@ observados. \\
 \subsection{Função de Custo}
 
 A Função de Custo, derivada diretamente da verossimilhança,
-é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:exp}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
+é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
 
 Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
