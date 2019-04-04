@@ -1,0 +1,26 @@
+** Introdução 
+   A predição da resistência compressiva do cimento é de vital importância para a área de Construção Civil, visto que essa medida é um dos principais indicadores da qualidade do cimento.
+   O ensaio de resistência de 28 dias é usado como um proxy suficiente para medir a qualidade do cimento, e a sua variância é usado como medida da estabilidade do cimento.
+   Tendo em vista o processo de fabricação de cimento, é importante se desenvolver um controle diário que permita detectar quedas na qualidade e que aponte correções (e.g. de reagentes) ao longo do tempo.  
+
+   Trabalhos antigos se usaram de métodos como...
+   
+   [1] Faz a distinção entre modelos estáticos e dinâmicos. Usando uma regressão linear "moving horizon"
+   
+   Esse trabalho usará métodos modernos de predições de séries temporais  
+   
+   
+  
+** Método
+
+   
+
+** Resultados
+   Uber Encoder Decoder
+   
+   Deep Factors
+
+   Auto-Regressive RNN
+   
+   Dynamic Linear Regression
+   
