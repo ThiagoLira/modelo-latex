@@ -1,20 +1,29 @@
 ** Introdução 
-   A predição da resistência compressiva do cimento é de vital importância para a área de Construção Civil, visto que essa medida é um dos principais indicadores da qualidade do cimento.
-   O ensaio de resistência de 28 dias é usado como um proxy suficiente para medir a qualidade do cimento, e a sua variância é usado como medida da estabilidade do cimento.
-   Tendo em vista o processo de fabricação de cimento, é importante se desenvolver um controle diário que permita detectar quedas na qualidade e que aponte correções (e.g. de reagentes) ao longo do tempo.  
+   The prediction of the compressive strength of cement is of the ultmost importance on the Civil Construction industry, 
+   given that this quantity is one of the factors to access the quality of the Cement.
+   
+   The 28-day compressive strength is then choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
+   
+   So, it is important for the factory to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
+   probably causing it. 
 
-   Trabalhos antigos se usaram de métodos como...
-   
-   [1] Faz a distinção entre modelos estáticos e dinâmicos. Usando uma regressão linear "moving horizon"
-   
-   Esse trabalho usará métodos modernos de predições de séries temporais  
-   
-   
-  
+   Past work:
+      cite:greciaLin makes the distinction between dynamic and static models to predict the compressive strength. They propose a dynamic moving window linear regression that 
+      recalculates it's regression parameters every time a new RC28 measurement is made. 
+
+   There were recent advancements on the time series prediction problem using Bayesian Deep Learning Methods. 
 ** Método
 
    
+   The data is first resampled (and filled with the mean in the case of missing values) so that we can have daily measurements. Since we are dealing with inputs of variying orders of magnitude,
+   we first rescale the data with the minmax method.
+   
+   So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot yet doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
+   the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
+   Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
+   will come from the last lots of cement of which this measurement is avaliable i.e. from the lots of the days $t-3$ and $t-7$ respectively.
+   
 ** Resultados
    Uber Encoder Decoder
    
