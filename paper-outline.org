@@ -11,9 +11,15 @@
       cite:greciaLin makes the distinction between dynamic and static models to predict the compressive strength. They propose a dynamic moving window linear regression that 
       recalculates it's regression parameters every time a new RC28 measurement is made. 
 
-   There were recent advancements on the time series prediction problem using Bayesian Deep Learning Methods. 
+   There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
+   - Deep Factors  
 ** Método
 
+   The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati. 
+
+   For the models, we use the the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped.
+   
+   From this data, we remove the columns of measurements that had a frequency too little to be of use statistically (i.e. < 70% of all days with data).
    
    The data is first resampled (and filled with the mean in the case of missing values) so that we can have daily measurements. Since we are dealing with inputs of variying orders of magnitude,
    we first rescale the data with the minmax method.
@@ -22,8 +28,10 @@
    the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
    Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
-   will come from the last lots of cement of which this measurement is avaliable i.e. from the lots of the days $t-3$ and $t-7$ respectively.
+   will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively.
    
+   We shall use data from 2007 to 2016 as our training data, and from 2016 and forward as our validation data. The models then should learn how to use the past information on cement production to predict
+   the future.
 ** Resultados
    Uber Encoder Decoder
    
