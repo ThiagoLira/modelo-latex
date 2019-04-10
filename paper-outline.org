@@ -1,6 +1,6 @@
-** Introdução 
-   The prediction of the compressive strength of cement is of the ultmost importance on the Civil Construction industry, 
-   given that this quantity is one of the factors to access the quality of the Cement.
+** Introduction
+   The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
+   given that this quantity is one of the factors to assess the quality of the cement.
    
    The 28-day compressive strength is then choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
    
@@ -12,8 +12,11 @@
       recalculates it's regression parameters every time a new RC28 measurement is made. 
 
    There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
-   - Deep Factors  
-** Método
+   - Deep Factors: The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
+     i.e. the noise. 
+   - Auto-regressive LSTM model: 
+   
+** Method
 
    The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati. 
 
@@ -30,14 +33,36 @@
    Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
    will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively.
    
-   We shall use data from 2007 to 2016 as our training data, and from 2016 and forward as our validation data. The models then should learn how to use the past information on cement production to predict
-   the future.
-** Resultados
-   Uber Encoder Decoder
+   We shall use data from 2007 to 2016 as our training data, and from 2016 and onward as our validation data. The models then should learn how to use the past information on cement production to predict
+   the future. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
    
-   Deep Factors
+*** Parameters 
+    
+    TF: Number of days to predict new RC28 measures on the future
 
-   Auto-Regressive RNN
-   
-   Dynamic Linear Regression
-   
+    window_size: Size of windows of data for the LSTM (RNN) models
+
+    rnn_hidden_size: Size of the hidden state used on the LSTM (RNN) models
+
+    batch_size: Size of batches on which the training data is prepared
+
+    
+
+
+** Results
+  
+   The Quantile Loss is defined as:
+  
+   The RMSE loss is defined as:
+
+
+
+   Gráficos para cada modelo mostrando o RMSE em função do TF de predição
+
+   Gráficos mostrando para cada modelo a distribuição das predições/valores reais (tipo QQ)
+
+   Tabela comparando quantile loss nos modelos em predições do:
+   - próximo dia
+   - 3 dias no futuro
+   - 7 dias no futuro
+
