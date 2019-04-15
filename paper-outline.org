@@ -1,82 +1,115 @@
+# #+LaTeX_HEADER: \input{miolo-preambulo.tex}
+
+
+#+LaTeX_HEADER: \usepackage{amsmath,amssymb}
+#+LaTeX_HEADER: \usepackage{empheq}
+
 ** Introduction
-   The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
-   given that this quantity is one of the factors to assess the quality of the cement.
-   
-   The 28-day compressive strength is then choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
-   
-   So, it is important for the factory to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
-   probably causing it. 
+The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
+given that this quantity is one of the factors to assess the quality of the cement.
 
-   Past work:
-      cite:greciaLin makes the distinction between dynamic and static models to predict the compressive strength. They propose a dynamic moving window linear regression that 
-      recalculates it's regression parameters every time a new RC28 measurement is made. 
+The 28-day compressive strength is then choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
 
-   There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
-   - Deep Factors: The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
-     i.e. the noise. 
-   - Auto-regressive LSTM model: 
+So, it is important for the factory to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
+probably causing it. 
+
+Past work:
+  cite:greciaLin makes the distinction between dynamic and static models to predict the compressive strength. They propose a dynamic moving window linear regression that 
+  recalculates it's regression parameters every time a new RC28 measurement is made. 
+
+There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
+- Deep Factors: The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
+  i.e. the noise. 
+- Auto-regressive LSTM model: 
    
 ** Method
 
-   The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati. 
+The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati. 
 
-   For the models, we use the the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped.
-   
-   From this data, we remove the columns of measurements that had a frequency too little to be of use statistically (i.e. < 70% of all days with data).
-   
-   The data is first resampled (and filled with the mean in the case of missing values) so that we can have daily measurements. Since we are dealing with inputs of variying orders of magnitude,
-   we first rescale the data with the minmax method.
-   
-   So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot yet doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
-   the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
+For the models, we use the the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped.
 
-   Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
-   will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively.
-   
-   We shall use data from 2007 to 2016 as our training data, and from 2016 and onward as our validation data. The models then should learn how to use the past information on cement production to predict
-   the future. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
-   
+From this data, we remove the columns of measurements that had a frequency too little to be of use statistically (i.e. < 70% of all days with data).
+
+The data is first resampled (and filled with the mean in the case of missing values) so that we can have daily measurements. Since we are dealing with inputs of variying orders of magnitude,
+we first rescale the data with the minmax method.
+
+So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot yet doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
+the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
+
+Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
+will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively.
+
+We shall use data from 2007 to 2016 as our training data, and from 2016 and onward as our validation data. The models then should learn how to use the past information on cement production to predict
+the future. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
+
 *** Parameters 
-    
-    TF: Number of days to predict new RC28 measures on the future
-
-    window_size: Size of windows of data for the LSTM (RNN) models
-
-    rnn_hidden_size: Size of the hidden state used on the LSTM (RNN) models
-
-    batch_size: Size of batches on which the training data is prepared
+   
+Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's efficiencies. 
+ 
 
     
 
 
 ** Results
   
-   The Quantile Loss is defined as:
-  
-   The RMSE loss is defined as:
+The Quantile Loss is defined as:
+
+
+#+BEGIN_EXPORT latex
+\begin{equation*}
+  \mathcal{QL}_{\rho}(y_{t},y^{*}_{t}(\rho)) =
+\begin{cases*}
+  2 \rho(y_{t} - y^{*}_{t}(\rho)) & if $ y_{t} - y^{*}_{t}(\rho) > 0$ \\
+  2 (1 - \rho)(y^{*}_{t}(\rho) - y_{t}) & if $y_{t} - y^{*}_{t}(\rho) \leq 0$
+\end{cases*}
+
+\end{equation*}
+#+END_EXPORT
+
+
+The RMSE loss is defined as:
 
 
 
-   Gráficos para cada modelo mostrando o RMSE em função do TF de predição
+We shall compare the accuracy of the models as time passes. The models are trained with data containing some last day T, 
+the validation data follows imediatly after T, and we evaluate the model's accuracy the more the model has to make predictions on days
+distant in time from the training data.
 
-   Gráficos mostrando para cada modelo a distribuição das predições/valores reais (tipo QQ)
+#+BEGIN_center
+# #+CAPTION: RMSE as a function of the date using the model Deep AR
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_ar.pdf]] 
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_factors.pdf]] 
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_enc_dec.pdf]] 
+#+END_center
 
-   Tabela comparando quantile loss nos modelos em predições do:
-   - próximo dia
-   - 3 dias no futuro
-   - 7 dias no futuro
 
- | Encoder Decoder | .5 risk | .9 risk |
- |             24h |   0.004 |   0.025 |
- |              3d |   0.005 |    0.02 |
- |              7d |   0.011 |   0.037 |
- 
-| Deep Factors | .5 risk | .9 risk |
-|          24h |   0.009 |   0.004 |
-|           3d |   0.018 |   0.008 |
-|           7d |   0.041 |   0.015 |
+We now plot the predictions of the model against it's true values, to evaluate the distribution of the predicted values.
 
- | Deep AR | .5 risk | .9 risk |
- |     24h |   0.009 |   0.004 |
- |      3d |   0.018 |   0.008 |
- |      7d |   0.044 |   0.016 |
+#+BEGIN_center
+# #+CAPTION: Scatter Plot of the Predictions as a function of the True Values
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_deep_ar.pdf]] 
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_deep_factors.pdf]] 
+#+ATTR_LaTeX: :height 0.3\textwidth :center
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_enc_dec.pdf]] 
+#+END_center
+
+To evaluate the quality of the uncertainty measures, we shall use the .5 risk and .9 risk metrics. For each model 
+we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. 
+
+| Encoder Decoder | .5 risk | .9 risk |
+|             24h |   0.004 |   0.025 |
+|              3d |   0.005 |    0.02 |
+|              7d |   0.011 |   0.037 |
+|    Deep Factors | .5 risk | .9 risk |
+|             24h |   0.009 |   0.004 |
+|              3d |   0.018 |   0.008 |
+|              7d |   0.041 |   0.015 |
+|         Deep AR | .5 risk | .9 risk |
+|             24h |   0.009 |   0.004 |
+|              3d |   0.018 |   0.008 |
+|              7d |   0.044 |   0.016 |
