@@ -1,8 +1,11 @@
 # #+LaTeX_HEADER: \input{miolo-preambulo.tex}
 
+#+BIBLIOGRAPHY: bibliografia plain
 
 #+LaTeX_HEADER: \usepackage{amsmath,amssymb}
 #+LaTeX_HEADER: \usepackage{empheq}
+#+LaTeX_HEADER: \bibliographystyle{plain}
+#+LaTeX_HEADER: \bibliography{bibliografia}{}
 
 ** Introduction
 The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
@@ -18,9 +21,16 @@ Past work:
   recalculates it's regression parameters every time a new RC28 measurement is made. 
 
 There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
+
 - Deep Factors: The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
-  i.e. the noise. 
-- Auto-regressive LSTM model: 
+  i.e. the noise and uncertainty.
+ 
+- DeepAR: This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical 
+  characteristics of the problem.
+
+- Encoder Decoder Forecaster: This model by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation), 
+  which them enables the model to decompose it's prediction uncertainty in three types:
+  model uncertainty, inherent noise and model misspecification.
    
 ** Method
 
@@ -61,10 +71,10 @@ Given a true value y_{t} and a quantile prediction y^*_t(\rho), with  1 > \rho >
 #+BEGIN_EXPORT latex
 \begin{equation*}
   \mathcal{QL}_{\rho}(y_{t},y^{*}_{t}(\rho)) =
-\begin{cases*}
-  2 \rho(y_{t} - y^{*}_{t}(\rho)) & if $ y_{t} - y^{*}_{t}(\rho) > 0$ \\
-  2 (1 - \rho)(y^{*}_{t}(\rho) - y_{t}) & if $y_{t} - y^{*}_{t}(\rho) \leq 0$
-\end{cases*}
+\begin{cases}
+  2 \rho(y_{t} - y^{*}_{t}(\rho)) & \text{if }  y_{t} - y^{*}_{t}(\rho) > 0 \\
+  2 (1 - \rho)(y^{*}_{t}(\rho) - y_{t}) & \text{if } y_{t} - y^{*}_{t}(\rho) \leq 0
+\end{cases}
 
 \end{equation*}
 #+END_EXPORT
