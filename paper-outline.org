@@ -4,8 +4,6 @@
 
 #+LaTeX_HEADER: \usepackage{amsmath,amssymb}
 #+LaTeX_HEADER: \usepackage{empheq}
-#+LaTeX_HEADER: \bibliographystyle{plain}
-#+LaTeX_HEADER: \bibliography{bibliografia}{}
 
 ** Introduction
 The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
@@ -75,7 +73,6 @@ Given a true value y_{t} and a quantile prediction y^*_t(\rho), with  1 > \rho >
   2 \rho(y_{t} - y^{*}_{t}(\rho)) & \text{if }  y_{t} - y^{*}_{t}(\rho) > 0 \\
   2 (1 - \rho)(y^{*}_{t}(\rho) - y_{t}) & \text{if } y_{t} - y^{*}_{t}(\rho) \leq 0
 \end{cases}
-
 \end{equation*}
 #+END_EXPORT
 
@@ -148,3 +145,8 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 |              7d |   0.044 |   0.016 |
 
 #+END_center
+
+#+BEGIN_EXPORT latex
+\bibliographystyle{plain}
+\bibliography{bibliografia}{}
+#+END_EXPORT 
