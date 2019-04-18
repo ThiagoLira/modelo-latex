@@ -20,13 +20,13 @@ Past work:
 
 There were recent advancements of the state of the art on the time series prediction problem using Bayesian Deep Learning Methods. 
 
-- Deep Factors: The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
+- Deep Factors cite:deepfactors : The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
   i.e. the noise and uncertainty.
  
-- DeepAR: This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical 
-  characteristics of the problem.
+- DeepAR cite:deepar : This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical 
+  characteristics of the problem. For this problem we use a Gaussian Likelihood.
 
-- Encoder Decoder Forecaster: This model by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation), 
+- Encoder Decoder Forecaster cite:ubertime  : This model by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation), 
   which them enables the model to decompose it's prediction uncertainty in three types:
   model uncertainty, inherent noise and model misspecification.
    
@@ -41,6 +41,18 @@ From this data, we remove the columns of measurements that had a frequency too l
 The data is first resampled (and filled with the mean in the case of missing values) so that we can have daily measurements. Since we are dealing with inputs of variying orders of magnitude,
 we first rescale the data with the minmax method.
 
+After cleaning, the columns of data with enough data to be useful at the learning task are: 
+
+ - Percentages related to chemical composition: AL_2O_3, SIO_2, MGO, RICARB, P_2O_5 and FE_2O_3. 
+ - Percentage of the matter os water relative to the cement: AGP
+ - Time (seconds) that the material takes to begin hardening and to finish hardening, respectively: IP, FP
+ - Blaine fineness, measured in square centimeters per gram: SBL
+ - Percentage of Mass lost to heating: FP
+
+Using the Machine Learning approach cite:dlbook, 
+we shall let the model learn by itself what parameters to give more importance, thus not doing any /feature engineering/ prior to training the model. As it is common on machine learning models.
+
+
 So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot yet doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
 the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
@@ -51,6 +63,9 @@ We shall use data from 2007 to 2016 as our training data, and from 2016 and onwa
 the future. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
 
 *** Parameters 
+
+
+
    
 Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's efficiencies. 
  
@@ -85,7 +100,7 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 
 #+END_EXPORT
 
-We will use the values of \rho 0.5 and 0.9. These values can be understood as the error on 50% and 90% of the sampled values, respectively. 
+We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
 The .5-risk is equivalent to the mean absolute percentage error.
 \\
 
