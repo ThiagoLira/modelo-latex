@@ -9,7 +9,7 @@
 The prediction of the compressive strength of cement is of the utmost importance on the Civil Construction industry, 
 given that this quantity is one of the factors to assess the quality of the cement.
 
-The 28-day compressive strength is then choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
+The 28-day compressive strength is choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
 
 So, it is important for the factory to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
 probably causing it. 
@@ -27,7 +27,7 @@ There were recent advancements of the state of the art on the time series predic
   characteristics of the problem. For this problem we use a Gaussian Likelihood.
 
 - Encoder Decoder Forecaster cite:ubertime  : This model by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation), 
-  which them enables the model to decompose it's prediction uncertainty in three types:
+  which them enables the model to decompose it's prediction uncertainty into three types:
   model uncertainty, inherent noise and model misspecification.
    
 ** Method
@@ -165,3 +165,9 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 \bibliographystyle{plain}
 \bibliography{bibliografia}{}
 #+END_EXPORT 
+
+
+** Contributions
+
+This work has applied Bayesian Deep Learning techniques to the prediction with uncertainty of cement strength. The results of the RMSE measures are similar to state of the art results using
+linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction.
