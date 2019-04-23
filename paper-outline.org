@@ -65,12 +65,12 @@ the future. It's expected that the validation error will increase the farther we
 
 ** Experiments
 
-All models were implemented using PyTorch cite:pytorch, for the Gaussian Proccesses we used GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
+All models were implemented using PyTorch cite:pytorch, for the Gaussian Processes we used GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
  
-Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's efficiencies. 
+Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's accuracies. 
  
 The models forecast performance will be evaluated by two metrics: One of which, the Quantile Loss (or \rho-risk), will assess the quality of the uncertainty measure,
-and the RMSE will assess the absolute value of the predictions. 
+and the RMSE will assess the error. 
  
 Given a true value y_{t} and a quantile prediction y^*_t(\rho), with  1 > \rho > 0. The Quantile Loss is defined as:
 
@@ -97,7 +97,7 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
 The .5-risk is equivalent to the mean absolute percentage error (MAPE).
 \\
-
+\\
 The RMSE loss is defined as:
 \\
 #+BEGIN_EXPORT latex
@@ -107,8 +107,7 @@ The RMSE loss is defined as:
 #+END_EXPORT
 
 We shall compare the accuracy of the models as time passes. The models are trained with data containing some last day T, 
-the validation data follows imediatly after T, and we evaluate the model's accuracy the more the model has to make predictions on days
-distant in time from the training data.
+the validation data follows imediatly after T, and we evaluate the model's average accuracy with a increasing number of days of prediction after T.
 
 #+BEGIN_center
 # #+CAPTION: RMSE as a function of the date using the model Deep AR
@@ -121,7 +120,7 @@ distant in time from the training data.
 #+END_center
 
 
-We now plot the predictions of the model against it's true values, to evaluate the distribution of the predicted values.
+We now plot the predictions for 300 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
 
 #+BEGIN_center
 # #+CAPTION: Scatter Plot of the Predictions as a function of the True Values
