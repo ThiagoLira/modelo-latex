@@ -30,7 +30,7 @@ There were recent advancements of the state of the art on the time series predic
   which them enables the model to decompose it's prediction uncertainty into three types:
   model uncertainty, inherent noise and model misspecification.
    
-** Method
+** Data 
 
 The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati. 
 
@@ -62,18 +62,12 @@ will come from the last lots of cement of which this measurement is avaliable on
 We shall use data from 2007 to 2016 as our training data, and from 2016 and onward as our validation data. The models then should learn how to use the past information on cement production to predict
 the future. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
 
-*** Parameters 
 
+** Experiments
 
-
-   
-Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's efficiencies. 
+All models were implemented using PyTorch cite:pytorch, for the Gaussian Proccesses we used GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
  
-
-    
-
-
-** Results
+Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's efficiencies. 
  
 The models forecast performance will be evaluated by two metrics: One of which, the Quantile Loss (or \rho-risk), will assess the quality of the uncertainty measure,
 and the RMSE will assess the absolute value of the predictions. 
@@ -101,7 +95,7 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 #+END_EXPORT
 
 We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
-The .5-risk is equivalent to the mean absolute percentage error.
+The .5-risk is equivalent to the mean absolute percentage error (MAPE).
 \\
 
 The RMSE loss is defined as:
@@ -150,9 +144,9 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 |              7d |   0.011 |   0.037 |
 
 |    Deep Factors | .5 risk | .9 risk |
-|             24h |   0.009 |   0.004 |
-|              3d |   0.018 |   0.008 |
-|              7d |   0.041 |   0.015 |
+|             24h |   0.001 |   0.036 |
+|              3d |   0.009 |   0.031 |
+|              7d |   0.023 |   0.027 |
 
 |         Deep AR | .5 risk | .9 risk |
 |             24h |   0.009 |   0.004 |
@@ -161,13 +155,12 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 
 #+END_center
 
+** Conclusion
+
+This work has applied Bayesian Deep Learning techniques to the modeling of uncertainty of cement strength prediction. The results of the RMSE measures are similar to state of the art results using
+linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction.
+
 #+BEGIN_EXPORT latex
 \bibliographystyle{plain}
 \bibliography{bibliografia}{}
 #+END_EXPORT 
-
-
-** Contributions
-
-This work has applied Bayesian Deep Learning techniques to the prediction with uncertainty of cement strength. The results of the RMSE measures are similar to state of the art results using
-linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction.
