@@ -43,11 +43,11 @@ we first rescale the data with the minmax method.
 
 After cleaning, the columns of data with enough data to be useful at the learning task are: 
 
- - Percentages related to chemical composition: AL_2O_3, SIO_2, MGO, RICARB, P_2O_5 and FE_2O_3. 
- - Percentage of the matter os water relative to the cement: AGP
+ - Percentages related to chemical composition: AL_{2}O_3, SIO_2, MGO, RICARB, P_{2}O_5 and FE_{2}O_3. 
+ - Percentage of the matter of water relative to the cement: AGP
  - Time (seconds) that the material takes to begin hardening and to finish hardening, respectively: IP, FP
  - Blaine fineness, measured in square centimeters per gram: SBL
- - Percentage of Mass lost to heating: FP
+ - Percentage of Mass lost on furnace: FP
 
 Using the Machine Learning approach cite:dlbook, 
 we shall let the model learn by itself what parameters to give more importance, thus not doing any /feature engineering/ prior to training the model. As it is common on machine learning models.
