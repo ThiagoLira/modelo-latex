@@ -35,7 +35,19 @@ with the assumption that the past of the measurements have some information conc
 
 Recently, many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr. 
 
-And there is a new trend of applying Bayesian Deep Learning to tackle time series regression. We shall make a quick review of such recently proposed models.
+And there is a new trend of applying Bayesian Deep Learning to tackle time series regression, to model the probability distribution representing the data, with it's uncertainty,
+a characteristic useful when modeling a industrial process output, since we are concerned with it's stability.
+
+The training data is composed of the pairs $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ on the time span $[t_o,T]$. 
+Let F be a finite time horizon, such that F > T, the models should learn a probability distribution of the form:
+
+#+BEGIN_EXPORT latex
+\begin{equation}
+p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T}) 
+\end{equation} 
+#+END_EXPORT 
+
+We shall make a quick review of such recent literature:
 
 - Deep Factors cite:deepfactors : The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
   i.e. the noise and uncertainty.
@@ -83,9 +95,8 @@ will come from the last lots of cement of which this measurement is avaliable on
 We shall use data from 2007 to 2016 as our training data, and from 2016 to 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
 can give information about it's future.
 
-We shall then evaluate how long in the future can the models reliably predict new measures with 
-an acceptable uncertainty. It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
-
+We shall then evaluate how long in the future can the models reliably predict new measures with an acceptable uncertainty.
+It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
 
 ** Experiments
 
