@@ -12,11 +12,11 @@
 #+LaTeX_HEADER: \usepackage{empheq}
 
 #+begin_abstract
-Much of the past work on the prediction of cement compressive strength (CSC) fail to account for the reality of the industrial process,
+Much of the past work on the prediction of cement compressive strength (CSC) fail to account for the reality of the industrial process (e.g. which data is avaliable on a daily basis),
 instead providing a limited analysis on isolated samples on a laboratory. Recent work considered the cement data as indexed by time, providing 
 models that could be used on a daily basis on the factory floor, providing decision making capabilities for the stability of the industrial process, using uncertainty.
 This work goes further and implements Bayesian Deep Learning techniques on this domain. These are able to scale to huge amounts of data, require no
-specific knowledge of the data and provides powerful uncertainty estimates, able to be calculated and renewed every day with new the data being produced on the factory.
+specific knowledge of the data and provides powerful uncertainty estimates, able to be calculated and renewed every day with the new data being produced on the factory.
 #+end_abstract
 
 
@@ -72,7 +72,7 @@ We shall make a quick review of such recent literature:
  
 ** Data 
 
-The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati.  
+The data represents 11 years of cement production on a medium sized factory, located on the city of Cajati.  
 
 For the models, we use the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped. 
 On this particular dataset, we have 2408 almost daily anotations spanning 8 years of cement production, with 25 collums (i.e. features) per day.
@@ -102,7 +102,7 @@ After cleaning, the columns with enough data to be useful at the learning task a
 
 Using the Machine Learning approach cite:dlbook,  we shall let the model learn by itself what parameters to give more importance, 
 thus not doing any /feature engineering/ prior to training the model, i.e. we shall not 
-use any civil engineering or chemistry knownledge to alter the models or the data in any way.
+use any civil engineering or chemistry knowledge to alter the models or the data in any way.
 
 So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
 the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
@@ -111,7 +111,7 @@ Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements 
 will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively. This is to ensure that such analysis
 can be done with new day, on the day of it's expedition, thus not confining our analysis just to older samples i.e. ones from which we already know it's RC3, RC7 and RC28 measurements. 
 
-We shall use data from 2007 to 2016 as our training data, and from 2016 to 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
+We shall use data from 01/2007 to 09/2018 as our training data, and the last 3 months of 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
 can give information about it's future.
 
 We shall then evaluate how long in the future can the models reliably predict new measures with an acceptable uncertainty.
@@ -188,7 +188,7 @@ We now plot the predictions for 150 days after T of the models against it's true
 [[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_enc_dec.pdf]] 
 #+END_center
 
-
+The Encoder-Decoder models seems to be able to best model the target distribution, although all models (after some weeks) settle on a stable mean prediction of the process. 
 
 To evaluate the quality of the uncertainty measures, we shall use the .5 risk and .9 risk metrics. For each model 
 we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. 
