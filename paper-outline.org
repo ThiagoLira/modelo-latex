@@ -24,7 +24,7 @@ specific knowledge of the data and provides powerful uncertainty estimates, able
 The prediction of the compressive strength of cement (CSC) is of the utmost importance on the Civil Construction Industry, 
 given that this capacity is one of the factors to assess the quality of cement cite:cementnn1.
 
-The 28-day compressive strength (RC28) is choosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial proccess. 
+The 28-day compressive strength (RC28) is chosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial process. 
 
 It is important for the industry to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
 probably causing it. The problem can them be tackled with supervised learning cite:dlbook, where the target are the RC28 measurements and the inputs are chemical compositions and other 
@@ -33,7 +33,7 @@ quantities measured on a daily basis on the factory.
 Much of the past work cite:cementlin,nncement using mathematical models to predict CSC have failed to account for the dynamical nature of the industrial process and instead rely on analises that are hard to make 
 on a daily basis on the industrial floor cite:dynstat. 
 
-Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CSC. 
+Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CCS. 
 The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
@@ -45,7 +45,16 @@ these deep learning models require no /feature engineering/ and work very well e
 
 Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. A new trend is to apply Bayesian Deep Learning
 techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. This last feature is particularly useful on a industrial setting, as to provide 
-decision making evidence on the factory floor cite:deepfactors. We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. 
+decision making evidence on the factory floor cite:deepfactors. We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. The contribuitions of this paper are 
+as follows: 
+
+- A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting.
+- A complete analysis of CCS data a as time series.
+- A novel application of Bayesian Deep Learning on CCS, with performance similar to previous state-of-the-art results using linear regression.
+
+
+
+
 
 The training data is composed of the pairs $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ on the time span $[t_o,T]$. 
 Let F be a finite time horizon, such that F > T, the models should learn a probability distribution of the form:
@@ -69,7 +78,6 @@ We shall make a quick review of such recent literature:
   model uncertainty, inherent noise and model misspecification.
   
 
- 
 ** Data 
 
 The data represents 8 years of cement production on a medium sized factory, located on the city of Cajati.  
@@ -195,7 +203,7 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 
 #+BEGIN_center
 #+NAME: table-yield
-#+CAPTION: Simple table created using LaTeX tabular environment
+# #+CAPTION: Simple table created using LaTeX tabular environment
 #+attr_latex: :environment tabular :width \textwidth :align lrr
 | Encoder Decoder | .5 risk | .9 risk |
 |             24h |   0.004 |   0.025 |
