@@ -38,23 +38,23 @@ The authors propose a dynamic moving window linear regression that recalculates 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
 Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), and model them as such, 
-with the assumption that the past of the measurements have some information concerning the future of the process. 
+with the assumption that the past of the measurements have some information concerning the future of the process.
+ 
+Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
+
+Our data doesn't conform to some core assumptions of classical time series models, such as stationarity and homoscedasticity, 
+making models such as ARIMA cite:inbook not good choices for fitting the data.
 
 Going further, many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr,
 these deep learning models require no /feature engineering/ and work very well even with gigabytes of data.
 
-Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. A new trend is to apply Bayesian Deep Learning
+Classic time series models also fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. A new trend is to apply Bayesian Deep Learning
 techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. This last feature is particularly useful on a industrial setting, as to provide 
 decision making evidence on the factory floor cite:deepfactors. We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. The contribuitions of this paper are 
 as follows: 
 
 - A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting.
-- A complete analysis of CCS data a as time series.
 - A novel application of Bayesian Deep Learning on CCS, with performance similar to previous state-of-the-art results using linear regression.
-
-
-
-
 
 The training data is composed of the pairs $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ on the time span $[t_o,T]$. 
 Let F be a finite time horizon, such that F > T, the models should learn a probability distribution of the form:
@@ -64,6 +64,8 @@ Let F be a finite time horizon, such that F > T, the models should learn a proba
 p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T}) 
 \end{equation} 
 #+END_EXPORT 
+
+
 
 We shall make a quick review of such recent literature:
 
@@ -77,13 +79,12 @@ We shall make a quick review of such recent literature:
   which them enables the model to decompose it's prediction uncertainty into three types:
   model uncertainty, inherent noise and model misspecification.
   
-
 ** Data 
 
 The data represents 11 years of cement production on a medium sized factory, located on the city of Cajati.  
 
 For the models, we use the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped. 
-On this particular dataset, we have 2408 almost daily anotations spanning 8 years of cement production, with 25 collums (i.e. features) per day.
+On this particular dataset, we have 2408 almost daily anotations spanning 11 years of cement production, with 25 collums (i.e. features) per day.
 
 From this data, we remove the columns of measurements that had a frequency too little to be of use statistically (i.e. < 70% of all days with data).
 
@@ -164,7 +165,7 @@ The RMSE loss is defined as:
 \\
 #+BEGIN_EXPORT latex
 \begin{equation*}
-\sum^n_{t}\sqrt{\frac{(y_t - \hat{y_t})^2}{n}}
+\sum^n_{t}\sqrt{\frac{(y_t - y^*_t)^2}{n}}
 \end{equation*}
 #+END_EXPORT
 
@@ -184,7 +185,7 @@ the validation data follows imediatly after T, and we evaluate the model's avera
 We observe then that error steadily increases as time passes, as in cite:dynstat, but on a much slower rate. The RNN models used on this work have the capability to 
 dinamically weight the last $t_f$ days ($t_f$ is a hyper-parameter) to make the best prediction, so we don't need to update the models parameters as often as a moving window linear regression.
 
-We now plot the predictions for 150 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
+We now plot the predictions for 90 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
 
 #+BEGIN_center
 # #+CAPTION: Scatter Plot of the Predictions as a function of the True Values
@@ -197,9 +198,10 @@ We now plot the predictions for 150 days after T of the models against it's true
 #+END_center
 
 The Encoder-Decoder models seems to be able to best model the target distribution, although all models (after some weeks) settle on a stable mean prediction of the process. 
+This graph could be used to model trends regarding the industrial process on a short horizon of time.
 
 To evaluate the quality of the uncertainty measures, we shall use the .5 risk and .9 risk metrics. For each model 
-we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. 
+we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. (The bigger the number the worse is the uncertainty).
 
 #+BEGIN_center
 #+NAME: table-yield
@@ -226,6 +228,7 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 
 This work has applied Bayesian Deep Learning techniques to the modeling of uncertainty of cement strength prediction. The results of the RMSE measures are similar to state of the art results using
 linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction. 
+All this work accounts for the reality of the industrial process, and could be implemented in any cement factory with similar daily measurements.
 We have not been provided with enough data to be comparable with most public datasets used to test Deep Learning models, but we do have more data than previous work on the prediction of the CSC
 and our work should be scalable to much more data.
 
