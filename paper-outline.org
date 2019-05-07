@@ -47,7 +47,8 @@ making models such as ARIMA cite:inbook not good choices for fitting the data. A
 on the data cite:forecasting.
 
 Many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr,
-these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods, meaning that little manual 
+these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
+that assume very little about the data, meaning that little manual 
 tweaking on the model parameters is necessary.
 
 Classic time series models also fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
