@@ -150,13 +150,13 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 
 We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
 The .5-risk is equivalent to the mean absolute percentage error (MAPE).
-\\
-\\
+
+
 The RMSE loss is defined as:
-\\
+
 #+BEGIN_EXPORT latex
 \begin{equation*}
-\sum^n_{t}\sqrt{\frac{(y_t - \hat{y_t})^2}{n}}
+\sum^n_{t}\sqrt{\frac{(y_t - y^*_{t})^2}{n}}
 \end{equation*}
 #+END_EXPORT
 
@@ -176,7 +176,7 @@ the validation data follows imediatly after T, and we evaluate the model's avera
 We observe then that error steadily increases as time passes, as in cite:dynstat, but on a much slower rate. The RNN models used on this work have the capability to 
 dinamically weight the last $t_f$ days ($t_f$ is a hyper-parameter) to make the best prediction, so we don't need to update the models parameters as often as a moving window linear regression.
 
-We now plot the predictions for 150 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
+We now plot the predictions for 90 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
 
 #+BEGIN_center
 # #+CAPTION: Scatter Plot of the Predictions as a function of the True Values
@@ -188,7 +188,7 @@ We now plot the predictions for 150 days after T of the models against it's true
 [[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_enc_dec.pdf]] 
 #+END_center
 
-The Encoder-Decoder models seems to be able to best model the target distribution, although all models (after some weeks) settle on a stable mean prediction of the process. 
+The Encoder-Decoder models seems to be able to best model the target distribution.
 
 To evaluate the quality of the uncertainty measures, we shall use the .5 risk and .9 risk metrics. For each model 
 we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. 
@@ -218,8 +218,8 @@ we wil compare the risks for the predictions of the next day, the next 3 days an
 
 This work has applied Bayesian Deep Learning techniques to the modeling of uncertainty of cement strength prediction. The results of the RMSE measures are similar to state of the art results using
 linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction. 
-We have not been provided with enough data to be comparable with most public datasets used to test Deep Learning models, but we do have more data than previous work on the prediction of the CSC
-and our work should be scalable to much more data.
+We have not been provided with enough data to be comparable with most public datasets used to test Deep Learning models, with that much data, the Deep Learning approach is more resource intensive 
+and prone to variance problems than the models used on previous work on this task. On the future however, with more data, the Deep Learning approach should be more prevalent on this industry.
 
 #+BEGIN_EXPORT latex
 \bibliographystyle{plain}
