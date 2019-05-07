@@ -22,7 +22,7 @@ specific knowledge of the data and provides powerful uncertainty estimates, able
 
 ** Introduction
 The prediction of the compressive strength of cement (CSC) is of the utmost importance on the Civil Construction Industry, 
-given that this capacity is one of the factors to assess the quality of cement cite:cementnn1.
+given that this capacity is one of the factors to assess the quality of cement cite:cementnn0.
 
 The 28-day compressive strength (RC28) is chosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial process. 
 
@@ -43,14 +43,19 @@ with the assumption that the past of the measurements have some information conc
 Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
 
 Our data doesn't conform to some core assumptions of classical time series models, such as stationarity and homoscedasticity, 
-making models such as ARIMA cite:inbook not good choices for fitting the data.
+making models such as ARIMA cite:inbook not good choices for fitting the data. Another limitation of ARIMA models is their inability to model non-linear relationships 
+on the data cite:forecasting.
 
-Going further, many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr,
-these deep learning models require no /feature engineering/ and work very well even with gigabytes of data.
+Many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr,
+these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods, meaning that little manual 
+tweaking on the model parameters is necessary.
 
-Classic time series models also fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. A new trend is to apply Bayesian Deep Learning
-techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. This last feature is particularly useful on a industrial setting, as to provide 
-decision making evidence on the factory floor cite:deepfactors. We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. The contribuitions of this paper are 
+Classic time series models also fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
+has managed to combine ARIMA models with Artificial Neural Networks (ANN), with better results than just either of these models.
+
+A new trend is to apply Bayesian Deep Learning techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. 
+This last feature is particularly useful on a industrial setting, as to provide decision making evidence on the factory floor cite:deepfactors. 
+We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. The contribuitions of this paper are 
 as follows: 
 
 - A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting.
