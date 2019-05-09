@@ -10,7 +10,7 @@
 
 #+LaTeX_HEADER: \usepackage{amsmath,amssymb}
 #+LaTeX_HEADER: \usepackage{empheq}
-
+#+LaTeX_HEADER: \usepackage{float}
 #+begin_abstract
 Much of the past work on the prediction of cement compressive strength (CSC) fail to account for the reality of the industrial process (e.g. which data is avaliable on a daily basis),
 instead providing a limited analysis on isolated samples on a laboratory. Recent work considered the cement data as indexed by time, providing 
@@ -42,16 +42,15 @@ with the assumption that the past of the measurements have some information conc
  
 Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
 
-Our data doesn't conform to some core assumptions of classical time series models, such as stationarity and homoscedasticity, 
-making models such as ARIMA cite:inbook not good choices for fitting the data. Another limitation of ARIMA models is their inability to model non-linear relationships 
-on the data cite:forecasting.
+For many decades the state-of-the-art on forecasting has been the ARIMA class of models, and Box-Jenkins procedures cite:inbook, but these models have their limitations. 
+They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear.
 
-Many time series problems on different domains had it's state of the art results beaten by new Deep Learning Recurrent Neural Network models cite:energylstm,lstmbr,
+Recently many time series problems on different domains had it's classical results beaten by new Deep Learning methods such as Recurrent Neural Network models cite:energylstm,lstmbr,
 these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
 that assume very little about the data, meaning that little manual 
 tweaking on the model parameters is necessary.
 
-Classic time series models also fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
+Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
 has managed to combine ARIMA models with Artificial Neural Networks (ANN), with better results than just either of these models.
 
 A new trend is to apply Bayesian Deep Learning techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. 
@@ -70,7 +69,6 @@ Let F be a finite time horizon, such that F > T, the models should learn a proba
 p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T}) 
 \end{equation} 
 #+END_EXPORT 
-
 
 
 We shall make a quick review of such recent literature:
@@ -119,22 +117,24 @@ Using the Machine Learning approach cite:dlbook,  we shall let the model learn b
 thus not doing any /feature engineering/ prior to training the model, i.e. we shall not 
 use any civil engineering or chemistry knowledge to alter the models or the data in any way.
 
-So, every day $t$ a new lot of cement is ready and expedited from the factory. This lot doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
+*** RC3, RC7 and RC28
+Every day $t$ a new lot of cement is ready and expedited from the factory. This lot doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
 the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
 Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
 will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively. This is to ensure that such analysis
 can be done with new day, on the day of it's expedition, thus not confining our analysis just to older samples i.e. ones from which we already know it's RC3, RC7 and RC28 measurements. 
 
+*** Train/Test Separation
 We shall use data from 01/2007 to 09/2018 as our training data, and the last 3 months of 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
 can give information about it's future.
 
 We shall then evaluate how long in the future can the models reliably predict new measures with an acceptable uncertainty.
 It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
 
-** Experiments
+** Results
 
-All models were implemented using PyTorch cite:pytorch, for the Gaussian Processes we used GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
+All models were implemented using PyTorch cite:pytorch, for the Gaussian Processes we use GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
  
 Every RNN based model will have a certain window of data as input to predict the next day of RC28. The size of this window is fixed across models so that we might compare it's accuracies. 
  
@@ -155,7 +155,7 @@ Given a true value y_{t} and a quantile prediction y^*_t(\rho), with  1 > \rho >
 #+END_EXPORT
 
 To compare the models we shall use the normalized sum of quantile losses, or \rho-risk. 
-\\
+
 #+BEGIN_EXPORT latex
 \begin{equation*}
 \sum_{t}\frac{\mathcal{QL}_{\rho}(y_{t},y^{*}_{t})}{\sum_{t}y_{t}}
@@ -166,39 +166,61 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
 The .5-risk is equivalent to the mean absolute percentage error (MAPE).
 
-
 The RMSE loss is defined as:
 
 #+BEGIN_EXPORT latex
 \begin{equation*}
-<<<<<<< HEAD
 \sum^n_{t}\sqrt{\frac{(y_t - y^*_{t})^2}{n}}
-=======
-\sum^n_{t}\sqrt{\frac{(y_t - y^*_t)^2}{n}}
->>>>>>> d3a9ecac3e4496aa3b801508fa64406d7e4b7309
 \end{equation*}
 #+END_EXPORT
 
-We shall compare the accuracy of the models as time passes. The models are trained with data containing some last day T, 
-the validation data follows imediatly after T, and we evaluate the model's average accuracy with a increasing number of days of prediction after T.
+
+Table [[taba1]] reports how each model performs as a function of the timespan of forecasting. 
+The error inscreases as time passes, as is expected. All models perform well on the 24h (next-day) forecasting.
 
 #+BEGIN_center
-# #+CAPTION: RMSE as a function of the date using the model Deep AR
-#+ATTR_LaTeX: :height 0.3\textwidth :center
-[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_ar.pdf]] 
-#+ATTR_LaTeX: :height 0.3\textwidth :center
-[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_factors.pdf]] 
-#+ATTR_LaTeX: :height 0.3\textwidth :center
-[[file:~/Dropbox/Mestrado/Intercement/paper_img/rmse_enc_dec.pdf]] 
+#+NAME: taba1
+#+CAPTION: RMSE values by forecast span
+|-----------------+---------------------|
+|    Deep Factors |                RMSE |
+|-----------------+---------------------|
+|             24h | 0.18                |
+|              3d |  2.36               |
+|              7d |  1.83               |
+|-----------------+---------------------|
+|         Deep AR |                RMSE |
+|-----------------+---------------------|
+|             24h | 0.07                |
+|              3d |  1.37               |
+|              7d |  1.44               |
+|-----------------+---------------------|
+| Encoder Decoder |                RMSE |
+|-----------------+---------------------|
+|             24h |  0.22               |
+|              3d |   0.36              |
+|              7d |  1.04               |
 #+END_center
 
-We observe then that error steadily increases as time passes, as in cite:dynstat, but on a much slower rate. The RNN models used on this work have the capability to 
-dinamically weight the last $t_f$ days ($t_f$ is a hyper-parameter) to make the best prediction, so we don't need to update the models parameters as often as a moving window linear regression.
+Next, Figures [[forecastencdec]], [[forecastdeepfactors]] and [[forecastdeepar]] report the full prediction on the dev set timespan, with it's uncertainties.
+
+#+NAME: forecastencdec
+#+CAPTION: Forecast Results for Encoder Decoder Model 
+#+ATTR_LaTeX: :height 0.3\textwidth :placement [H]
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/forecast_enc_dec.pdf]] 
+
+#+NAME: forecastdeepfactors
+#+CAPTION: Forecast Results for Deep Factors Model 
+#+ATTR_LaTeX: :height 0.3\textwidth :placement [H]
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/forecast_deep_factors.pdf]] 
+
+#+NAME: forecastdeepar
+#+CAPTION: Forecast Results for Deep AR Model 
+#+ATTR_LaTeX: :height 0.3\textwidth :placament [H]
+[[file:~/Dropbox/Mestrado/Intercement/paper_img/forecast_deep_ar.pdf]] 
 
 We now plot the predictions for 90 days after T of the models against it's true values, to evaluate the distribution of the predicted values.
 
 #+BEGIN_center
-# #+CAPTION: Scatter Plot of the Predictions as a function of the True Values
 #+ATTR_LaTeX: :height 0.3\textwidth :center
 [[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_deep_ar.pdf]] 
 #+ATTR_LaTeX: :height 0.3\textwidth :center
@@ -207,36 +229,39 @@ We now plot the predictions for 90 days after T of the models against it's true 
 [[file:~/Dropbox/Mestrado/Intercement/paper_img/qq_enc_dec.pdf]] 
 #+END_center
 
-<<<<<<< HEAD
 The Encoder-Decoder models seems to be able to best model the target distribution.
-=======
-The Encoder-Decoder models seems to be able to best model the target distribution, although all models (after some weeks) settle on a stable mean prediction of the process. 
-This graph could be used to model trends regarding the industrial process on a short horizon of time.
->>>>>>> d3a9ecac3e4496aa3b801508fa64406d7e4b7309
 
 To evaluate the quality of the uncertainty measures, we shall use the .5 risk and .9 risk metrics. For each model 
-we wil compare the risks for the predictions of the next day, the next 3 days and the next 7 days. (The bigger the number the worse is the uncertainty).
+we will compare the risks for the predictions of the next day, the next 3 days and the next 7 days. (The bigger the number the worse is the uncertainty).
 
 #+BEGIN_center
-#+NAME: table-yield
-# #+CAPTION: Simple table created using LaTeX tabular environment
+#+NAME: taba 
+#+CAPTION: Table with risks for each timespan forecast 
 #+attr_latex: :environment tabular :width \textwidth :align lrr
+|-----------------+---------+---------|
 | Encoder Decoder | .5 risk | .9 risk |
+|-----------------+---------+---------|
 |             24h |   0.004 |   0.025 |
 |              3d |   0.005 |    0.02 |
 |              7d |   0.011 |   0.037 |
-
+|-----------------+---------+---------|
 |    Deep Factors | .5 risk | .9 risk |
+|-----------------+---------+---------|
 |             24h |   0.001 |   0.036 |
 |              3d |   0.009 |   0.031 |
 |              7d |   0.023 |   0.027 |
-
+|-----------------+---------+---------|
 |         Deep AR | .5 risk | .9 risk |
+|-----------------+---------+---------|
 |             24h |   0.009 |   0.004 |
 |              3d |   0.018 |   0.008 |
 |              7d |   0.044 |   0.016 |
-
 #+END_center
+
+
+As Table [[taba]] shows, the 3 models have good next-day predictions, with a low .5 risk. All risks increasingly increase as the forecast acts further in the future, as is expected.
+
+
 
 ** Conclusion
 
