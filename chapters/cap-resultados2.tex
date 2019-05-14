@@ -5,46 +5,25 @@
 \section{Resultados}
 
 
+\subsection{RC3, RC7 e RC28}
+
+Assim como feito em \cite{greciaLin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
+não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
+i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. \\
 
 
+\subsection{Abordagem Não-Temporal}
 
-Seguindo requisitos de negócio da Intercement, uma primeira
-bateria de testes foi feita pensando em como seria a realidade de um sistema de
-predição usado em produção na fábrica. Dessa maneira, usamos os índices RC3 e
-RC7 para modelar predições para o índice RC28. Como explicado na introdução, o
-índice de resistência RCX é medido X dias após o lote de cimento é produzido. Ou
-seja, é desejável se ter uma estimativa de um índice que demora semanas para
-poder ser medido como o RC28. \\
-
-
-Os testes foram realizados com modelos sequenciais e não sequenciais. Para ambos
-as classes de modelos os dados foram transformados para possuirem variância
+ Para ambos as classes de modelos os dados foram transformados para possuirem variância
 unitária e média 0. Os índices RC3 e RC7 foram usados como entrada e o índice
 RC28 foi usado como saída. Os dados foram divididos em
 \textit{treino}, \textit{validação}. Usamos os dados de treino 
 para treinar os
-modelos, e os de validação apenas para avaliar o seu erro. Os
-gráficos~\ref{fig:divrc3}, \ref{fig:divrc7} e \ref{fig:divrc28} mostram essa divisão. Lembramos que apenas os dados de
+modelos, e os de validação apenas para avaliar o seu erro. O Gráfico
+~\ref{fig:divrc28} mostram essa divisão. Lembramos que apenas os dados de
 validação são inéditos para os modelos, com eles avaliamos a capacidade de
 generalização dos modelos. 
 
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC3.png}
-\caption{Divisão do dataset para a saída RC3, os pontos azuis foram usados para
-treino e os pontos laranjas usados para validação.}
-  \label{fig:divrc3}
-\end{figure}
-
-
-\begin{figure}[H]
-  \centering
-\includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC7.png}
-\caption{Divisão do dataset para a saída RC3, os pontos azuis foram usados para
-treino e os pontos laranjas usados para validação.}
-  \label{fig:divrc7}
-\end{figure}
 
 \begin{figure}[H]
   \centering
@@ -55,31 +34,11 @@ treino e os pontos laranjas usados para validação.}
 \end{figure}
 
 
-Seguem então os resultados dos modelos não-sequenciais para esse experimento, os
-erros indicados são calculados pela métrica R2, para efeito de comparação, por
-se tratar de uma métrica absoluta: \\
+\subsection{Modelos Bayesianos para Séries Temporais}
 
 
+Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. Para as predições de séries temporais, usamos todas as entradas de 01/2007 até 09/2018 como nossos dados de treino, e os últimos 3 meses de dados como os dados de validação. As tuplas de treino são da forma $(RC28_{t},\{\})$. Os dados são normalizados pelo método min-max para igualarmos suas grandezas. 
 
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\columnwidth]{exped_saco_2008-2012-2014RC28.png}
-\caption{Comparação dos 3 modelos não-sequenciais na tarefa de regressão do índice RC28}
-\label{fig:3nseq}
-\end{figure}
-
-
-
-E os resultados para o modelo Encoder-Decoder-Forecaster: \\
-
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\columnwidth]{exped_saco_2008-2015-2017encdecRC28.png}
-\caption{Resultados da rede Encoder-Decoder-Forecaster na tarefa de regressão do índice RC28}
-\label{fig:3nseq}
-\end{figure}
 
 
 
