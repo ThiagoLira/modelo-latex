@@ -37,9 +37,65 @@ treino e os pontos laranjas usados para validação.}
 \subsection{Modelos Bayesianos para Séries Temporais}
 
 
-Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. Para as predições de séries temporais, usamos todas as entradas de 01/2007 até 09/2018 como nossos dados de treino, e os últimos 3 meses de dados como os dados de validação. As tuplas de treino são da forma $(RC28_{t},\{\})$. Os dados são normalizados pelo método min-max para igualarmos suas grandezas. 
+Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. Para as predições de séries temporais, usamos todas as entradas de 01/2007 até 09/2018 como nossos dados de treino, e os últimos 3 meses de dados como os dados de validação. As tuplas de treino são da forma $(RC28_{t},\{\})$. Os dados são normalizados pelo método min-max para igualarmos suas grandezas. O vetor normalizado $z$ é dado pela seguinte equacão:  
 
 
+\begin{equation}
+z=\frac{x-\min (x)}{\max (x)-\min (x)}
+\end{equation}
+
+
+As Imagens \ref{fig:rmsedeepar}, \ref{fig:rmsedeepfactors} e \ref{fig:rmseencdec} mostram o RMSE médio dos modelos por dia a medida que o horizonte de predicão aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém opara apenas a predicão de 24h, 3d e 7d. \\
+
+
+
+\begin{figure}[H]
+  \centering
+\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_ar.pdf} 
+\caption{RMSE médio para o Modelo Deep AR}
+  \label{fig:rmsedeepar}
+\end{figure}
+\begin{figure}[H]
+  \centering
+\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_factors.pdf} 
+\caption{RMSE médio para o Modelo Deep Factors}
+  \label{fig:rmsedeepfactors}
+\end{figure}
+\begin{figure}[H]
+  \centering
+\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_enc_dec.pdf} 
+\caption{RMSE médio para o Modelo Encoder Decoder Forecaster}
+  \label{fig:rmseencdec}
+\end{figure}
+
+
+\begin{center}
+\begin{table}[htbp]
+\caption{\label{tab:rmse}
+RMSE values by forecast span}
+\centering
+\begin{tabular}{rr}
+\hline
+Deep Factors & RMSE\\
+\hline
+24h & 0.18\\
+3d & 2.36\\
+7d & 1.83\\
+\hline
+Deep AR & RMSE\\
+\hline
+24h & 0.07\\
+3d & 1.37\\
+7d & 1.44\\
+\hline
+Encoder Decoder & RMSE\\
+\hline
+24h & 0.22\\
+3d & 0.36\\
+7d & 1.04\\
+\end{tabular}
+\end{table}
+\end{center}
 
 
 % Local Variables:
