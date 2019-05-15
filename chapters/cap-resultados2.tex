@@ -45,27 +45,17 @@ z=\frac{x-\min (x)}{\max (x)-\min (x)}
 \end{equation}
 
 
-As Imagens \ref{fig:rmsedeepar}, \ref{fig:rmsedeepfactors} e \ref{fig:rmseencdec} mostram o RMSE médio dos modelos por dia a medida que o horizonte de predicão aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém opara apenas a predicão de 24h, 3d e 7d. \\
+As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predicão de 24h, 3d e 7d. \\
 
 
 
 \begin{figure}[H]
-  \centering
-\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_ar.pdf} 
-\caption{RMSE médio para o Modelo Deep AR}
-  \label{fig:rmsedeepar}
-\end{figure}
-\begin{figure}[H]
-  \centering
-\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_deep_factors.pdf} 
-\caption{RMSE médio para o Modelo Deep Factors}
-  \label{fig:rmsedeepfactors}
-\end{figure}
-\begin{figure}[H]
-  \centering
-\includegraphics[height=0.3\textwidth]{~/Dropbox/Mestrado/Intercement/paper_img/rmse_enc_dec.pdf} 
-\caption{RMSE médio para o Modelo Encoder Decoder Forecaster}
-  \label{fig:rmseencdec}
+\label{fig:rmseday}
+\centering
+\includegraphics[width=.3\textwidth]{rmse_deep_ar.pdf} \hfill
+\includegraphics[width=.3\textwidth]{rmse_deep_factors.pdf} \hfill
+\includegraphics[width=.3\textwidth]{rmse_enc_dec.pdf} 
+\caption{RMSE médio por dia para cada um dos modelos estudados} 
 \end{figure}
 
 
@@ -98,6 +88,41 @@ Encoder Decoder & RMSE\\
 \end{center}
 
 
+Também estudamos a distribuição dos valores previstos, até 150 dias após a data onde começam os dados de validação, a Imagem \ref{fig:distr} permite comparar as distribuições previstas pelos 3 modelos:
+
+\begin{figure}[H]
+\label{fig:distr}
+\centering
+\includegraphics[width=.3\textwidth]{qq_deep_ar.pdf} \hfill
+\includegraphics[width=.3\textwidth]{qq_deep_factors.pdf} \hfill
+\includegraphics[width=.3\textwidth]{qq_enc_dec.pdf} 
+\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\end{figure}
+
+
+Finalmente, os valores e incertezas previstos pelos modelos:
+
+
+\begin{figure}[H]
+  \label{fig:fordeepar}
+  \centering
+\includegraphics[height=.3\textwidth]{forecast_deep_ar.pdf} 
+\caption{Predição para todos os dados de validação para o modelo Deep AR}
+\end{figure}
+
+\begin{figure}[H]
+  \label{fig:fordeepfactors}
+  \centering
+\includegraphics[height=.3\textwidth]{forecast_deep_factors.pdf} 
+\caption{Predição para todos os dados de validação para o modelo Deep Factors}
+\end{figure}
+
+\begin{figure}[H]
+  \label{fig:forencdec}
+  \centering
+\includegraphics[height=.3\textwidth]{forecast_enc_dec.pdf} 
+\caption{Predição para todos os dados de validação para o modelo Encoder Decoder Forecaster} 
+\end{figure}
 % Local Variables:
 % TeX-master: "../quali"
 % End:
