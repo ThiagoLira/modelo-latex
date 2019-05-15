@@ -39,41 +39,16 @@ diversos lotes experimentados).
 \end{enumerate}
 
 \subsection{Dados faltantes}
-Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muitas vezes não possuem alguma de suas colunas.
-A seguir vemos para todas as tabelas de dados, para cada uma de suas colunas, quantos
-dias possuem dados faltantes. 
+Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muitas vezes não possuem algum valor de alguma coluna.
+A seguir vemos para os dados de Expedição de Cimento, para cada uma de suas colunas, a porcentagem de dados presentes. 
 
-\captionof{table}{Dias com dados faltantes para cada parâmetro de Expedição de Cimento}
-\begin{center}
-\begin{tabular}{ c c }
-AGP     &  1131\\
-IP      &  1131\\
-FP      &  1132\\
-G75    &  1133\\
-G44   &  1153\\
-MVOL    &  1656\\
-SBL     &  1131\\
-RC3     &  1130\\
-RC7     &  1130\\
-RC28    &  1130\\
-RICARB  &  1331\\
-PF      &  1136\\
-AL2O3   &  1140\\
-CAOT    &  1140\\
-K2O     &  1140\\
-MGO     &  1139\\
-SIO2    &  1140\\
-FE2O3   &  1140\\
-SO3     &  1137\\
-NA2O    &  3139\\
-P2O5    &  1141\\
-EXP     &  2804\\
-RC1     &  1861\\
-RC91    &  3638\\
-CO2     &  3629 
-\end{tabular}
-\end{center}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{slides_dados_pct.pdf}
+  \caption{Porcentagem de dados faltantes por Coluna para dados de Expedição de Cimento}
+  \label{fig:dadosfalta}
+\end{figure}
 
 
 \section{Reamostragem dos dados}
@@ -82,7 +57,14 @@ Para maior facilidade de manuseio dos dados foi necessário realizar uma
 mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem
 dados foram criados como placeholders para facilidade de visualização dos dados.
 A seguir são reproduzidas as contagens de dados após a reamostragem.
+A Figura \ref{fig:reamos} mostra como os dados estavam antes da reamostragem: 
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\columnwidth]{slides_dados_antes_resample.pdf}
+  \caption{Distribuição das distâncias entre entradas subsequentes dos dados de Expedição de Cimento, antes da reamostragem.}
+  \label{fig:reamos}
+\end{figure}
 
 \begin{itemize}
 \item Clínquer: Temos dados de entrada do dia 22/04/2008 até o dia 18/12/2017

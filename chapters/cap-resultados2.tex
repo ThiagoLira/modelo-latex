@@ -45,6 +45,8 @@ z=\frac{x-\min (x)}{\max (x)-\min (x)}
 \end{equation}
 
 
+Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emição de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
+
 As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predicão de 24h, 3d e 7d. \\
 
 
@@ -123,6 +125,23 @@ Finalmente, os valores e incertezas previstos pelos modelos:
 \includegraphics[height=.3\textwidth]{forecast_enc_dec.pdf} 
 \caption{Predição para todos os dados de validação para o modelo Encoder Decoder Forecaster} 
 \end{figure}
+
+
+Para modelagem de séries temporais, é também comum estudarmos o resíduo das predições. A sua distribuição deve ser randômica para garantirmos que nosso modelo não está cometendo algum viés que seria
+modelável com mudanças no aprendizado. \\
+
+
+\begin{figure}[H]
+\label{fig:distr}
+\centering
+\includegraphics[width=.3\textwidth]{res_deep_ar.pdf} \hfill
+\includegraphics[width=.3\textwidth]{res_deep_factors.pdf} \hfill
+\includegraphics[width=.3\textwidth]{res_enc_dec.pdf} 
+\caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
+\end{figure}
+
+
+
 % Local Variables:
 % TeX-master: "../quali"
 % End:
