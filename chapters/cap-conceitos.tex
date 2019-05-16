@@ -306,7 +306,7 @@ os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especif
 um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
 consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para
 calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
-$p(X,Y | \theta)$, a chamada verossimilhança \citep{bayesml}. 
+$p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}. 
 
 \[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
 
@@ -320,10 +320,16 @@ p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta
 
 Essa integral é geralmente intratável pela dificuldade de se calcular
 analiticamente $p(\theta | X,Y)$ \citep{ubertime}, devemos então tentar aproximar essa distribuição
-pela chamada distribuição variacional, $q^*(\theta)$, e então resolvermos numericamente a Integral~\ref{eq:int}.
+pela chamada distribuição variacional, $q^*(\theta)$, e então a solução numérica da integral, com uma boa escolha de $q^{*}$, se torna uma aproximação $q^{*}(y^{*}| x^{*})$: 
+
+\begin{align*}
+  \label {eq:pq}
+    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,W) q^*(W)dW \\
+                       &= q^*(y^* | x^*)
+\end{align*}
 
 Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a distribuição variacional da distribuição real $p(\theta | X,Y)$)
-é alcançado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound}: \\
+é alcançado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound} \citep{bayesml}: \\
 
 \begin{equation}
   \label {eq:ine}
@@ -332,7 +338,7 @@ Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a
 \end{equation}
 
 
-A Inferência Variacional pode ser aproximada em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
+O processo de Inferência Variacional pode ser aproximado em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
 
 O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
@@ -340,7 +346,7 @@ probabilidade $p$.\\
 
 \begin{figure}
   \centering
-  \input{chapters/dropout.tex}
+  \resizebox {\columnwidth} {!} {\input{chapters/dropout.tex}}
   \label{fig:dropout}
   \caption{Representacão do uso de Dropout em uma rede neural}
 \end{figure}
@@ -369,12 +375,15 @@ A função de custo de uma rede neural com dropout em todas as camadas pode ser 
 do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
 
 Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
-Por conseguinte, para o cálculo da incerteza das predições do modelo se realizam $B$ computações estocásticas de uma mesma
-saída $y^*$, sejam elas $Y^* = \{y^*_{(1)},y^*_{(2)}, \dots , y^*_{(B)}\}$. A incerteza
-dessa medida é calculada então pela variância amostral de $Y^*$. E sua média pela média w- amostral.
+A média e variância amostrais de um conjunto de diversas realizações estocásticas da saída da rede são estimadores não-enviesados das médias e variâncias reais:
 
-
-
+\begin{align*}
+  \label{eq:aproxs}
+  \widetilde{\mathbb{E}}[y^*] &=
+   \frac{1}{B}\sum^B_{B=1}\mathnormal{f}^{\hat{W},b}(x^*) = \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)}\\ 
+   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
+ \end{align*}
+ 
 \subsection{Random Forest}
 
 Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
