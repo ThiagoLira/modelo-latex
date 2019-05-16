@@ -15,7 +15,7 @@ i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos.
 \subsection{Abordagem Não-Temporal}
 
  Para ambos as classes de modelos os dados foram transformados para possuirem variância
-unitária e média 0. Os índices RC3 e RC7 foram usados como entrada e o índice
+unitária e média 0. Os índices $RC3_{t-3}$ e $RC7_{t-7}$ foram usados como entrada e o índice
 RC28 foi usado como saída. Os dados foram divididos em
 \textit{treino}, \textit{validação}. Usamos os dados de treino 
 para treinar os
@@ -33,6 +33,17 @@ treino e os pontos laranjas usados para validação.}
   \label{fig:divrc28}
 \end{figure}
 
+
+Modelos de Machine Learning clássicos foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
+As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
+
+\begin{figure}[H]
+  \centering
+  \label{fig:linmodels}
+\includegraphics[width=0.9\columnwidth]{linear_exp.pdf}
+\caption{Predições nos dados de validação nos experimentos com modelos não-temporais. }
+  \label{fig:divrc28}
+\end{figure}
 
 \subsection{Modelos Bayesianos para Séries Temporais}
 

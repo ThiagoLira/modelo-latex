@@ -289,7 +289,7 @@ modelar como saída o índice RC28. \\
 \begin{figure}
   \centering
   \input{chapters/NN.tex}
-  \caption{Um exemplo de Rede Neural no domínio dos dados da Intercement}
+  \caption{Um exemplo de Rede Neural no contexto dos dados da Intercement}
   \label{fig:nn}
 \end{figure}
 
@@ -338,9 +338,19 @@ Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a
 \end{equation}
 
 
+
+\subsubsection{Rede Neural Bayesiana}
+
+Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $W$ de parâmetros.
+A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usalmente é feito no tratamente frequentista.
+Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \cite{Gal2016Uncertainty}.
+O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
+
+\subsubsection{Monte Carlo Dropout}
+
 O processo de Inferência Variacional pode ser aproximado em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
 
-O MC Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
+O Monte Carlo Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
 neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
 probabilidade $p$.\\
 
@@ -579,8 +589,8 @@ rede LSTM para o problema de regressão. Agora iremos definir como a informaçã
 de incerteza pode ser calculada usando esse modelo. \\
 
 Na seção~\ref{sec:reglog} definimos um problema de regressão linear sob o ponto
-de vista Bayesiano. Para esse problema assumimos a distribuição geradora de
-predições como $p(y |f^W(x))$. Onde $f^W(.)$ é a rede Encoder-Forecaster após o treino.
+de vista Bayesiano. Para esse problema assumimos a verossimilhança como $p(y |f^W(x))$.
+Onde $f^W(.)$ é a rede Encoder-Forecaster após o treino.
 Como estamos lidando com regressão, podemos especificar ainda essa distribuição
 como \citep{ubertime}:  
 
@@ -589,10 +599,10 @@ como \citep{ubertime}:
  y| W \sim \mathcal{N}(y;f^W(x),\,\sigma^2)
 \end{equation}
 
- Na seção~\ref{sec:bayesinf} explicamos como usamos inferência
- Bayesiana para marginalizar os parâmetros $W$ e calcular a distribuição $p(y^*
- | x^*)$ pela Integral~\ref{eq:int}. A variância dessa última distribuição quantifica a incerteza das predições
- \citep{dropbayes}, e pode ser decomposta usando a lei da variância total \citep{ubertime}: \\
+ Na seção~\ref{sec:bayesinf} explicamos como na Inferência Bayesiana para marginalizamos os parâmetros $W$ e calculamos a distribuição $p(y^*
+ | x^*)$ pela Integral~\ref{eq:int}, o que é intratável para esse modelo sem uma aproximação.
+ A variância de $p(y^{*} | x^{*})$ quantifica a incerteza das predições
+ \citep{dropbayes}, e pode ser decomposta usando a lei da variância total \citep{ubertime}, e parte dessa soma pode ser estimada pela técnica do MC Dropout: \\
 
 
 

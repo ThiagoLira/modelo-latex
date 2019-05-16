@@ -43,7 +43,9 @@ with the assumption that the past of the measurements have some information conc
 Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
 
 For many decades the state-of-the-art on forecasting has been the ARIMA class of models, and Box-Jenkins procedures cite:inbook, but these models have their limitations. 
-They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear.
+They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear. These models also have trouble using exogenous variables 
+to aid the time series forecasting cite:ubertime.
+
 
 Recently many time series problems on different domains had it's classical results beaten by new Deep Learning methods such as Recurrent Neural Network models cite:energylstm,lstmbr,
 these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
