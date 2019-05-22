@@ -37,7 +37,7 @@ Past work on this more industry-aware front cite:greciaLin makes the distinction
 The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
-Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), and model them as such, 
+Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), 
 with the assumption that the past of the measurements have some information concerning the future of the process.
  
 Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
@@ -55,14 +55,19 @@ tweaking on the model parameters is necessary.
 Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
 has managed to combine ARIMA models with Artificial Neural Networks (ANN), with better results than just either of these models.
 
-A new trend is to apply Bayesian Deep Learning techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. 
+We then use a new aproach, using Bayesian Deep Learning techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. 
 This last feature is particularly useful on a industrial setting, as to provide decision making evidence on the factory floor cite:deepfactors. 
-We shall bring these new Bayesian Deep Learning capabilities to the CSC prediction domain. The contribuitions of this paper are 
+
+** Objectives
+
+We shall bring these new Bayesian Deep Learning techniques to the CSC prediction domain. The contribuitions of this paper are 
 as follows: 
 
 - A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting.
 - A novel application of Bayesian Deep Learning on CCS, with performance similar to previous state-of-the-art results using linear regression.
 
+** Preliminaries
+  
 The training data is composed of the pairs $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ on the time span $[t_o,T]$. 
 Let F be a finite time horizon, such that F > T, the models should learn a probability distribution of the form:
 
@@ -72,21 +77,70 @@ p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T})
 \end{equation} 
 #+END_EXPORT 
 
+We shall briefly explain each model used, where always the model with trained parameters \theta is represented by the function f^{\theta}. 
 
-We shall make a quick review of such recent literature:
+*** Deep Factors cite:deepfactors  
 
-- Deep Factors cite:deepfactors : The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
-  i.e. the noise and uncertainty.
+The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
+i.e. the noise and uncertainty.
  
-- DeepAR cite:deepar : This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical 
-  characteristics of the problem. For this problem we use a Gaussian Likelihood.
-
-- Encoder Decoder Forecaster cite:ubertime  : This model proposed by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation), 
-  which them enables the model to decompose it's prediction uncertainty into three types:
-  model uncertainty, inherent noise and model misspecification.
+*** DeepAR cite:deepar  
   
-** Data 
+This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical
+characteristics of the problem. For this problem we use a Gaussian Likelihood.
 
+The model is described via the following autoregressive equation:
+
+#+BEGIN_center
+h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
+#+END_center
+The hidden state **h** of a timestep is then used to calculate the mean 
+and standard deviation of it's prediction:
+
+#+BEGIN_center
+\mu(h_{i,t}) = W_{\mu}h_{i,t} + b_{\mu} 
+
+\sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma})) 
+#+END_center
+It is then a simple matter of using a Gaussian Likelihood with parameters \mu and \sigma to 
+calculate the model's cost function and propagate it's error.
+
+*** Encoder Decoder Forecaster cite:ubertime   
+This model proposed by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation),
+which them enables the model to decompose it's prediction uncertainty into three types:
+model uncertainty, inherent noise and model misspecification. We assume a Gaussian Likelihood as
+our data generating distribution: 
+
+#+BEGIN_EXPORT latex
+\begin{equation}
+y| \theta \sim \mathcal{N}(y;f^{\theta}(x),\,\sigma^2)
+\end{equation}
+#+END_EXPORT 
+
+Following the Bayesian aproach, we would integrate over the distribution of
+our model parameters \theta, to get to the distribution of the predictions given new inputs 
+p(y^* | x^*). The variance of this distribution can be calculated via the Law of Total Variance:
+
+#+BEGIN_EXPORT latex
+\begin{equation}
+Var[y^* | x^*] = Var[f^{\theta}(x^*)] + \sigma^2  
+\end{equation}
+#+END_export
+
+Where \sigma (the inherent noise) is estimated using the validation data and Var[f^W(x^*)] (the model uncertainty)
+is given by the Monte Carlo Dropout Technique. This value is estimated via the sample variance 
+of **B** stochastic realizations of a prediction, using the trained model: 
+
+#+BEGIN_EXPORT latex
+\begin{equation}
+Var[f^{\theta}(x^*)]  = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  
+\end{equation}
+#+END_EXPORT 
+
+** Methodology 
+
+*** Data 
+    
 The data represents 11 years of cement production on a medium sized factory, located on the city of Cajati.  
 
 For the models, we use the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped. 
@@ -119,7 +173,7 @@ Using the Machine Learning approach cite:dlbook,  we shall let the model learn b
 thus not doing any /feature engineering/ prior to training the model, i.e. we shall not 
 use any civil engineering or chemistry knowledge to alter the models or the data in any way.
 
-*** RC3, RC7 and RC28
+**** RC3, RC7 and RC28
 Every day $t$ a new lot of cement is ready and expedited from the factory. This lot doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
 the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
@@ -127,14 +181,14 @@ Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements 
 will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively. This is to ensure that such analysis
 can be done with new day, on the day of it's expedition, thus not confining our analysis just to older samples i.e. ones from which we already know it's RC3, RC7 and RC28 measurements. 
 
-*** Train/Test Separation
+**** Train/Test Separation
 We shall use data from 01/2007 to 09/2018 as our training data, and the last 3 months of 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
 can give information about it's future.
 
 We shall then evaluate how long in the future can the models reliably predict new measures with an acceptable uncertainty.
 It's expected that the validation error will increase the farther we try to predict the RC28 measure on the future.
 
-** Results
+** Experiments
 
 All models were implemented using PyTorch cite:pytorch, for the Gaussian Processes we use GPyTorch cite:gpytorch. The hyperparameters chosen for each model are shown on Table [?]. 
  
@@ -177,6 +231,8 @@ The RMSE loss is defined as:
 #+END_EXPORT
 
 
+*** Results
+
 Table [[taba1]] reports how each model performs as a function of the timespan of forecasting. 
 The error inscreases as time passes, as is expected. All models perform well on the 24h (next-day) forecasting.
 
@@ -201,6 +257,7 @@ The error inscreases as time passes, as is expected. All models perform well on 
 |             24h |  0.22               |
 |              3d |   0.36              |
 |              7d |  1.04               |
+|-----------------+---------------------|
 #+END_center
 
 Next, Figures [[forecastencdec]], [[forecastdeepfactors]] and [[forecastdeepar]] report the full prediction on the dev set timespan, with it's uncertainties.
