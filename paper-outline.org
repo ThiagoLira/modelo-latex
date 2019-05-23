@@ -82,17 +82,51 @@ We shall briefly explain each model used, where always the model with trained pa
 *** Deep Factors cite:deepfactors  
 
 The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
-i.e. the noise and uncertainty.
+i.e. the noise and uncertainty. A Gaussian Process is a collection of random variables, all pairwise Gaussian Distributed. The process is completely specified by it's
+mean function and a covariance function, or kernel. 
+
+\[
+f(x) \sim \mathcal{GP}( m(x), K(x,x'))
+\]
+
+The most common kernel used for regression tasks is the exponential kernel, that captures the distance between variables in 
+the euclidean sense.
+
+\[
+  K(x,x') = \exp(-\frac{1}{2}|x - x'|^2)
+\]
+
+
+The generative model is comprised of multiple effects combined in the distribution of the prediction:
+
+\[
+    \textbf{Local effect: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
+\]
+
+\[
+  \textbf{Fixed effect:}  f_{i,t} = W_ig_t(x_{i,t})
+\]
  
+
+\[
+  \textbf{Emission: }  y^*_{i,t} \sim p(. | u_{i,t}) , u_{i,t} = r_{i,t} + f_{i,t}  
+\]
+
+The model is optmized maximizing the likelihood of the predictions, in a similar fashion to the other models presented in this work.
+
+\[
+p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
+\]
+
 *** DeepAR cite:deepar  
   
-This model uses an autoregressive RNN architecture to model the probability distribution of a time series. The likelihood function can be choosen given the statistical
+This model uses an autoregressive RNN architecture to model the probability distribution of predictions on a forecast horizon of a time series. The likelihood function can be choosen given the statistical
 characteristics of the problem. For this problem we use a Gaussian Likelihood.
 
-The model is described via the following autoregressive equation:
+The model is described via the following autoregressive equation, the **y** term is the real value of the previous timestep annotation (the autoregressive term), as we are in the training regime:
 
 #+BEGIN_center
-h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
+h_{i,t} = h(h_{i,t-1},y_{i,t-1},x_{i,t}, \theta)
 #+END_center
 The hidden state **h** of a timestep is then used to calculate the mean 
 and standard deviation of it's prediction:
@@ -104,6 +138,13 @@ and standard deviation of it's prediction:
 #+END_center
 It is then a simple matter of using a Gaussian Likelihood with parameters \mu and \sigma to 
 calculate the model's cost function and propagate it's error.
+
+For making predictions, we use a Monte Carlo trace. Each timestep's output is a **distribution** parametrized by \mu and \sigma, which enables us to make quantile forecasts for each timestep.
+The autoregressive term for the next timestep is just a sample from the last timestep's distribution.
+
+\[ y^*_{i,t-1}  \sim \mathcal{N}(\mu(h_{i,t}),\sigma(h_{i,t})) \]
+
+
 
 *** Encoder Decoder Forecaster cite:ubertime   
 This model proposed by Uber implements a Bayesian Neural Network (BNN) via the Monte Carlo Dropout technique (a variational inference aproximation),
