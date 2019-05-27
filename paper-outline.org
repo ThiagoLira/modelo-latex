@@ -2,7 +2,7 @@
 
 #+TITLE: Using Deep Learning Bayesian Methods do Predict Cement Compressive Strength with Uncertainty  
 #+SUBTITLE: 
-#+AUTHOR: Thiago Lira 
+#+AUTHOR: Marcelo Finger, Thiago Lira
 #+DATE: May 1, 2019
 #+OPTIONS: toc:nil 
 
@@ -26,21 +26,21 @@ given that this capacity is one of the factors to assess the quality of cement c
 
 The 28-day compressive strength (RC28) is chosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial process. 
 
-It is important for the industry to have a system that, detecting drops on the quality of the cement, can point to anomalies on the proccess (e.g. concentration of reagents) 
+It is important for the industry to have a system that, detecting drops on the quality of the cement, can point to anomalies on the process (e.g. concentration of reagents) 
 probably causing it. The problem can them be tackled with supervised learning cite:dlbook, where the target are the RC28 measurements and the inputs are chemical compositions and other 
 quantities measured on a daily basis on the factory.
 
-Much of the past work cite:cementlin,nncement using mathematical models to predict CSC have failed to account for the dynamical nature of the industrial process and instead rely on analises that are hard to make 
+Much of the past work cite:cementlin,nncement using mathematical models to predict CSC have failed to account for the dynamical nature of the industrial process and instead rely on analysis that are hard to make 
 on a daily basis on the industrial floor cite:dynstat. 
 
-Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CCS. 
+Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CSC. 
 The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
 Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), 
 with the assumption that the past of the measurements have some information concerning the future of the process.
  
-Our objective is then to model the *full probability distribution* of the time series, as to provide decision making capabilities on the industrial floor.
+Our objective is then to model the probability distribution of the time series, to provide decision making capabilities on the industrial floor.
 
 For many decades the state-of-the-art on forecasting has been the ARIMA class of models, and Box-Jenkins procedures cite:inbook, but these models have their limitations. 
 They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear. These models also have trouble using exogenous variables 
@@ -49,22 +49,24 @@ to aid the time series forecasting cite:ubertime.
 
 Recently many time series problems on different domains had it's classical results beaten by new Deep Learning methods such as Recurrent Neural Network models cite:energylstm,lstmbr,
 these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
-that assume very little about the data, meaning that little manual 
-tweaking on the model parameters is necessary.
+that assume very little about the data, meaning that little manual tweaking on the model parameters is necessary.
 
 Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
 has managed to combine ARIMA models with Artificial Neural Networks (ANN), with better results than just either of these models.
 
-We then use a new aproach, using Bayesian Deep Learning techniques to leverage the scalability of deep learning with the uncertainty estimation of Bayesian Statistics. 
+We then use a new approach, implementing Bayesian Deep Learning techniques to leverage the scalability of Deep Learning with the uncertainty estimation of Bayesian Statistics. 
 This last feature is particularly useful on a industrial setting, as to provide decision making evidence on the factory floor cite:deepfactors. 
 
+*** Paper structure 
+The rest of the paper is organized as follows: Section [[Objectives]] lists the contributions and objetives of this paper; Section [[Preliminaries]] gives a brief
+overview of each model used and a formal definition of the supervised learning problem; Section [[Methodology]] specifies how the data was transformed and treated before 
+used on the learning task; Section [[Experiments]] details our experiments and results with the models; Section [[Conclusion]] gives a final word and future directions of research. 
 ** Objectives
 
-We shall bring these new Bayesian Deep Learning techniques to the CSC prediction domain. The contribuitions of this paper are 
+We shall bring these new Bayesian Deep Learning techniques to the CSC prediction domain. The contributions of this paper are 
 as follows: 
 
-- A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting.
-- A novel application of Bayesian Deep Learning on CCS, with performance similar to previous state-of-the-art results using linear regression.
+- A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting on a new domain for these techniques.
 
 ** Preliminaries
   
@@ -77,45 +79,54 @@ p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T})
 \end{equation} 
 #+END_EXPORT 
 
-We shall briefly explain each model used, where always the model with trained parameters \theta is represented by the function f^{\theta}. 
+Meaning that we want to model the distribution of the next ($F-T$) $y$ values, given some past horizon of $x$ and $y$ values. Contextualized on our data, the targets $y_t$
+are the RC28 measurements and $x_t$ are the covariates (i.e. exogenous variables), specified on Section [[Methodology]].
+
+We now shall briefly explain each model used:
 
 *** Deep Factors cite:deepfactors  
 
 The Deep Factors Model combines a LSTM time series regression model to model the "global" part of the predictions, and a Gaussian Process to model the "local" part
-i.e. the noise and uncertainty. A Gaussian Process is a collection of random variables, all pairwise Gaussian Distributed. The process is completely specified by it's
+i.e. the noise and uncertainty. 
+
+**** Gaussian Process
+A Gaussian Process cite:gpml is a collection of random variables, such that every linear combination of them are normally distributed. The process is completely specified by it's
 mean function and a covariance function, or kernel. 
 
 \[
 f(x) \sim \mathcal{GP}( m(x), K(x,x'))
 \]
 
-The most common kernel used for regression tasks is the exponential kernel, that captures the distance between variables in 
+The most common kernel used for regression tasks is the exponential kernel, it captures the distance between variables in 
 the euclidean sense.
 
 \[
   K(x,x') = \exp(-\frac{1}{2}|x - x'|^2)
 \]
 
-
-The generative model is comprised of multiple effects combined in the distribution of the prediction:
+**** Generative Model
+An observed value from the Deep Factors model $y^*_{i,t}$ is the sum of the weighted average on the global parts learned by the LSTM cell and the local flutuaction
+given by the Gaussian Process:
 
 \[
-    \textbf{Local effect: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
+  \textbf{Local effect: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
 \]
 
 \[
   \textbf{Fixed effect:}  f_{i,t} = W_ig_t(x_{i,t})
 \]
- 
+
+These effects are combined via a latent function $u_{i,t}$, to form the generative model: 
 
 \[
   \textbf{Emission: }  y^*_{i,t} \sim p(. | u_{i,t}) , u_{i,t} = r_{i,t} + f_{i,t}  
 \]
 
-The model is optmized maximizing the likelihood of the predictions, in a similar fashion to the other models presented in this work.
+The model is optimized by maximizing the marginal likelihood of the predictions, in a similar fashion to the other models presented in this work. 
+In this case, $p(.|u_{i,t})$ is Gaussian, so the marginal likelihood can be computed easily, where $\sigma_i$ is an additional parameter to stabilize the covariance:
 
 \[
-p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
+p(y^*_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
 \]
 
 *** DeepAR cite:deepar  
@@ -123,7 +134,7 @@ p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
 This model uses an autoregressive RNN architecture to model the probability distribution of predictions on a forecast horizon of a time series. The likelihood function can be choosen given the statistical
 characteristics of the problem. For this problem we use a Gaussian Likelihood.
 
-The model is described via the following autoregressive equation, the **y** term is the real value of the previous timestep annotation (the autoregressive term), as we are in the training regime:
+The model is described via the following autoregressive equation, the $y_{i,t}$ term is the real value of the previous timestep annotation (the autoregressive term), as we are in the training regime:
 
 #+BEGIN_center
 h_{i,t} = h(h_{i,t-1},y_{i,t-1},x_{i,t}, \theta)
@@ -136,7 +147,7 @@ and standard deviation of it's prediction:
 
 \sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma})) 
 #+END_center
-It is then a simple matter of using a Gaussian Likelihood with parameters \mu and \sigma to 
+It is then a simple matter of using a Gaussian Marginal Likelihood with parameters \mu and \sigma to 
 calculate the model's cost function and propagate it's error.
 
 For making predictions, we use a Monte Carlo trace. Each timestep's output is a **distribution** parametrized by \mu and \sigma, which enables us to make quantile forecasts for each timestep.
@@ -185,7 +196,7 @@ Var[f^{\theta}(x^*)]  = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2
 The data represents 11 years of cement production on a medium sized factory, located on the city of Cajati.  
 
 For the models, we use the data from the last phase of the production of cement. The measurements represent the cement when it is ready to be shipped. 
-On this particular dataset, we have 2408 almost daily anotations spanning 11 years of cement production, with 25 collums (i.e. features) per day.
+On this particular dataset, we have 2408 almost daily annotations spanning 11 years of cement production, with 25 collums (i.e. features) per day.
 
 From this data, we remove the columns of measurements that had a frequency too little to be of use statistically (i.e. < 70% of all days with data).
 
@@ -214,15 +225,15 @@ Using the Machine Learning approach cite:dlbook,  we shall let the model learn b
 thus not doing any /feature engineering/ prior to training the model, i.e. we shall not 
 use any civil engineering or chemistry knowledge to alter the models or the data in any way.
 
-**** RC3, RC7 and RC28
+*** RC3, RC7 and RC28
 Every day $t$ a new lot of cement is ready and expedited from the factory. This lot doesn't have RC3, RC7 or RC28 measurements yet made. The task is to predict with a margin of confidence 
 the RC28 value of this specific lot. From this lot we have multiple concentrations and quantities of reagents annotated from the factory as inputs.
 
-Following the lead of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
-will come from the last lots of cement of which this measurement is avaliable on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively. This is to ensure that such analysis
+Following the methodology of cite:greciaLin, we will have the RC3 and RC7 measurements along with the other inputs. But if we are predicting the compressive strength of day $t$, the RC3 and RC7 measurements
+will come from the last lots of cement of which this measurement is available on that day i.e. from the lots of the days $t-3$ and $t-7$ respectively. This is to ensure that such analysis
 can be done with new day, on the day of it's expedition, thus not confining our analysis just to older samples i.e. ones from which we already know it's RC3, RC7 and RC28 measurements. 
 
-**** Train/Test Separation
+*** Train/Test Separation
 We shall use data from 01/2007 to 09/2018 as our training data, and the last 3 months of 2018 (where our data ends) as our validation data, as we are assuming that the past of the process
 can give information about it's future.
 
@@ -263,11 +274,12 @@ To compare the models we shall use the normalized sum of quantile losses, or \rh
 We will use the values of \rho 0.5 and 0.9. These values can be understood as the expected error on 50% and 90% of the sampled values, respectively. 
 The .5-risk is equivalent to the mean absolute percentage error (MAPE).
 
-The RMSE loss is defined as:
+
+The RMSE loss for a predicted time series $\mathbf{y^*}$ and it's true values $\mathbf{y}$ is defined as:
 
 #+BEGIN_EXPORT latex
 \begin{equation*}
-\sum^n_{t}\sqrt{\frac{(y_t - y^*_{t})^2}{n}}
+RMSE(\mathbf{y}^*,\mathbf{y}) = \sum^n_{t}\sqrt{\frac{(y_t - y^*_{t})^2}{n}}
 \end{equation*}
 #+END_EXPORT
 
@@ -275,7 +287,7 @@ The RMSE loss is defined as:
 *** Results
 
 Table [[taba1]] reports how each model performs as a function of the timespan of forecasting. 
-The error inscreases as time passes, as is expected. All models perform well on the 24h (next-day) forecasting.
+The error increases as time passes, as is expected. All models perform well on the 24h (next-day) forecasting.
 
 #+BEGIN_center
 #+NAME: taba1
@@ -356,6 +368,7 @@ we will compare the risks for the predictions of the next day, the next 3 days a
 |             24h |   0.009 |   0.004 |
 |              3d |   0.018 |   0.008 |
 |              7d |   0.044 |   0.016 |
+|-----------------+---------+---------|
 #+END_center
 
 
@@ -365,10 +378,7 @@ As Table [[taba]] shows, the 3 models have good next-day predictions, with a low
 
 ** Conclusion
 
-This work has applied Bayesian Deep Learning techniques to the modeling of uncertainty of cement strength prediction. The results of the RMSE measures are similar to state of the art results using
-linear regression based techniques. We present results of uncertainty metrics using multiple models and time horizons, to serve as a benchmark for future work on this direction. 
-We have not been provided with enough data to be comparable with most public datasets used to test Deep Learning models, with that much data, the Deep Learning approach is more resource intensive 
-and prone to variance problems than the models used on previous work on this task. On the future however, with more data, the Deep Learning approach should be more prevalent on this industry.
+TO DO
 
 #+BEGIN_EXPORT latex
 \bibliographystyle{plain}
