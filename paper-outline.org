@@ -3,7 +3,7 @@
 #+TITLE: Using Deep Learning Bayesian Methods do Predict Cement Compressive Strength with Uncertainty  
 #+SUBTITLE: 
 #+AUTHOR: Marcelo Finger, Thiago Lira
-#+DATE: May 1, 2019
+#+DATE: May 28, 2019
 #+OPTIONS: toc:nil 
 
 #+BIBLIOGRAPHY: bibliografia plain
@@ -12,7 +12,7 @@
 #+LaTeX_HEADER: \usepackage{empheq}
 #+LaTeX_HEADER: \usepackage{float}
 #+begin_abstract
-Much of the past work on the prediction of cement compressive strength (CSC) fail to account for the reality of the industrial process (e.g. which data is avaliable on a daily basis),
+Much of the past work on the prediction of cement compressive strength (CCS) fail to account for the reality of the industrial process (e.g. which data is avaliable on a daily basis),
 instead providing a limited analysis on isolated samples on a laboratory. Recent work considered the cement data as indexed by time, providing 
 models that could be used on a daily basis on the factory floor, providing decision making capabilities for the stability of the industrial process, using uncertainty.
 This work goes further and implements Bayesian Deep Learning techniques on this domain. These are able to scale to huge amounts of data, require no
@@ -21,7 +21,7 @@ specific knowledge of the data and provides powerful uncertainty estimates, able
 
 
 ** Introduction
-The prediction of the compressive strength of cement (CSC) is of the utmost importance on the Civil Construction Industry, 
+The prediction of the compressive strength of cement (CCS) is of the utmost importance on the Civil Construction Industry, 
 given that this capacity is one of the factors to assess the quality of cement cite:cementnn0.
 
 The 28-day compressive strength (RC28) is chosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial process. 
@@ -30,10 +30,10 @@ It is important for the industry to have a system that, detecting drops on the q
 probably causing it. The problem can them be tackled with supervised learning cite:dlbook, where the target are the RC28 measurements and the inputs are chemical compositions and other 
 quantities measured on a daily basis on the factory.
 
-Much of the past work cite:cementlin,nncement using mathematical models to predict CSC have failed to account for the dynamical nature of the industrial process and instead rely on analysis that are hard to make 
+Much of the past work cite:cementlin,nncement using mathematical models to predict CCS have failed to account for the dynamical nature of the industrial process and instead rely on analysis that are hard to make 
 on a daily basis on the industrial floor cite:dynstat. 
 
-Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CSC. 
+Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CCS. 
 The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
@@ -46,7 +46,6 @@ For many decades the state-of-the-art on forecasting has been the ARIMA class of
 They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear. These models also have trouble using exogenous variables 
 to aid the time series forecasting cite:ubertime.
 
-
 Recently many time series problems on different domains had it's classical results beaten by new Deep Learning methods such as Recurrent Neural Network models cite:energylstm,lstmbr,
 these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
 that assume very little about the data, meaning that little manual tweaking on the model parameters is necessary.
@@ -57,13 +56,13 @@ has managed to combine ARIMA models with Artificial Neural Networks (ANN), with 
 We then use a new approach, implementing Bayesian Deep Learning techniques to leverage the scalability of Deep Learning with the uncertainty estimation of Bayesian Statistics. 
 This last feature is particularly useful on a industrial setting, as to provide decision making evidence on the factory floor cite:deepfactors. 
 
-*** Paper structure 
+*** Paper Structure 
 The rest of the paper is organized as follows: Section [[Objectives]] lists the contributions and objetives of this paper; Section [[Preliminaries]] gives a brief
 overview of each model used and a formal definition of the supervised learning problem; Section [[Methodology]] specifies how the data was transformed and treated before 
 used on the learning task; Section [[Experiments]] details our experiments and results with the models; Section [[Conclusion]] gives a final word and future directions of research. 
 ** Objectives
 
-We shall bring these new Bayesian Deep Learning techniques to the CSC prediction domain. The contributions of this paper are 
+We shall bring these new Bayesian Deep Learning techniques to the CCS prediction domain. The contributions of this paper are 
 as follows: 
 
 - A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting on a new domain for these techniques.
@@ -137,15 +136,15 @@ characteristics of the problem. For this problem we use a Gaussian Likelihood.
 The model is described via the following autoregressive equation, the $y_{i,t}$ term is the real value of the previous timestep annotation (the autoregressive term), as we are in the training regime:
 
 #+BEGIN_center
-h_{i,t} = h(h_{i,t-1},y_{i,t-1},x_{i,t}, \theta)
+$h_{i,t} = h(h_{i,t-1},y_{i,t-1},x_{i,t}, \theta)$
 #+END_center
 The hidden state **h** of a timestep is then used to calculate the mean 
 and standard deviation of it's prediction:
 
 #+BEGIN_center
-\mu(h_{i,t}) = W_{\mu}h_{i,t} + b_{\mu} 
+$\mu(h_{i,t}) = W_{\mu}h_{i,t} + b_{\mu}$ 
 
-\sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma})) 
+$\sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma}))$ 
 #+END_center
 It is then a simple matter of using a Gaussian Marginal Likelihood with parameters \mu and \sigma to 
 calculate the model's cost function and propagate it's error.
@@ -191,6 +190,9 @@ Var[f^{\theta}(x^*)]  = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2
 
 ** Methodology 
 
+We shall evaluate the performance of 3 Bayesian Deep Learning models on the 28-day CCS prediction learning task. The raw data is first preprocessed 
+before it can be used on a time-series forecasting setting. This process is explained next:
+
 *** Data 
     
 The data represents 11 years of cement production on a medium sized factory, located on the city of Cajati.  
@@ -218,7 +220,7 @@ After cleaning, the columns with enough data to be useful at the learning task a
  - (iii) Time (in seconds) that the material takes to begin hardening and to finish hardening, respectively: IP, FP
  - (iv) Blaine fineness, measured in square centimeters per gram: SBL
  - (v) Percentage of Mass lost on furnace: FP
- - (vi) The CSC measurements made after 3, 7 and 28 (our target) days of expedition of that particular sample: RC3, RC7, RC28
+ - (vi) The CCS measurements made after 3, 7 and 28 (our target) days of expedition of that particular sample: RC3, RC7, RC28
 
 
 Using the Machine Learning approach cite:dlbook,  we shall let the model learn by itself what parameters to give more importance, 
