@@ -11,12 +11,22 @@
 #+LaTeX_HEADER: \usepackage{amsmath,amssymb}
 #+LaTeX_HEADER: \usepackage{empheq}
 #+LaTeX_HEADER: \usepackage{float}
+
 #+begin_abstract
-Much of the past work on the prediction of cement compressive strength (CCS) fail to account for the reality of the industrial process (e.g. which data is avaliable on a daily basis),
-instead providing a limited analysis on isolated samples on a laboratory. Recent work considered the cement data as indexed by time, providing 
-models that could be used on a daily basis on the factory floor, providing decision making capabilities for the stability of the industrial process, using uncertainty.
-This work goes further and implements Bayesian Deep Learning techniques on this domain. These are able to scale to huge amounts of data, require no
-specific knowledge of the data and provides powerful uncertainty estimates, able to be calculated and renewed every day with the new data being produced on the factory.
+Prediction of cement compressive strength (CCS) is an im-
+portant step in quality assurance in the industrial production
+of construction materials. The literature has recognized that
+laboratory data provides a limited analysis on isolated sam-
+ples, and recent work on predicting CCS considers cement
+data time-series obtained on factory floor. This works extends
+this approach, providing Bayesian Deep Learning techniques
+to generate machine learning models to support decision mak-
+ing activities aiming at the stability of the industrial process
+in the presence of uncertainty. These models are able to scale
+to huge amounts of data, require no specific knowledge of the
+data and provide powerful uncertainty estimates, which are
+updated in a day-to-day basis incorporating new data pro-
+duced on the factory.
 #+end_abstract
 
 
@@ -30,8 +40,8 @@ It is important for the industry to have a system that, detecting drops on the q
 probably causing it. The problem can them be tackled with supervised learning cite:dlbook, where the target are the RC28 measurements and the inputs are chemical compositions and other 
 quantities measured on a daily basis on the factory.
 
-Much of the past work cite:cementlin,nncement using mathematical models to predict CCS have failed to account for the dynamical nature of the industrial process and instead rely on analysis that are hard to make 
-on a daily basis on the industrial floor cite:dynstat. 
+Past work cite:cementlin,nncement on the problem focused on laboratorial analyses. We extend this approach to account for the dynamical nature of the industrial process, providing 
+an analysis that can be made on a daily basis on the industrial floor, as is done in cite:dynstat.
 
 Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CCS. 
 The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
@@ -39,9 +49,8 @@ This dynamical model is also able to provide standard deviations for the regress
 
 Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), 
 with the assumption that the past of the measurements have some information concerning the future of the process.
+Our data was provided 
  
-Our objective is then to model the probability distribution of the time series, to provide decision making capabilities on the industrial floor.
-
 For many decades the state-of-the-art on forecasting has been the ARIMA class of models, and Box-Jenkins procedures cite:inbook, but these models have their limitations. 
 They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear. These models also have trouble using exogenous variables 
 to aid the time series forecasting cite:ubertime.
@@ -56,17 +65,16 @@ has managed to combine ARIMA models with Artificial Neural Networks (ANN), with 
 We then use a new approach, implementing Bayesian Deep Learning techniques to leverage the scalability of Deep Learning with the uncertainty estimation of Bayesian Statistics. 
 This last feature is particularly useful on a industrial setting, as to provide decision making evidence on the factory floor cite:deepfactors. 
 
-*** Paper Structure 
-The rest of the paper is organized as follows: Section [[Objectives]] lists the contributions and objetives of this paper; Section [[Preliminaries]] gives a brief
-overview of each model used and a formal definition of the supervised learning problem; Section [[Methodology]] specifies how the data was transformed and treated before 
-used on the learning task; Section [[Experiments]] details our experiments and results with the models; Section [[Conclusion]] gives a final word and future directions of research. 
-** Objectives
+*** Objectives
 
 We shall bring these new Bayesian Deep Learning techniques to the CCS prediction domain. The contributions of this paper are 
 as follows: 
 
 - A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting on a new domain for these techniques.
 
+*** Paper Structure 
+The rest of the paper is organized as follows:  Section [[Preliminaries]] gives a brief overview of each model used and a formal definition of the supervised learning problem; Section [[Methodology]] specifies how the data was transformed and treated before 
+used on the learning task; Section [[Experiments]] details our experiments and results with the models; Section [[Conclusion]] gives a final word and future directions of research. 
 ** Preliminaries
   
 The training data is composed of the pairs $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ on the time span $[t_o,T]$. 
@@ -351,7 +359,7 @@ we will compare the risks for the predictions of the next day, the next 3 days a
 #+BEGIN_center
 #+NAME: taba 
 #+CAPTION: Table with risks for each timespan forecast 
-#+attr_latex: :environment tabular :width \textwidth :align lrr
+#+attr_latex: :environment tabular :width \textwidth :align lrr :placement [H]
 |-----------------+---------+---------|
 | Encoder Decoder | .5 risk | .9 risk |
 |-----------------+---------+---------|
@@ -374,7 +382,7 @@ we will compare the risks for the predictions of the next day, the next 3 days a
 #+END_center
 
 
-As Table [[taba]] shows, the 3 models have good next-day predictions, with a low .5 risk. All risks increasingly increase as the forecast acts further in the future, as is expected.
+As Table [[taba]] shows, the 3 models have good next-day predictions, with a low .5 risk. All risks increase as the forecast acts further in the future, as is expected.
 
 
 
