@@ -44,20 +44,20 @@ Past work cite:cementlin,nncement on the problem focused on laboratorial analyse
 an analysis that can be made on a daily basis on the industrial floor, as is done in cite:dynstat.
 
 Past work on this more industry-aware front cite:greciaLin makes the distinction between dynamic and static models to predict the CCS. 
-The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is made. 
+The authors propose a dynamic moving window linear regression that recalculates it's regression parameters every time a new RC28 measurement is ready. 
 This dynamical model is also able to provide standard deviations for the regression parameters.
 
 Following that idea, we shall consider all the cement data as time series (i.e. indexed by time), 
 with the assumption that the past of the measurements have some information concerning the future of the process.
-Our data was provided 
+Our data was provided by brazilian's cement company Intercement.   
  
 For many decades the state-of-the-art on forecasting has been the ARIMA class of models, and Box-Jenkins procedures cite:inbook, but these models have their limitations. 
 They are unable to model non-linear relationships on the data cite:forecasting, and many real world processes happen to be non-linear. These models also have trouble using exogenous variables 
 to aid the time series forecasting cite:ubertime.
 
 Recently many time series problems on different domains had it's classical results beaten by new Deep Learning methods such as Recurrent Neural Network models cite:energylstm,lstmbr,
-these deep learning models require no /feature engineering/ and work very well even with gigabytes of data cite:ARIMA_LSTM. They are more data-driven than classical methods
-that assume very little about the data, meaning that little manual tweaking on the model parameters is necessary.
+these deep learning models require no /feature engineering/ (i.e. specific knowledge about the data) and work very well even with gigabytes of data cite:ARIMA_LSTM. 
+They are more data-driven than classical methods that assume very little about the data, meaning that little manual tweaking on the model parameters is necessary.
 
 Classic time series models fail to scale well to huge amounts of data, although they are able to provide good uncertainty estimates cite:deepar. Past work cite:DIAZROBLES20088331,KHASHEI2010479 
 has managed to combine ARIMA models with Artificial Neural Networks (ANN), with better results than just either of these models.
