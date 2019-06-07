@@ -7,7 +7,7 @@
 #+OPTIONS: toc:nil 
 
 #+BIBLIOGRAPHY: bibliografia plain
-
+#+LaTeX_CLASS_OPTIONS: [a4paper]
 #+LaTeX_HEADER: \usepackage{amsmath,amssymb}
 #+LaTeX_HEADER: \usepackage{empheq}
 #+LaTeX_HEADER: \usepackage{float}
