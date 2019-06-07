@@ -31,10 +31,11 @@ duced on the factory.
 
 
 ** Introduction
-The prediction of the compressive strength of cement (CCS) is of the utmost importance on the Civil Construction Industry, 
+The prediction of the compressive strength of cement (CCS) is has been recognized of great importance to the civil construction industry, 
 given that this capacity is one of the factors to assess the quality of cement cite:cementnn0.
 
-The 28-day compressive strength (RC28) is chosen as a proxy to measure the quality of the cement, and the variance of these measurements can indicate the stability of the industrial process. 
+The 28-day compressive strength (RC28) is chosen as the measurement used as a regulatory parameter in construction codes, and the variance of these measurements can 
+indicate the stability of the industrial process. 
 
 It is important for the industry to have a system that, detecting drops on the quality of the cement, can point to anomalies on the process (e.g. concentration of reagents) 
 probably causing it. The problem can them be tackled with supervised learning cite:dlbook, where the target are the RC28 measurements and the inputs are chemical compositions and other 
