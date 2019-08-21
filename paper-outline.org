@@ -68,10 +68,8 @@ This last feature is particularly useful on a industrial setting, as to provide 
 
 *** Objectives
 
-We shall bring these new Bayesian Deep Learning techniques to the CCS prediction domain. The contributions of this paper are 
-as follows: 
-
-- A comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting on a new domain for these techniques.
+We shall bring these new Bayesian Deep Learning techniques to the CCS prediction domain. The main contribution of this paper is a 
+comparison of 3 state-of-the-art Bayesian Deep Learning models for time series forecasting on a new domain for these techniques.
 
 *** Paper Structure 
 The rest of the paper is organized as follows:  Section [[Preliminaries]] gives a brief overview of each model used and a formal definition of the supervised learning problem; Section [[Methodology]] specifies how the data was transformed and treated before 
