@@ -3,7 +3,14 @@
 \label{cap:introducao}
 
 
-A durabilidade e vida útil do cimento tem sido o problema mais importante enfrentado pela indústria de construção civil nas últimas décadas \citep{cementml}. Os custos de manutenção são da ordem de bilhões de dólares e portanto, a capacidade da previsão de propriedades do cimento desde a sua produção ganha grande importância. Une-se a isso a presença cada vez maior de métodos de ML em domínios diversos da engenharia e ciência com excelentes resultados e surge então a tentativa de usar algoritmos de aprendizado também para esse domínio \citep{cementnn1, cementnn2}. \\ 
+A predição da resistência compressiva do cimento (CCS) é reconhecido como de
+extrema importância para a indústria da construção civil, dado que essa
+capacidade é um dos fatores para avaliar a qualidade do cimento
+\citep{cementml}. O CCS após 28 dias da produção do cimento (RC28) é escolhido
+ como um parâmetro regulatório em normas de construção. Dado que os custos de
+ manutenção de estruturas são da ordem de bilhões de dólares, métodos
+ estatísticos para a predição dessa quantia seriam bastante úteis para um
+ funcionamento mais eficiente da indústria.
 
 Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de
 Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos
@@ -12,24 +19,39 @@ Cajati, uma das plantas da empresa. Esse trabalho é um estudo com a análise
 desses dados, desde o seu pré-processamento até uma criação de modelos
 preditivos e a investigação de sua acurácia. \\
 
-O indicador mais usado para a qualidade do cimento é a Resistência Compressiva (CSC) discutida na Sessão~\ref{sec:rc}, medida em quilo-pascais (kPa). Normas exigem que a CSC da amostra 28 dias após a sua expedição pela fábrica
-cumpra certos requisitos. Esse valor, o RC28, é o principal objetivo de predição de modelos estatísticos propostos na literura, visto que é de grande valia uma estimativa confiável desse valor antes que o mesmo seja medido por análise laboratorial 28 dias após a produção da amostra em questão. Concentrações de reagentes e outras grandezas referentes ao processo industrial são então usados em uma tarefa de \textbf{aprendizado supervisionado} para predizer o valor do RC28. \\
-
 
 \section {Motivação}
 
 
-Muito da literatura proposta para esse problema falha em levar em consideração o processo industrial da produção de cimento, e se limitam a análise de dados estritamente no contexto laboratorial \citep{cementlin},\citep{nncement}, com análises que não poderiam ser feitas no dia-a-dia da fábrica \citep{dynstat}. \\
+Já existem resultados obtidos com o uso de técnicas estatísticas para modelagem
+dos índices regulatórios da produção de cimento
+\citep{cementlin},\citep{nncement}. Nosso objetivo é extender a metodologia para
+levar essas análises ao chão de fábrica, com dados colhidos no dia-a-dia que já
+possam entregar resultados imediatos para a ação dos operadores.
 
-Mas trabalhos recentes propõe métodos de modelagem que poderiam ser implementados em chão de fábrica. \cite{greciaLin,dynstat} usam uma regressão linear de janela móvel, recalculando parâmetros de regressão sempre que uma nova medida RC28 é entregue pelo laboratório. Os dados então passam a ser tratados temporalmente, a medida que eles se tornam disponíveis na fábrica. Esse trabalho irá continuar nesse caminho e irá considerar os dados fornecidos da produção de cimento como \textbf{séries temporais}, assumindo que existe uma correlação entre lotes de cimento temporalmente próximos na expedição da fábrica. Nosso objetivo será o de modelar a \textbf{distribuição de probabilidade} dessa série, de modo a podermos amostrar médias e variâncias úteis para análise diária na fábrica. 
+\cite{dynstat} propõe uma regressão linear cujos paramêtros são recalculados
+sempre que um novo valor RC28 é amostrado pelo laboratório. Nossa contribuição é
+o tramamento completo dos dados providênciados pelo chão de fábrica como
+\textbf{séries temporais} i.e. dados indexados por anotações de tempo.
 
 Por muitas décadas o estado da arte desse tipo de análise temporal foram os processos ARIMA, com a metodologia Box-Jenkins \citep{arima}. Esses modelos tem uma excelente capacidade estatística e interpretabilidade. Mas essa família de modelos não vem sem as suas limitações: Eles falham em modelar relações não-lineares nos dados \citep{forecasting}, e a muitos processos reais tendem a ser não-lineares por natureza. Esses modelos também tem dificuldade de incorporar variáveis exógenas a série temporal nas predições \cite{ubertime}.
 
-Novos métodos de Machine Learning (ML) e mais recentemente Deep Learning (DL) como Redes Neurais Profundas (DNN), tem conquistado melhores resultados em diversas campos como visão computacional, análise de linguagem narutal (NLP) e regressão de séries temporais. Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados a dados \citep{dlbook}. Esses modelos não necessitam de \textit{feature engineering}, e também não assumem muito sobre a distribuição geradora dos dados, como por exemplo a família ARIMA, que requisita do engenheiro de dados a especificação da sazonalidade e estacionariedade dos dados \citep{arima}. Redes Neurais são capazes de aprendem sozinhas diversas caractísticas dos dados sem necessidade de intervenção. \\
+Novos métodos de Machine Learning (ML) e mais recentemente Deep Learning (DL)
+como Redes Neurais Profundas (DNN), que tem conquistado melhores resultados em
+diversas campos como visão computacional e análise de linguagem narutal (NLP)
+também entraram como alternativas à modelagem de séries temporais. Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados a dados \citep{dlbook}. Esses modelos não necessitam de \textit{feature engineering}, e também não assumem muito sobre a distribuição geradora dos dados, como por exemplo a família ARIMA, que requisita do engenheiro de dados a especificação da sazonalidade e estacionariedade dos dados \citep{arima}. Redes Neurais são capazes de aprendem sozinhas diversas caractísticas dos dados sem necessidade de intervenção. \\
+Alguns trabalhos uniram a flexibilidade de redes neurais com a robustez de métodos ARIMA \citep{DIAZROBLES20088331,KHASHEI2010479}, criando soluções melhores que qualquer um desses modelos sozinho. Porém, uma das arquiteturas de DL mais presentes em análises de séries temporais
+atualmente são as Redes Neurais Recorrentes. Esses modelos já foram usados com
+melhores resultados do que métodos clássicos para prever séries temporais de
+demanda de energia elétrica e de carros em um aplicativo de corridas popular
+\cite{energylstm,ubertime}.
 
-Alguns trabalhos uniram a flexibilidade de DNNs com a robustez de métodos ARIMA \citep{DIAZROBLES20088331,KHASHEI2010479}, criando soluções melhores que qualquer um desses modelos sozinho.
-Outro modelo de DL que obteve excelentes resultados empíricos foram Redes Neurais Recorrentes, modelos sequenciais usados para NLP e também análise de séries temporais. Esses modelos já foram usados com resultados melhores que o estado da arte para prever séries temporais de demanda de energia elétrica e de carros em um aplicativo de corridas popular \cite{energylstm,ubertime}. Uma tendência recente agora é de usar modelos de Deep Learning Bayesianos, que unem a versatilidade de modelos de DL com a expressividade de técnicas bayesianas, capazes de modelar a distribuição de probabilidade alvo pela Lei de Bayes. Esse trabalho irá aplicar 3 técnicas recentes de regressão de séries temporais com métodos bayesianos na predição do CSC do cimento. São elas:
-
+Dado que o objetivo desse trabalho é o de modelar um processo industrial, com
+um sensível nível de imprecisão e incerteza, isso deve se refletir no tipo de
+resultado gerado para uso da fábrica. A estatística bayesiana oferece técnicas
+mais robustas para a modelagem de incerteza \cite{bayesml}, e num contexto em
+que possuímos muitos dados, técnicas de DL também podem ser aplicadas sob a
+ótica bayesiana para a propagação de erro e calculo de incertezas \cite{ubertime,Gal2016Uncertainty}. 
 
 
 

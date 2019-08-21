@@ -95,29 +95,28 @@ dos modelos possui uma distribuição aproximadamente normal \cite{dlbook}.
 Uma variável aleatória Y distribuida normalmente possui uma funcão densidade de
 probabilidade da seguinte forma:
 
-\[
+\begin{equation}
+  \label{eq:ver}
 p(y| \mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{-\frac{(y - \mu)^2}{2\sigma^2}}
-\]
+\end{equation}
 
 Esse valor também é chamado de verossimilhança (a probabilidade de termos
-observado um valor de X, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
+observado um valor de Y, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
 normalmente trabalha-se com o logarítimo desse valor, para podermos trocar um
 multiplicatório por somatório para agregar os erros gaussianos de um conjunto de dados
-i.i.d., nesse caso, a log-verossimilhança total é dada por:
+i.i.d.. Nesse caso, temos pares de predição e valor real, que assumirá o papel
+da média $\mu$. A verossimilhança total de um conjunto de diversos pares
+$(\hat{y},y)$ é dado por: 
 
 \begin{equation}
-\label{eq:logver}
+\label{eq:logver1}
   \mathcal{L}= -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
   \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2}
 \end{equation}
 
 
-O Erro Quadrático Médio é um estimador não enviesado desse valor \cite{dlbook},
-distante apenas por constantes. Então, podemos calcular o erro total de um
-conjunto de dados apenas por:
-
 \begin{equation}
-  \label{eq:logver}
+  \label{eq:logver2}
   \mathcal{L}=  \sum^m_{i=1} (\hat{y_i}-y_i)^2
 \end{equation}
 
@@ -131,14 +130,15 @@ Nessa sessão iremos definir a função de custo usada em todos os modelos de re
 
 \subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
-O erro quadrático médio (em inglês, MSE) é uma medida de diferença entre duas variáveis contínuas
-$\hat{y}$ e y \citep{cohen}. Ele é dado por: \\
 
-\[MSE = \sum^n_{i=1}\frac{(y_i - \hat{y_i})^2}{n}\]
+O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
+\cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
+$(\hat{y},y)$, definido da seguinte forma:
+
+\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
 
 Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
-do modelo. \\
-
+do modelo, i.e. mais distante suas predições estão da média real. \\
 
 \subsection{Métrica de Acurácia}
 
