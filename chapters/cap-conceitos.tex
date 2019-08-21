@@ -71,54 +71,6 @@ $p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemo
 
 E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
 
-\subsubsection{Estimação por Log-verossimilhança}
- 
-Um exemplo de estimação frequentista que será usada nesse trabalho é a de
-log-verossimilhança \citep{dlbook}. O desenvolvimento a seguir será feito para o
-caso de distribuições de probabilidade que modelam problemas de aprendizado
-\textbf{supervisionado}, e.g. $p(y|x)$. 
-Essa estimação segue o princípio de maximizar a verossimilhança i.e. a probabilidade de
-termos observado nossos dados \textit{com as anotações corretas}, parametrizada pelos parâmetros $\theta$: $p(y|x ; \theta)$.
-Ou seja, dada uma matriz de dados $X$, suas anotações $Y$ e um conjunto de parâmetros $\theta$, o estimador de máxima verossimilhança de $\theta$ é dado por: \\
-
-\[ \hat{\theta} = \argmax_{\theta} p_{modelo}(Y | X;\theta) \] 
-
-Onde $p_{modelo}$ busca aproximar a real distribuição geradora dos dados $p$. Assumindo dados i.i.d e trocando a multiplicação por soma de logaritmos obtém-se: \\
-
-\[ \hat{\theta} = \argmax_{\theta} \sum_{i=1}^{m} \log p_{modelo}(y^{(i)}| x^{(i)};\theta) \]
-
-Maximizar a equação anterior é equivalente a minimizar a \textit{entropia-cruzada} entre
-nossas anotações reais $y$ e as predições feitas pelo modelo $\hat{y}$
-\citep{dlbook}. \\
-
-Continuando com o caso de de aprendizado supervisionado, a \textit{entropia de uma variável aleatória} $y | x$ cuja função densidade
-de probabilidade seja $p(y | x)$ pode ser calculada por \citep{shannon2001mathematical}: \\
-
-\[ H(y | x)  = - \sum^m_{i=1} p(y_i | x_i)*\log p(y_i | x_i) \]
-
-Ou ainda:
-
-\[H(y | x) = - \mathop{\mathbb{E}}_p[\log p(y | x)] \]
-
-Com o operador $\mathop{\mathbb{E}}_p[x]$ representando o valor esperado da
-variável aleatória $x$ na distribuição $p$. \\
-
-Sejam $p,p_{modelo}$ duas funções de distribuição de probabilidade. A \textit{entropia-cruzada} de $p_{modelo}$ em $p$ é definida pelo valor
-esperado da entropia de $p_{modelo}$ na distribuição $p$ \citep{bayesml}: \\
-
-\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(y | x)] \]
-
-Se a distribuição $p_{modelo}$ for parametrizada pelo vetor $\theta$, a equação
-acima toma a forma: \\
-
-
-\[H(p,p_{modelo}) =  \mathop{\mathbb{E}}_p[\log p_{modelo}(y | x ; \theta)] \]
-
-Minimizar essa equação é equivalente a maximizar a equação da
-log-verossimilhança \citep{dlbook}. A sessão~\ref{sec:reglog} irá mostrar o caso
-específico de estimação por log-verossimilhança para problemas de regressão.  
-
-
 
 \subsubsection{Divergência KL}
 
@@ -133,39 +85,25 @@ Ou em uma forma mais usual: \\
 \[D_{KL}(p||q) = \sum_{i=1}^{N}p(x_{i}) \log \frac{p(x_{i})}{q(x_{i})}​\]
 
 
-\subsubsection{Estimação por Log-verossimilhança para Regressão}
+\subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
-Nos modelos usados nesse trabalho, a equação que irá ditar o \textbf{erro} a ser
-minimizado pelos algoritmos é o MSE (explicado na sessão~\ref{sec:MSE}). 
-É simples mostrar intuitivamente que minimizar o MSE entre os valores previstos
-e os dados de treino pode ser considerado uma estimação por maximização de
-verossimilhança \citep{dlbook}. É possível explicar uma regressão linear como
-uma maximização de verossimilhança:
-\\
 
-Desejamos criar um modelo linear que explica a relação entre duas variáveis
-$x$ e $y$ em um modelo da forma $y = \theta X + \epsilon$, onde $\epsilon
-\sim \mathcal{N}(\epsilon;0,\,\sigma^2)$ e $\sigma$ é selecionado pelo programador.\\
+É bastante comum se usar a equação do Erro Quadrático Médio como objetivo de
+otimização em problemas de regressão, nesse caso estamos assumindo que o erro
+dos modelos possui uma distribuição aproximadamente normal \cite{dlbook}. 
 
-Considera-se que esse modelo está produzindo uma distribuição condicional
-$p(y|x)$ (assim como a maior parte dos problema de aprendizado supervisionado). \\ 
+Uma variável aleatória Y distribuida normalmente possui uma funcão densidade de
+probabilidade da seguinte forma:
 
-Define-se então, para esse modelo, $p(y|x) =
-\mathcal{N}(y ; \hat{y}(x,\theta),\sigma^2)$, pois foi assumido que o ruído $\epsilon$
-segue uma distribuição normal. Nota-se que a média da gaussiana é a previsão do
-modelo. \\
+\[
+p(y| \mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{-\frac{(y - \mu)^2}{2\sigma^2}}
+\]
 
-A log-verossimilhança do modelo é dada por: \\
-
-\begin{equation}
-  \label{eq:lv}
-\mathcal{L} =  \sum^m_{i=1}\log p(y_i | x_i ; \theta)
-\end{equation}
-
-E como definimos a distribuição gerada pelo modelo como $\mathcal{N}(y ;
-\hat{y}(x,\theta),\sigma^2)$, então aplicando a definição da
-distribuição normal na equação~\ref{eq:lv} chegamos em: \\
-
+Esse valor também é chamado de verossimilhança (a probabilidade de termos
+observado um valor de X, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
+normalmente trabalha-se com o logarítimo desse valor, para podermos trocar um
+multiplicatório por somatório para agregar os erros gaussianos de um conjunto de dados
+i.i.d., nesse caso, a log-verossimilhança total é dada por:
 
 \begin{equation}
 \label{eq:logver}
@@ -173,14 +111,16 @@ distribuição normal na equação~\ref{eq:lv} chegamos em: \\
   \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2}
 \end{equation}
 
-Observa-se que essa equação que calcula a verossimilhança para regressão possui o termo $(\hat{y_i}-y_i^2)$, a diferença
-quadrática entre as predições e os valores reais, o \textit{erro quadrático}. E
-de fato, no desenvolvimento desse projeto, usaremos o Erro Quadrático Médio
-(definido formalmente na seção~\ref{sec:MSE}) entre
-predições e valores reais para calcular o erro do nosso modelo e otimiza-lo.  
-E essa otimização pode ser interpretada como uma busca por parâmetros que
-maximizem a verossimilhança dos valores gerados pelo modelo frente os dados
-observados. \\ 
+
+O Erro Quadrático Médio é um estimador não enviesado desse valor \cite{dlbook},
+distante apenas por constantes. Então, podemos calcular o erro total de um
+conjunto de dados apenas por:
+
+\begin{equation}
+  \label{eq:logver}
+  \mathcal{L}=  \sum^m_{i=1} (\hat{y_i}-y_i)^2
+\end{equation}
+
 
 \subsection{Função de Custo}
 
@@ -303,8 +243,8 @@ O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas 
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
 os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
-um grau de certeza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
-consideramos que os dados \textbf{foram observados} e usamos a lei de Bayes para
+a incerteza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
+consideramos que os dados \textbf{foram observados} e usa-se a lei de Bayes para
 calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
 $p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}. 
 
@@ -686,7 +626,7 @@ TO-DO-IMAGEM \\
 O funcionamento do modelo é similar ao de uma rede Encoder-Decoder, como visto na Sessão~\ref{sec:encdec}, o modelo deve consumir intervalos de $F$ valores dos parâmetros da série temporal, essa seria a fase do \textit{encoding}, para então gerar $T$ anotações dos dados na fase do \textit{decoding}. Durante o treinamento o erro do modelo é calculado comparando-se uma anotação gerada durante a fase de encoding $y^{*}_{t}$ com o seu valor real $y_{t}$. \\
 
 Durante o \textbf{treinamento} o modelo recebe como entrada do instante $t$, o valor real da série no instante $t-1$. \\
-
+  
 Durante a \textbf{validação} o modelo é \textbf{realimentado} com a anotação $y^{*}_{t-1}$ gerada na iteração anterior. \\ 
 
 
@@ -708,7 +648,6 @@ Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaus
 
 O modelo \textit{Deep Factors with Gaussian Process} \cite{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
 
-\subsubsection{Processo Gaussiano}
 
 Um Processo Gaussiano é uma coleção de variáveis aleatórias,
 sendo que qualquer subconjunto finito das mesmas é descrito por uma Distribuição Gaussiana conjunta \cite{gpml}. \\
