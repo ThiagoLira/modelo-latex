@@ -318,7 +318,7 @@ The error increases as time passes, as is expected. All models perform well on t
 |-----------------+---------------------|
 |             24h |  0.22               |
 |              3d |   0.36              |
-|              7d |  1.04               |
+|$              7d |  1.04               |
 |-----------------+---------------------|
 #+END_center
 

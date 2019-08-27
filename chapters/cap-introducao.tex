@@ -9,49 +9,67 @@ capacidade é um dos fatores para avaliar a qualidade do cimento
 \citep{cementml}. O CCS após 28 dias da produção do cimento (RC28) é escolhido
  como um parâmetro regulatório em normas de construção. Dado que os custos de
  manutenção de estruturas são da ordem de bilhões de dólares, métodos
- estatísticos para a predição dessa quantia seriam bastante úteis para um
- funcionamento mais eficiente da indústria.
+ estatísticos para a predição dessa quantia ganham ainda mais importância para um
+ funcionamento mais eficiente da indústria. Nota-se também que essa  
+ indústria representa grande parte das emissões de $CO_2$ na atmosfera \cite{cementroadmap}.
 
 Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de
 Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos
 10 anos de dados de diversas etapas da produção de cimento do complexo de
-Cajati, uma das plantas da empresa. Esse trabalho é um estudo com a análise
-desses dados, desde o seu pré-processamento até uma criação de modelos
-preditivos e a investigação de sua acurácia. \\
+Cajati, uma das plantas da empresa. Esse trabalho estuda a possibilidade do uso
+de modelos estatísticos modernos em dados produzidos diariamente nas fábricas,
+para a tomada de decisões no chão de fábrica.
 
 
 \section {Motivação}
 
 
-Já existem resultados obtidos com o uso de técnicas estatísticas para modelagem
-dos índices regulatórios da produção de cimento
-\citep{cementlin},\citep{nncement}. Nosso objetivo é extender a metodologia para
+
+Trabalhos recentes aplicam técnicas estatísticas em amostras de cimento num
+contexto laboratorial \citep{cementlin},\citep{nncement}.
+Nosso objetivo é estender a metodologia para
 levar essas análises ao chão de fábrica, com dados colhidos no dia-a-dia que já
 possam entregar resultados imediatos para a ação dos operadores.
 
-\cite{dynstat} propõe uma regressão linear cujos paramêtros são recalculados
+\cite{dynstat} propõe uma regressão linear cujos parâmetros são recalculados
 sempre que um novo valor RC28 é amostrado pelo laboratório. Nossa contribuição é
-o tramamento completo dos dados providênciados pelo chão de fábrica como
+o tratamento completo dos dados providenciados pelo chão de fábrica como
 \textbf{séries temporais} i.e. dados indexados por anotações de tempo.
 
-Por muitas décadas o estado da arte desse tipo de análise temporal foram os processos ARIMA, com a metodologia Box-Jenkins \citep{arima}. Esses modelos tem uma excelente capacidade estatística e interpretabilidade. Mas essa família de modelos não vem sem as suas limitações: Eles falham em modelar relações não-lineares nos dados \citep{forecasting}, e a muitos processos reais tendem a ser não-lineares por natureza. Esses modelos também tem dificuldade de incorporar variáveis exógenas a série temporal nas predições \cite{ubertime}.
+Por muitas décadas o estado da arte desse tipo de análise temporal foram os
+processos ARIMA, com a metodologia Box-Jenkins \citep{arima}.
+Esses modelos tem uma excelente capacidade estatística e interpretabilidade.
+Mas essa família de modelos não vem sem as suas limitações:
+eles falham em modelar relações não-lineares nos dados \citep{forecasting} e 
+muitos processos reais tendem a ser não-lineares por natureza.
+Esses modelos também tem dificuldade de incorporar variáveis exógenas a série temporal nas predições \cite{ubertime}.
 
-Novos métodos de Machine Learning (ML) e mais recentemente Deep Learning (DL)
-como Redes Neurais Profundas (DNN), que tem conquistado melhores resultados em
-diversas campos como visão computacional e análise de linguagem narutal (NLP)
-também entraram como alternativas à modelagem de séries temporais. Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados a dados \citep{dlbook}. Esses modelos não necessitam de \textit{feature engineering}, e também não assumem muito sobre a distribuição geradora dos dados, como por exemplo a família ARIMA, que requisita do engenheiro de dados a especificação da sazonalidade e estacionariedade dos dados \citep{arima}. Redes Neurais são capazes de aprendem sozinhas diversas caractísticas dos dados sem necessidade de intervenção. \\
-Alguns trabalhos uniram a flexibilidade de redes neurais com a robustez de métodos ARIMA \citep{DIAZROBLES20088331,KHASHEI2010479}, criando soluções melhores que qualquer um desses modelos sozinho. Porém, uma das arquiteturas de DL mais presentes em análises de séries temporais
-atualmente são as Redes Neurais Recorrentes. Esses modelos já foram usados com
+
+A modelagem de série temporais tem se beneficiado pelo desenvolvimento de novos
+métodos de Machine Learning (ML), e mais recentemente de Deep Learning (DL).
+Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados
+a dados \citep{dlbook}.
+Esses modelos não necessitam de \textit{feature engineering}, e também não
+assumem muito sobre a distribuição geradora dos dados, como por exemplo a
+família ARIMA, que requisita do engenheiro de dados a especificação da
+sazonalidade e estacionariedade dos dados \citep{arima}.
+Redes Neurais são capazes de aprendem sozinhas diversas características dos dados sem necessidade de intervenção. 
+Alguns trabalhos uniram a flexibilidade de redes neurais com a robustez de
+métodos ARIMA \citep{DIAZROBLES20088331,KHASHEI2010479},
+criando soluções melhores que qualquer um desses modelos sozinho. Porém, uma das
+arquiteturas de DL mais presentes atualmente em análise de séries temporais
+são as Redes Neurais Recorrentes. Esses modelos já foram usados com
 melhores resultados do que métodos clássicos para prever séries temporais de
 demanda de energia elétrica e de carros em um aplicativo de corridas popular
 \cite{energylstm,ubertime}.
 
-Dado que o objetivo desse trabalho é o de modelar um processo industrial, com
-um sensível nível de imprecisão e incerteza, isso deve se refletir no tipo de
-resultado gerado para uso da fábrica. A estatística bayesiana oferece técnicas
+
+Nossa metodologia deve ser capaz de prever o sensível nível de imprecisão e
+incerteza que ocorrem no processo industrial,
+refletindo assim as condições reais observadas na fábrica. A estatística bayesiana oferece técnicas
 mais robustas para a modelagem de incerteza \cite{bayesml}, e num contexto em
 que possuímos muitos dados, técnicas de DL também podem ser aplicadas sob a
-ótica bayesiana para a propagação de erro e calculo de incertezas \cite{ubertime,Gal2016Uncertainty}. 
+ótica bayesiana para a propagação de erro e cálculo de incertezas \cite{ubertime,Gal2016Uncertainty}. 
 
 
 
