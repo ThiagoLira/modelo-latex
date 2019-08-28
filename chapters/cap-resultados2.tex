@@ -1,4 +1,3 @@
-
 \chapter{Resultados Experimentais }
 \label{cap:resultados}
 
@@ -7,34 +6,23 @@
 
 \subsection{RC3, RC7 e RC28}
 
-Assim como feito em \cite{greciaLin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
+Assim como proposto em \cite{greciaLin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
 não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
-i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. \\
+i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
 
-
-\subsection{Abordagem Não-Temporal}
-
- Para ambos as classes de modelos os dados foram transformados para possuirem variância
-unitária e média 0. Os índices $RC3_{t-3}$ e $RC7_{t-7}$ foram usados como entrada e o índice
-RC28 foi usado como saída. Os dados foram divididos em
-\textit{treino}, \textit{validação}. Usamos os dados de treino 
-para treinar os
-modelos, e os de validação apenas para avaliar o seu erro. O Gráfico
-~\ref{fig:divrc28} mostram essa divisão. Lembramos que apenas os dados de
-validação são inéditos para os modelos, com eles avaliamos a capacidade de
-generalização dos modelos. 
-
+\subsection{Divisão dos dados entre treino e validação}
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=0.9\columnwidth]{split_2008-2015-2017RC28.png}
-\caption{Divisão do dataset para a saída RC28, os pontos azuis foram usados para
-treino e os pontos laranjas usados para validação.}
+  \includegraphics[width=0.9\columnwidth]{train_dev.pdf}
+  \caption{Divisão do dataset para a saída RC28, os pontos verdes foram usados para
+    treino e os pontos azuis usados para validação.}
   \label{fig:divrc28}
 \end{figure}
 
+\subsection{Abordagem Não-Temporal}
 
-Modelos de Machine Learning clássicos foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
+Modelos de Machine Learning não-temporais foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
 As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
 
 \begin{figure}[H]
@@ -42,19 +30,36 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
   \label{fig:linmodels}
 \includegraphics[width=0.9\columnwidth]{linear_exp.pdf}
 \caption{Predições nos dados de validação nos experimentos com modelos não-temporais. }
-  \label{fig:divrc28}
+\end{figure}
+
+\subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
+
+Para efeito de comparação de resultados, iremos aplicar o método proposto em
+\cite{grecialin}. Primeiramente apresentamos a variação do erro de treino em
+função do parâmetro $t_d$ i.e. o tamanho do conjunto de treino para cada
+regressão.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{tdparameter.pdf}
+  \caption{Erro de treino em função do parâmetro $t_d$}
+  \label{fig:tdparam}
+\end{figure}
+
+Os resultados do modelo em todo o período de validação, bem como o erro são
+reportados a seguir:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{forecast_lin_reg_win.pdf}
+  \caption{Predições no conjunto de validação do modelo de regressão linear dinâmico}
+  \label{fig:tdparam}
 \end{figure}
 
 \subsection{Modelos Bayesianos para Séries Temporais}
 
 
-Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. Para as predições de séries temporais, usamos todas as entradas de 01/2007 até 09/2018 como nossos dados de treino, e os últimos 3 meses de dados como os dados de validação. As tuplas de treino são da forma $(RC28_{t},\{\})$. Os dados são normalizados pelo método min-max para igualarmos suas grandezas. O vetor normalizado $z$ é dado pela seguinte equacão:  
-
-
-\begin{equation}
-z=\frac{x-\min (x)}{\max (x)-\min (x)}
-\end{equation}
-
+Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
 Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emição de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
 
