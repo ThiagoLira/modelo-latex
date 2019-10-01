@@ -7,18 +7,18 @@ A predição da resistência compressiva do cimento (CCS) é reconhecido como de
 extrema importância para a indústria da construção civil, dado que essa
 capacidade é um dos fatores para avaliar a qualidade do cimento
 \citep{cementml}. O CCS após 28 dias da produção do cimento (RC28) é escolhido
- como um parâmetro regulatório em normas de construção. Dado que os custos de
- manutenção de estruturas são da ordem de bilhões de dólares, métodos
+ como um parâmetro regulatório em normas de construção. Dado que os custos
+ anuais de manutenção de estruturas são da ordem de bilhões de dólares, métodos
  estatísticos para a predição dessa quantia ganham ainda mais importância para um
  funcionamento mais eficiente da indústria. Nota-se também que essa  
- indústria representa grande parte das emissões de $CO_2$ na atmosfera \cite{cementroadmap}.
+ indústria representa grande parte das emissões de $CO_2$ na atmosfera \citep{cementroadmap}.
 
 Esse trabalho é uma colaboração entre a empresa Intercement e o Laboratório de
-Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram concedidos
+Lógica, Inteligência Artificial e Métodos Formais do IME-USP. Foram apresentados
 10 anos de dados de diversas etapas da produção de cimento do complexo de
 Cajati, uma das plantas da empresa. Esse trabalho estuda a possibilidade do uso
-de modelos estatísticos modernos em dados produzidos diariamente nas fábricas,
-para a tomada de decisões no chão de fábrica.
+de modelos computacionais e estatísticos modernos em dados produzidos diariamente nas fábricas,
+para a tomada de decisões na operação da fábrica.
 
 
 \section {Motivação}
@@ -26,27 +26,27 @@ para a tomada de decisões no chão de fábrica.
 
 
 Trabalhos recentes aplicam técnicas estatísticas em amostras de cimento num
-contexto laboratorial \citep{cementlin},\citep{nncement}.
+contexto laboratorial \citep{cementlin,nncement}.
 Nosso objetivo é estender a metodologia para
-levar essas análises ao chão de fábrica, com dados colhidos no dia-a-dia que já
+levar essas análises da operação da fábrica, com dados colhidos na operação diária que já
 possam entregar resultados imediatos para a ação dos operadores.
 
-\cite{dynstat} propõe uma regressão linear cujos parâmetros são recalculados
+\citep{dynstat} propõe uma regressão linear cujos parâmetros são recalculados
 sempre que um novo valor RC28 é amostrado pelo laboratório. Nossa contribuição é
-o tratamento completo dos dados providenciados pelo chão de fábrica como
+o tratamento completo dos dados providenciados na operação da fábrica como
 \textbf{séries temporais} i.e. dados indexados por anotações de tempo.
 
-Por muitas décadas o estado da arte desse tipo de análise temporal foram os
-processos ARIMA, com a metodologia Box-Jenkins \citep{arima}.
+Por muitas décadas o estado da arte desse tipo de análise temporal centrou-se
+nos processos ARIMA, com a metodologia Box-Jenkins \citep{arima}.
 Esses modelos tem uma excelente capacidade estatística e interpretabilidade.
-Mas essa família de modelos não vem sem as suas limitações:
-eles falham em modelar relações não-lineares nos dados \citep{forecasting} e 
+Mas essa família de modelos possui suas limitações:
+ela falha em modelar relações não-lineares nos dados \citep{forecasting} e 
 muitos processos reais tendem a ser não-lineares por natureza.
-Esses modelos também tem dificuldade de incorporar variáveis exógenas a série temporal nas predições \cite{ubertime}.
+Esses modelos também têm dificuldade de incorporar variáveis exógenas à série temporal nas predições \citep{ubertime}.
 
 
 A modelagem de série temporais tem se beneficiado pelo desenvolvimento de novos
-métodos de Machine Learning (ML), e mais recentemente de Deep Learning (DL).
+métodos de Aprendizado de Máquina (ML), e mais recentemente de Deep Learning (DL).
 Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados
 a dados \citep{dlbook}.
 Esses modelos não necessitam de \textit{feature engineering}, e também não
@@ -61,14 +61,14 @@ arquiteturas de DL mais presentes atualmente em análise de séries temporais
 são as Redes Neurais Recorrentes. Esses modelos já foram usados com
 melhores resultados do que métodos clássicos para prever séries temporais de
 demanda de energia elétrica e de carros em um aplicativo de corridas popular
-\cite{energylstm,ubertime}.
+\citep{energylstm,ubertime}.
 
 
 Nossa metodologia deve ser capaz de prever o sensível nível de imprecisão e
 incerteza que ocorrem no processo industrial,
 refletindo assim as condições reais observadas na fábrica. A estatística bayesiana oferece técnicas
-mais robustas para a modelagem de incerteza \cite{bayesml}. E num contexto em
-que possuímos muitos dados, técnicas de DL também podem ser aplicadas com um desenvolvimento bayesiano para a propagação de erro e cálculo de incertezas \cite{ubertime,Gal2016Uncertainty}. 
+mais robustas para a modelagem de incerteza \citep{bayesml}. E num contexto em
+que possuímos muitos dados, técnicas de DL também podem ser aplicadas com um desenvolvimento bayesiano para a propagação de erro e cálculo de incertezas \citep{ubertime,Gal2016Uncertainty}. 
 
 
 

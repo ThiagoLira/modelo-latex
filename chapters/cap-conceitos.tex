@@ -119,6 +119,12 @@ $\mathcal{L}$ é dado por:
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
+Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
+coincide com a frequentista, convergindo para a \textbf{estimaćão de máxima
+verossimilhanća} \citep{gpml}. Isso se deve ao fato que a distribuićão de
+probabilidade a priori progressivamente se torna menos importante no calculo da
+probabilidade posterior com muitos dados.
+
 
 \[
   \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t})}
