@@ -15,7 +15,8 @@ as seguintes partes \citep{dlbook}: \\
   
 \item A tarefa $T$, no caso dos dados da Intercement, um problema de regressão.
   Onde desejamos estimar valores numéricos a partir de uma matriz de dados $X$ e
-  suas anotações numéricas $Y$.  
+  suas anotações numéricas $Y$. O definição do problema atacado por esse projeto
+  é enunciado na seção~\ref{sec:tar} .
   
 \item Uma métrica de performance $P$, que define a distância entre as predições
   do modelo e os dados de treinamento. A teoria por trás desses métricas será explicada na seção~\ref{sec:metricas}.
@@ -25,8 +26,8 @@ as seguintes partes \citep{dlbook}: \\
   
 \end{itemize}
 
-\subsection{Aprendizado}
-\label{sec:exp}
+\subsection{A Tarefa}
+\label{sec:tar}
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 
@@ -51,11 +52,35 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \subsection{Definição do Problema}
 
 
-Os dados da Intercement são anotados temporalmente, então podemos escolher trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo importa. A tarefa de regressão se torna então prever próximas anotações desses dados num horizonte de tempo futuro finito. O problema ainda é de Aprendizado Supervisionado, mas iremos alterar a formalização do tópico~\ref{sec:apren} condicionando então uma anotação $y$ a parâmetros de entrada $x$, mas também ao histórico da série temporal, i.e. valores passados do objetivo $y$. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo de predição $y$ e de um vetor $\textbf{x}$ de parâmetros. Os dados de treinamento serão os pares $(\{\textbf{x}_{t_0},y_{t_o}\},\{\textbf{x}_{t_1},y_{t_1}\}, \dots, \{\textbf{x}_{T},y_{T}\})$ no intervalo de tempo $[t_o,T]$. Seja um horizonte finito de tempo $F$, $F > T$, os modelos devem aprender uma distribuição de probabilidade do tipo:
+Os dados da Intercement são anotados temporalmente, então podemos escolher
+trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
+importa. A tarefa de regressão se torna então prever próximas anotações desses
+dados num horizonte de tempo futuro finito. O problema ainda é de Aprendizado
+Supervisionado, mas iremos alterar a formalização do tópico~\ref{sec:apren}
+condicionando então uma anotação $y$ a parâmetros de entrada $x$, mas também ao
+histórico da série temporal, i.e. valores passados do objetivo $y$. A série
+temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
+de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independetes.
 
-\[ p(y_{T:F} | y_{t_{o}:T},\textbf{x}_{t_{0}:T}) \]
 
-Cabe então fazermos a distinção entre modelos sequenciais e não-sequenciais \cite{dlbook}. Os modelos sequenciais irão usar a natureza temporal dos dados como descrita nesse tópico na modelagem e predições. Os modelos não-sequenciais irão tratar cada par $(\textbf{x},y)$ sem a sua anotação de tempo $t$.
+Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
+independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
+séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
+de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condidionadas por uma janela de
+observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado.
+
+
+\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
+
+A distribuição será aprendida por meio de aprendizado supervisionado, onde os
+modelos serão alimentados com diversos pares de entradas,
+$(y_t,\textbf{x}_{(t-W):t})$, onde $\textbf{x}$ é um vetor contendo os valores de
+cada variável independente $X_i$, no instante de tempo $t$. Cada tupla de
+entrada contém $W$ entradas do vetor de variáveis independentes. O parâmetro $W$, o
+tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
+treino e pode ser alterado na busca de uma melhor acurácia de predição.
+
+
 
 
 \subsection{A Performance}
@@ -69,8 +94,58 @@ vertentes da estatística. O seguinte desenvolvimento é retirado de \cite{dlboo
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade
 $p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
-E no campo de ML, as duas maneiras de se gerar predições são estimadores frequentistas e inferência Bayesiana \citep{dlbook}.
+E no campo de ML, as duas maneiras de se gerar predições são estimadores
+frequentistas e inferência Bayesiana \citep{dlbook}. Inferência Bayesiana será
+definida da seção~\ref{sec:bayesinf}
 
+
+\subsubsection{Estimadores}
+
+
+A aprendizagem estatística busca a diminuição de \textit{risco} das predições feitas por
+um modelo.
+
+Um método usual da diminuição de risco é a de buscar guiar o aprendizado pela
+maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
+observado os dados alvo condicionada pelos parâmetros do modelo. Uma iteração de
+treino então consistira do produtório de todas as verossimilhanças para cada par
+de entradas. Generalizando essa ideia, na definição do nosso problema, temos que o custo total do modelo
+$\mathcal{L}$ é dado por:
+
+\[
+\mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}) 
+\]
+
+É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
+o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
+
+
+\[
+  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t})}
+\]
+
+
+Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
+assumindo que o custo do modelo é distribuído normalmente.
+
+\subsubsection{Função de Custo}
+
+A Função de Custo, derivada diretamente da verossimilhança,
+é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
+
+Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
+
+\subsubsection{Erro Quadrático Médio}
+\label{sec:MSE}
+
+O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
+\cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
+$(\hat{y},y)$, definido da seguinte forma:
+
+\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
+
+Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
+do modelo, i.e. mais distante suas predições estão da média real. \\
 
 \subsubsection{Divergência KL}
 
@@ -87,6 +162,7 @@ Ou em uma forma mais usual: \\
 
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
+
 
 É bastante comum se usar a equação do Erro Quadrático Médio como objetivo de
 otimização em problemas de regressão, nesse caso estamos assumindo que o erro
@@ -121,24 +197,6 @@ $(\hat{y},y)$ é dado por:
 \end{equation}
 
 
-\subsection{Função de Custo}
-
-A Função de Custo, derivada diretamente da verossimilhança,
-é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
-
-Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
-
-\subsubsection{Erro Quadrático Médio}
-\label{sec:MSE}
-
-O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
-\cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
-$(\hat{y},y)$, definido da seguinte forma:
-
-\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
-
-Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
-do modelo, i.e. mais distante suas predições estão da média real. \\
 
 \subsection{Métrica de Acurácia}
 
