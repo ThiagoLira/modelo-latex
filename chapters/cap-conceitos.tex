@@ -1,6 +1,50 @@
 %% ------------------------------------------------------------------------- %%
 \chapter{Conceitos}
-l\label{cap:conceitos}
+\label{cap:conceitos}
+
+
+\section{Definição do Problema}
+
+
+Os dados da Intercement são anotados temporalmente, então podemos escolher
+trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
+importa. A tarefa de regressão se torna então prever próximas anotações desses
+dados num horizonte de tempo futuro finito. O problema é de Aprendizado
+Supervisionado, buscamos a distribuição das anotações $y$ condicionada
+aos parâmetros de entrada $x$, mas também ao
+histórico da série temporal, i.e. valores passados do objetivo $y$. A série
+temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
+de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independetes.
+
+
+Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
+independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
+séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
+de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condidionadas por uma janela de
+observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado.
+
+\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
+
+A distribuição será aprendida por meio de aprendizado supervisionado, onde os
+modelos serão alimentados com diversos pares de entradas,
+$(y_t,\textbf{x}_{(t-W):t})$, onde $\textbf{x}$ é um vetor contendo os valores de
+cada variável independente $X_i$, no instante de tempo $t$. Cada tupla de
+entrada contém $W$ entradas do vetor de variáveis independentes. O parâmetro $W$, o
+tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
+treino e pode ser alterado na busca de uma melhor acurácia de predição.
+
+\section{Estatística Frequentista e Estatística Bayesiana}
+ 
+Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
+cabe então uma breve elaboração das diferenças entre as duas principais
+vertentes da estatística. O seguinte desenvolvimento é retirado de \citep{dlbook}:\\
+
+Digamos que exista um evento aleatório que tenha um resultado com probabilidade
+$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+
+E no campo de ML, as duas maneiras de se gerar predições são estimadores
+frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
+
 
 
 \section{Aprendizado Automático}
@@ -15,8 +59,7 @@ as seguintes partes \citep{dlbook}: \\
   
 \item A tarefa $T$, no caso dos dados da Intercement, um problema de regressão.
   Onde desejamos estimar valores numéricos a partir de uma matriz de dados $X$ e
-  suas anotações numéricas $Y$. O definição do problema atacado por esse projeto
-  é enunciado na seção~\ref{sec:tar} .
+  suas anotações numéricas $Y$. 
   
 \item Uma métrica de performance $P$, que define a distância entre as predições
   do modelo e os dados de treinamento. A teoria por trás desses métricas será explicada na seção~\ref{sec:metricas}.
@@ -26,8 +69,8 @@ as seguintes partes \citep{dlbook}: \\
   
 \end{itemize}
 
-\subsection{A Tarefa}
-\label{sec:tar}
+\subsection{A Experiência}
+\label{sec:exp}
 Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 
@@ -49,130 +92,48 @@ anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde t
 também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma propriedade importante dessa distribuição.
 
 
-\subsection{Definição do Problema}
-
-
-Os dados da Intercement são anotados temporalmente, então podemos escolher
-trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
-importa. A tarefa de regressão se torna então prever próximas anotações desses
-dados num horizonte de tempo futuro finito. O problema ainda é de Aprendizado
-Supervisionado, mas iremos alterar a formalização do tópico~\ref{sec:apren}
-condicionando então uma anotação $y$ a parâmetros de entrada $x$, mas também ao
-histórico da série temporal, i.e. valores passados do objetivo $y$. A série
-temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
-de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independetes.
-
-
-Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
-independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
-séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
-de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condidionadas por uma janela de
-observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado.
-
-
-\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
-
-A distribuição será aprendida por meio de aprendizado supervisionado, onde os
-modelos serão alimentados com diversos pares de entradas,
-$(y_t,\textbf{x}_{(t-W):t})$, onde $\textbf{x}$ é um vetor contendo os valores de
-cada variável independente $X_i$, no instante de tempo $t$. Cada tupla de
-entrada contém $W$ entradas do vetor de variáveis independentes. O parâmetro $W$, o
-tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
-treino e pode ser alterado na busca de uma melhor acurácia de predição.
-
-
-
 
 \subsection{A Performance}
 \label{sec:metricas}
-\subsubsection{Estatística Frequentista e Estatística Bayesiana}
- 
-Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
-cabe então uma breve elaboração das diferenças entre as duas principais
-vertentes da estatística. O seguinte desenvolvimento é retirado de \cite{dlbook}:\\
-
-Digamos que exista um evento aleatório que tenha um resultado com probabilidade
-$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
-
-E no campo de ML, as duas maneiras de se gerar predições são estimadores
-frequentistas e inferência Bayesiana \citep{dlbook}. Inferência Bayesiana será
-definida da seção~\ref{sec:bayesinf}
-
 
 \subsubsection{Estimadores}
-
+\label{sec:est}
 
 A aprendizagem estatística busca a diminuição de \textit{risco} das predições feitas por
 um modelo.
 
 Um método usual da diminuição de risco é a de buscar guiar o aprendizado pela
 maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
-observado os dados alvo condicionada pelos parâmetros do modelo. Uma iteração de
+observado os dados alvo condicionada pelos parâmetros do modelo e as entradas
+(que iremos representar pelo vetor $\theta$). Uma iteração de
 treino então consistira do produtório de todas as verossimilhanças para cada par
 de entradas. Generalizando essa ideia, na definição do nosso problema, temos que o custo total do modelo
 $\mathcal{L}$ é dado por:
 
 \[
-\mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}) 
+\mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}, \theta) 
 \]
 
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
 Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
-coincide com a frequentista, convergindo para a \textbf{estimaćão de máxima
-verossimilhanća} \citep{gpml}. Isso se deve ao fato que a distribuićão de
+coincide com a frequentista, convergindo para a \textbf{estimação de máxima
+verossimilhança} \citep{gpml}. Isso se deve ao fato que a distribuição de
 probabilidade a priori progressivamente se torna menos importante no calculo da
 probabilidade posterior com muitos dados.
 
 
 \[
-  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t})}
+  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}),\theta}
 \]
 
 
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
 assumindo que o custo do modelo é distribuído normalmente.
 
-\subsubsection{Função de Custo}
-
-A Função de Custo, derivada diretamente da verossimilhança,
-é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \cite{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
-
-Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
-
-\subsubsection{Erro Quadrático Médio}
-\label{sec:MSE}
-
-O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
-\cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
-$(\hat{y},y)$, definido da seguinte forma:
-
-\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
-
-Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
-do modelo, i.e. mais distante suas predições estão da média real. \\
-
-\subsubsection{Divergência KL}
-
-A divergência KL, ou Kullback-Leibler, é uma medida de diferença entre duas distribuições de probabilidade (também chamada de Entropia Relativa). \\
-Essa medida pode ser definida pelo valor esperado da diferença logarítmica da probabilidade dos dados serem observados em uma distribuição ou na outra \citep{dlbook}. \\
-Sejam duas distribuições de probabilidade $p$ e $q$, bem como uma matriz de dados $X$: \\
-
-\[D_{KL}(p || q) = \mathop{\mathbb{E}}[\log p(x) - \log q(x)]​\]
-
-Ou em uma forma mais usual: \\
-
-\[D_{KL}(p||q) = \sum_{i=1}^{N}p(x_{i}) \log \frac{p(x_{i})}{q(x_{i})}​\]
-
-
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
-
-
-É bastante comum se usar a equação do Erro Quadrático Médio como objetivo de
-otimização em problemas de regressão, nesse caso estamos assumindo que o erro
-dos modelos possui uma distribuição aproximadamente normal \cite{dlbook}. 
 
 Uma variável aleatória Y distribuida normalmente possui uma funcão densidade de
 probabilidade da seguinte forma:
@@ -201,6 +162,38 @@ $(\hat{y},y)$ é dado por:
   \label{eq:logver2}
   \mathcal{L}=  \sum^m_{i=1} (\hat{y_i}-y_i)^2
 \end{equation}
+
+
+\subsubsection{Função de Custo}
+
+A Função de Custo, derivada diretamente da verossimilhança,
+é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \citep{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
+
+Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
+
+\subsubsection{Erro Quadrático Médio}
+\label{sec:MSE}
+
+O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
+\citep{dlbook}. Ele é calculado em relação a duas variáveis contínuas
+$(\hat{y},y)$, definido da seguinte forma:
+
+\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
+
+Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
+do modelo, i.e. mais distante suas predições estão da média real. \\
+
+\subsubsection{Divergência KL}
+
+A divergência KL, ou Kullback-Leibler, é uma medida de diferença entre duas distribuições de probabilidade (também chamada de Entropia Relativa). \\
+Essa medida pode ser definida pelo valor esperado da diferença logarítmica da probabilidade dos dados serem observados em uma distribuição ou na outra \citep{dlbook}. \\
+Sejam duas distribuições de probabilidade $p$ e $q$, bem como uma matriz de dados $X$: \\
+
+\[D_{KL}(p || q) = \mathop{\mathbb{E}}[\log p(x) - \log q(x)]​\]
+
+Ou em uma forma mais usual: \\
+
+\[D_{KL}(p||q) = \sum_{i=1}^{N}p(x_{i}) \log \frac{p(x_{i})}{q(x_{i})}​\]
 
 
 
@@ -244,8 +237,6 @@ Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(
 \end{equation}
 
 
-
-
 %% ------------------------------------------------------------------------- %%
 
 
@@ -255,9 +246,14 @@ Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(
 
 \subsection{ Regressão Linear}
 
+Um modelo de Regressão Linear é da forma \citep{bayesml}:
+\begin{equation}
+ \label{eq:linreg}
+  p(y| x, \theta) = \mathcal{N}(y | \omega^\intercal x, \sigma^2)
+\end{equation}
 
-\subsection{Média Movel com Peso Exponencial}
-
+O vetor $\omega$ é aprendido por meio do métodos dos mínimos quadrados, que é
+uma maximização da verossimilhança da Equação~\ref{eq:linreg}.
 
 
 \subsection{Redes Neurais}
@@ -277,7 +273,7 @@ a aplicação de uma função não-linear $\sigma$: \\
 
 Importante ressaltar que $W$ é uma matriz, assim como $x$ e $b$ são vetores. \\
 
-A computação da saída de uma rede neural então pode ser escrita como:
+Auma  computação da saída de uma rede neural então pode ser escrita como:
 
 \[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
 
@@ -381,7 +377,7 @@ Finalmente, o novo vetor de ativações é calculado por $\epsilon * a$. O efeit
 processo é de zerar aleatoriamente entradas do vetor de ativação.
 \\
 
-Seja uma rede neural com apenas uma camada, cujos parâmetros são $W$ e $b$, como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos amostrando os próprios pesos da rede a cada computação \cite{dropbayes}. Seja $W$ a matriz de pesos da rede neural, então, escrevemos que a cada computação essa matriz é calculada amostrando-se um vetor $\epsilon$ e multiplicando pelo valor atual dos pesos: \\
+Seja uma rede neural com apenas uma camada, cujos parâmetros são $W$ e $b$, como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos amostrando os próprios pesos da rede a cada computação \citep{dropbayes}. Seja $W$ a matriz de pesos da rede neural, então, escrevemos que a cada computação essa matriz é calculada amostrando-se um vetor $\epsilon$ e multiplicando pelo valor atual dos pesos: \\
 
 \newcommand{\diag}{\mathop{\mathrm{diag}}}
 
@@ -394,7 +390,7 @@ A função de custo de uma rede neural com dropout em todas as camadas pode ser 
 \[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
 
 
-\cite{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização
+\citep{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização
 do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
 
 Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
@@ -530,7 +526,7 @@ RNNs. \\
 \begin{figure}[H]
 \centering
 \input{chapters/encdec.tex}
-\caption{ Diagrama de Rede Encoder-Decoder.\\ Modificado de \cite{encdec}}
+\caption{ Diagrama de Rede Encoder-Decoder.\\ Modificado de \citep{encdec}}
 
 \end{figure}
   
@@ -565,7 +561,7 @@ DL como redes encoder-decoder. \\
 
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
-Iremos reproduzir nesse trabalho o modelo proposto em \cite{ubertime}. A
+Iremos reproduzir nesse trabalho o modelo proposto em \citep{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
 série temporal (i.e. uma representacão que extraia informações úteis para o
 problema) e então uma rede \textbf{forecaster} que usa essas codificações ao lado de
@@ -575,7 +571,7 @@ variáveis exógenas a série temporal para realizar predições.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\columnwidth]{uber.png}
-\caption{Arquitetura do modelo proposto por \cite{ubertime}}
+\caption{Arquitetura do modelo proposto por \citep{ubertime}}
 \end{figure}
 
 
@@ -661,7 +657,7 @@ $\eta^2_2$, calcula-se a incerteza total do modelo por: \\
 
 \subsection{Modelo DeepAR}
 
-O modelo \textit{DeepAR}, proposto em \cite{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
+O modelo \textit{DeepAR}, proposto em \citep{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
 i.e. que tem sua saída realimentada na entrada da iteração posterior. Por meio da função de verossimilhança binomial esse modelo é capaz
 de realizar predições probabilísticas.
 
@@ -719,11 +715,11 @@ Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaus
 
 \subsection{Modelo com Deep Factors}
 
-O modelo \textit{Deep Factors with Gaussian Process} \cite{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
+O modelo \textit{Deep Factors with Gaussian Process} \citep{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
 
 
 Um Processo Gaussiano é uma coleção de variáveis aleatórias,
-sendo que qualquer subconjunto finito das mesmas é descrito por uma Distribuição Gaussiana conjunta \cite{gpml}. \\
+sendo que qualquer subconjunto finito das mesmas é descrito por uma Distribuição Gaussiana conjunta \citep{gpml}. \\
 
 Um Processo Gaussiano é descrito completamente pela sua função de média e sua função de covariância. Usamos essas duas funções para amostrar o processo estocástico $f(x)$ que está sendo modelado: \\
 
@@ -731,7 +727,7 @@ Um Processo Gaussiano é descrito completamente pela sua função de média e su
 f(x) \sim \mathcal{GP}( m(x), K(x,x'))
 \]
 
-É comum que se escolha como função média apenas a constante 0 \cite{gpml}.  A função de covariância, as vezes chamada de Kernel, deve especificar a covariância entre os pares de variáveis aleatórias (i.e. os dados), para problemas de regressão é usual escolhermos um Kernel que relacione uma medida de distância das variáveis de entrada. Como por exemplo o \textit{quadrado da função exponencial}: \\
+É comum que se escolha como função média apenas a constante 0 \citep{gpml}.  A função de covariância, as vezes chamada de Kernel, deve especificar a covariância entre os pares de variáveis aleatórias (i.e. os dados), para problemas de regressão é usual escolhermos um Kernel que relacione uma medida de distância das variáveis de entrada. Como por exemplo o \textit{quadrado da função exponencial}: \\
 
 \[
   K(x,x') = \exp(-\frac{1}{2}\abs{x - x'}^2)
