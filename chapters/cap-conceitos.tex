@@ -100,7 +100,7 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \label{sec:est}
 
 A aprendizagem estatística busca a diminuição de \textit{risco} das predições feitas por
-um modelo.
+um modelo \citep{mlprob}.
 
 Um método usual da diminuição de risco é a de buscar guiar o aprendizado pela
 maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
@@ -119,7 +119,7 @@ o produtório de probabilidades pelo somatório do logarítimo das probabilidade
 
 Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
 coincide com a frequentista, convergindo para a \textbf{estimação de máxima
-verossimilhança} \citep{gpml}. Isso se deve ao fato que a distribuição de
+verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
 probabilidade a priori progressivamente se torna menos importante no calculo da
 probabilidade posterior com muitos dados.
 
@@ -136,7 +136,7 @@ assumindo que o erro do modelo é distribuído normalmente.
 \label{sec:reglog}
 
 Uma variável aleatória Y distribuida normalmente possui uma funcão densidade de
-probabilidade da seguinte forma:
+probabilidade da seguinte forma \citep{mlprob}:
 
 \begin{equation}
   \label{eq:ver}
@@ -158,7 +158,7 @@ $(\hat{y},y)$ é dado por:
 \end{equation}
 
 Um estimador sem viés da Equação~\ref{eq:logver1}, chamado de Erro Quadrático
-Médio, pode ser escrito apenas como:
+Médio, pode ser escrito apenas como \citep{mlprob}:
 
 \begin{equation}
   \label{eq:logver2}
