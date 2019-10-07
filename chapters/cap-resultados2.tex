@@ -59,11 +59,11 @@ reportados a seguir:
 \subsection{Modelos Bayesianos para Séries Temporais}
 
 
-Todos os modelos foram implementados usando a bibliteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
+Todos os modelos foram implementados usando a biblioteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
-Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emição de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
+Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emissão de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
 
-As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predicão de 24h, 3d e 7d. \\
+As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predição de 24h, 3d e 7d. \\
 
 
 

@@ -14,13 +14,13 @@ Supervisionado, buscamos a distribuição das anotações $y$ condicionada
 aos parâmetros de entrada $x$, mas também ao
 histórico da série temporal, i.e. valores passados do objetivo $y$. A série
 temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
-de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independetes.
+de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independentes.
 
 
 Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
 independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
-de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condidionadas por uma janela de
+de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
 observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
@@ -77,8 +77,8 @@ Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionad
 \subsubsection{Aprendizado Supervisionado}
 \label{sec:apren} 
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
-de probabilidade do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
-entrada $x$ associados a uma anotação $y$ e gostariamos de modelar essa relação
+de probabilidade condicional do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
+entrada $x$ associados a uma anotação $y$ e gostaríamos de modelar essa relação
 entre dados e anotações para que possamos anotar novos dados inéditos para os
 modelos. Ou seja, para diversos exemplos de vetores
 $x$ são fornecidas anotações $y$, e desejamos então criar predições de anotações
@@ -146,7 +146,7 @@ p(y| \mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{-\frac{(y - \mu)^2}{2\sig
 Esse valor também é chamado de verossimilhança (a probabilidade de termos
 observado um valor de Y, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
 normalmente trabalha-se com o logarítimo desse valor, para podermos trocar um
-multiplicatório por somatório para agregar os erros gaussianos de um conjunto de dados
+produtório por somatório para agregar os erros gaussianos de um conjunto de dados
 i.i.d.. Nesse caso, temos pares de predição e valor real, que assumirá o papel
 da média $\mu$. A verossimilhança total de um conjunto de diversos pares
 $(\hat{y},y)$ é dado por: 
@@ -169,7 +169,7 @@ Médio, pode ser escrito apenas como \citep{mlprob}:
 \subsubsection{Função de Custo}
 
 A Função de Custo, derivada diretamente da verossimilhança,
-é uma funcao usada para guiar os algoritmos de otimização na direcão de parâmetros que melhorem a performance do modelo \citep{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
+é uma função usada para guiar os algoritmos de otimização na direção de parâmetros que melhorem a performance do modelo \citep{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
 
 Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
@@ -201,7 +201,7 @@ Ou em uma forma mais usual: \\
 
 \subsection{Métrica de Acurácia}
 
-Diferentemente da funcão de custo, a métrica de acurácia não é usada para guiar a otimizacão do modelo,
+Diferentemente da função de custo, a métrica de acurácia não é usada para guiar a otimização do modelo,
 mas para testar as predições frente a realidade e avaliar sua qualidade. \\
 
 \subsubsection{R-quadrado}
@@ -227,7 +227,7 @@ indicando um modelo ideal.\\
 
 \subsubsection{Custo quantílico}
 
-O custo quantílico é usado na avaliacão de performance de predições temporais. \\
+O custo quantílico é usado na avaliação de performance de predições temporais. \\
 Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(\rho)$, esse valor é definido por: \\
 
 \begin{equation}
@@ -310,7 +310,7 @@ modelar como saída o índice RC28. \\
  
 \subsection{Random Forest}
 
-Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurária do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diveras árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
+Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurácia do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diversas árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
 \section{Modelos Sequenciais}
@@ -354,9 +354,9 @@ bem como os parâmetros internos da RNN, são divididos entre iterações tempor
 Essa classe de modelos normalmente é usada para modelagem de linguagem. Buscando
 estimar uma distribuição de probabilidade $p(w_t | w_{t-1},w_{t-2},w_{t-3} \dots
 ) $ onde os $w_i$ são palavras subsequentes de um texto. Normalmente um modelo
-dessa natureza busca resolver um problema de classifição, onde a próxima palavra
+dessa natureza busca resolver um problema de classificação, onde a próxima palavra
 a ser prevista pelo modelo é uma entre todas as possibilidades de um certo
-vocabulário. No caso do domínio em questão desejamamos resolver um problema de
+vocabulário. No caso do domínio em questão desejamos resolver um problema de
 regressão, onde nosso alvo é um valor numérico. Para treinar um desses modelos,
 precisamos usar como entrada exemplos subsequentes de dados, onde cada exemplo
 de entrada tem um exemplo pareado de saída. Basicamente redes neurais
@@ -401,7 +401,7 @@ $o_t,i_t,f_t$.\\
 O diferencial de uma LSTM é a propagação do sinal $c_t$, a célula de memória.
 Esse valor depende de $f_t$ e $i_t$, que influenciam em como o valor da
 célula de memória será atualizado na presente iteração. A equação a seguir
-mostra como o valor da célula de memória é calculado. Onde $\circ$ é o produto Hadamard, ou apenas multiplição entrada por entrada de
+mostra como o valor da célula de memória é calculado. Onde $\circ$ é o produto Hadamard, ou apenas multiplicação entrada por entrada de
 duas matrizes ou vetores. \\
 
 \[c_t = f_t \circ c_{t-1} + i_t \circ \sigma_c(W_cx_t + U_ch_{t-1} + b_c)\]
@@ -514,7 +514,7 @@ Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a
 \subsubsection{Rede Neural Bayesiana}
 
 Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $W$ de parâmetros.
-A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usalmente é feito no tratamente frequentista.
+A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usualmente é feito no tratamento frequentista.
 Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \cite{Gal2016Uncertainty}.
 O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
 
@@ -548,7 +548,7 @@ $$    W^*   \sim \mathnormal{q}(W) $$
 $$    W^*  = \diag(\epsilon) * W $$
 
 
-A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinta forma:
+A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinte forma:
 
 \[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
 
@@ -570,7 +570,7 @@ A média e variância amostrais de um conjunto de diversas realizações estocá
 
 Iremos reproduzir nesse trabalho o modelo proposto em \citep{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
-série temporal (i.e. uma representacão que extraia informações úteis para o
+série temporal (i.e. uma representação que extraia informações úteis para o
 problema) e então uma rede \textbf{forecaster} que usa essas codificações ao lado de
 variáveis exógenas a série temporal para realizar predições.  
 
@@ -682,7 +682,7 @@ A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma d
 \mathcal{L}(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
 \]
 
-A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saída do modelo. Para a média, usamos uma transformação linear parametrizada por $W_{\mu},b_{\mu}$. No caso do desvio-padrão, para garantirmos que ele seja maior que 0, usamos uma função softplus após uma transformação linear análoga ao caso da média, parametrizada por  $W_{\sigma},b_{\sigma}$.\\
+A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saída do modelo. Para a média, usamos uma transformação linear parametrizada por $W_{\mu},b_{\mu}$. No caso do desvio-padrão, para garantirmos que ele seja maior que 0, usamos uma função \textit{softplus} após uma transformação linear análoga ao caso da média, parametrizada por  $W_{\sigma},b_{\sigma}$.\\
 
 \[ \mu(h_{i,t}) = W_{\mu}h_{i,t} + b_{\mu} \]
 
