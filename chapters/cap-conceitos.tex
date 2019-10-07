@@ -21,7 +21,7 @@ Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
 independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
 de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado.
+observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado \citep{deepfactors}.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
 
@@ -37,7 +37,7 @@ treino e pode ser alterado na busca de uma melhor acurácia de predição.
  
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
 cabe então uma breve elaboração das diferenças entre as duas principais
-vertentes da estatística. O seguinte desenvolvimento é retirado de \citep{dlbook}:\\
+vertentes da estatística \citep{dlbook}. 
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade
 $p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
@@ -108,7 +108,7 @@ observado os dados alvo condicionada pelos parâmetros do modelo e as entradas
 (que iremos representar pelo vetor $\theta$). Uma iteração de
 treino então consistira do produtório de todas as verossimilhanças para cada par
 de entradas. Generalizando essa ideia, na definição do nosso problema, temos que o custo total do modelo
-$\mathcal{L}$ é dado por:
+$\mathcal{L}$ é dado por \citep{dlbook}:
 
 \[
 \mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}, \theta) 
@@ -227,7 +227,7 @@ indicando um modelo ideal.\\
 
 \subsubsection{Custo quantílico}
 
-O custo quantílico é usado na avaliação de performance de predições temporais. \\
+O custo quantílico \citep{deepar} é usado na avaliação de performance de predições temporais. \\
 Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(\rho)$, esse valor é definido por: \\
 
 \begin{equation}
@@ -238,6 +238,12 @@ Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(
 \end{cases*}
 \end{equation}
 
+
+Esse valor é bastante informativo quando a predição toma a forma de uma faixa de
+valores (como uma distribuição de probabilidade) ao invés de apenas um valor
+pontual, como é comum para problemas de regressão. Ele nos informa o risco
+ponderado de um certo quantil da predição. E.g. para $q = 0.9$ estaríamos
+calculando o risco apresentado pelos valores menores que 90\% da distribuição empírica. 
 
 %% ------------------------------------------------------------------------- %%
 
