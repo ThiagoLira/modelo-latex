@@ -125,12 +125,12 @@ probabilidade posterior com muitos dados.
 
 
 \[
-  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}),\theta}
+  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t},\theta)}
 \]
 
 
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
-assumindo que o custo do modelo é distribuído normalmente.
+assumindo que o erro do modelo é distribuído normalmente.
 
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
@@ -242,11 +242,11 @@ Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(
 %% ------------------------------------------------------------------------- %%
 
 
-\section{Modelos Usados} 
+\section{Modelos Clássicos} 
 
 
 
-\subsection{ Regressão Linear}
+\subsection{Regressão Linear}
 
 Um modelo de Regressão Linear é da forma \citep{bayesml}:
 \begin{equation}
@@ -307,103 +307,6 @@ modelar como saída o índice RC28. \\
 
 \bigskip
 
-
-\subsection{Inferência Bayesiana em Machine Learning}
-\label{sec:bayesinf}
-O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
-Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
-predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
-os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
-a incerteza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
-consideramos que os dados \textbf{foram observados} e usa-se a lei de Bayes para
-calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
-$p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}. 
-
-\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
-
-Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
-
-
-\begin{equation}
-  \label{eq:int}
-p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
-\end{equation}
-
-Essa integral é geralmente intratável pela dificuldade de se calcular
-analiticamente $p(\theta | X,Y)$ \citep{ubertime}, devemos então tentar aproximar essa distribuição
-pela chamada distribuição variacional, $q^*(\theta)$, e então a solução numérica da integral, com uma boa escolha de $q^{*}$, se torna uma aproximação $q^{*}(y^{*}| x^{*})$: 
-
-\begin{align*}
-  \label {eq:pq}
-    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,W) q^*(W)dW \\
-                       &= q^*(y^* | x^*)
-\end{align*}
-
-Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a distribuição variacional da distribuição real $p(\theta | X,Y)$)
-é alcançado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound} \citep{bayesml}: \\
-
-\begin{equation}
-  \label {eq:ine}
-  \mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W)) \\
-                  \leq \log p(Y|X) 
-\end{equation}
-
-
-
-\subsubsection{Rede Neural Bayesiana}
-
-Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $W$ de parâmetros.
-A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usalmente é feito no tratamente frequentista.
-Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \cite{Gal2016Uncertainty}.
-O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
-
-\subsubsection{Monte Carlo Dropout}
-
-O processo de Inferência Variacional pode ser aproximado em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
-
-O Monte Carlo Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
-neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
-probabilidade $p$.\\
-
-\begin{figure}
-  \centering
-  \resizebox {\columnwidth} {!} {\input{chapters/dropout.tex}}
-  \label{fig:dropout}
-  \caption{Representacão do uso de Dropout em uma rede neural}
-\end{figure}
-
-Formalmente, para um vetor de ativações $a$ na saída de uma
-camada da rede neural, amostramos um vetor de \textit{máscara} $\epsilon$ de uma
-distribuição de Bernoulli cujo parâmetro é $p$, i.e. $\epsilon \sim Bernoulli(p)$.
-Finalmente, o novo vetor de ativações é calculado por $\epsilon * a$. O efeito desse
-processo é de zerar aleatoriamente entradas do vetor de ativação.
-\\
-
-Seja uma rede neural com apenas uma camada, cujos parâmetros são $W$ e $b$, como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos amostrando os próprios pesos da rede a cada computação \citep{dropbayes}. Seja $W$ a matriz de pesos da rede neural, então, escrevemos que a cada computação essa matriz é calculada amostrando-se um vetor $\epsilon$ e multiplicando pelo valor atual dos pesos: \\
-
-\newcommand{\diag}{\mathop{\mathrm{diag}}}
-
-$$    W^*   \sim \mathnormal{q}(W) $$
-$$    W^*  = \diag(\epsilon) * W $$
-
-
-A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinta forma:
-
-\[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
-
-
-\citep{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização
-do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
-
-Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
-A média e variância amostrais de um conjunto de diversas realizações estocásticas da saída da rede são estimadores não-enviesados das médias e variâncias reais:
-
-\begin{align*}
-  \label{eq:aproxs}
-  \widetilde{\mathbb{E}}[y^*] &=
-   \frac{1}{B}\sum^B_{B=1}\mathnormal{f}^{\hat{W},b}(x^*) = \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)}\\ 
-   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
- \end{align*}
  
 \subsection{Random Forest}
 
@@ -412,7 +315,6 @@ Random Forests são um método de \textbf{Ensemble Learning} para classificaçã
 
 \section{Modelos Sequenciais}
 Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
-\\
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
@@ -560,6 +462,109 @@ pode levar anos se essa tarefa for colocada na mão de especialistas humanos
 DL como redes encoder-decoder. \\
 
 
+
+\section{Modelos Bayesianos}
+
+Apesar de se tratarem de aproximações de verdadeiras inferências bayesianas, os
+modelos nessa seção buscam unir a acurácia de métodos frequentistas de ML com a
+margem de incerteza proveniente do uso da Lei de Bayes.
+
+\subsection{Inferência Bayesiana em Machine Learning}
+\label{sec:bayesinf}
+O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
+Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
+predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
+os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
+a incerteza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
+consideramos que os dados \textbf{foram observados} e usa-se a lei de Bayes para
+calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
+$p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}. 
+
+\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
+
+Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
+
+
+\begin{equation}
+  \label{eq:int}
+p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
+\end{equation}
+
+Essa integral é geralmente intratável pela dificuldade de se calcular
+analiticamente $p(\theta | X,Y)$ \citep{ubertime}, devemos então tentar aproximar essa distribuição
+pela chamada distribuição variacional, $q^*(\theta)$, e então a solução numérica da integral, com uma boa escolha de $q^{*}$, se torna uma aproximação $q^{*}(y^{*}| x^{*})$: 
+
+\begin{align*}
+  \label {eq:pq}
+    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,W) q^*(W)dW \\
+                       &= q^*(y^* | x^*)
+\end{align*}
+
+Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a distribuição variacional da distribuição real $p(\theta | X,Y)$)
+é alcançado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound} \citep{bayesml}: \\
+
+\begin{equation}
+  \label {eq:ine}
+  \mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W)) \\
+                  \leq \log p(Y|X) 
+\end{equation}
+
+
+
+\subsubsection{Rede Neural Bayesiana}
+
+Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $W$ de parâmetros.
+A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usalmente é feito no tratamente frequentista.
+Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \cite{Gal2016Uncertainty}.
+O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
+
+\subsubsection{Monte Carlo Dropout}
+
+O processo de Inferência Variacional pode ser aproximado em uma rede neural pela técnica do Monte Carlo Dropout \citep{dropbayes}. \\
+
+O Monte Carlo Dropout consiste no uso de \textbf{Dropout} em todas as camadas da rede
+neural, i.e. descartar ativações aleatoriamente entre duas camadas da rede com
+probabilidade $p$.\\
+
+\begin{figure}
+  \centering
+  \resizebox {\columnwidth} {!} {\input{chapters/dropout.tex}}
+  \label{fig:dropout}
+  \caption{Representacão do uso de Dropout em uma rede neural}
+\end{figure}
+
+Formalmente, para um vetor de ativações $a$ na saída de uma
+camada da rede neural, amostramos um vetor de \textit{máscara} $\epsilon$ de uma
+distribuição de Bernoulli cujo parâmetro é $p$, i.e. $\epsilon \sim Bernoulli(p)$.
+Finalmente, o novo vetor de ativações é calculado por $\epsilon * a$. O efeito desse
+processo é de zerar aleatoriamente entradas do vetor de ativação.
+\\
+
+Seja uma rede neural com apenas uma camada, cujos parâmetros são $W$ e $b$, como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos amostrando os próprios pesos da rede a cada computação \citep{dropbayes}. Seja $W$ a matriz de pesos da rede neural, então, escrevemos que a cada computação essa matriz é calculada amostrando-se um vetor $\epsilon$ e multiplicando pelo valor atual dos pesos: \\
+
+\newcommand{\diag}{\mathop{\mathrm{diag}}}
+
+$$    W^*   \sim \mathnormal{q}(W) $$
+$$    W^*  = \diag(\epsilon) * W $$
+
+
+A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinta forma:
+
+\[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
+
+
+\citep{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização
+do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
+
+Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
+A média e variância amostrais de um conjunto de diversas realizações estocásticas da saída da rede são estimadores não-enviesados das médias e variâncias reais:
+
+\begin{align*}
+  \label{eq:aproxs}
+  \widetilde{\mathbb{E}}[y^*] &=
+   \frac{1}{B}\sum^B_{B=1}\mathnormal{f}^{\hat{W},b}(x^*) = \frac{1}{B}\sum^B_{B=1}\hat{y}^*_{(B)}\\ 
+   \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
+ \end{align*}
 
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
