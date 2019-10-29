@@ -6,12 +6,8 @@
 \section{Definição do Problema}
 
 
-A seguir segue uma breve definição do problema que esse trabalho busca
-solucionar comparando diversos métodos. Os termos usados nesse capítulo serão
-elaborados nos capítulos posteriores. \\ 
-
 Os dados da Intercement são anotados temporalmente, então podemos escolher
-trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
+tratá-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
 é uma informação relevante. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
 de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independentes. O problema é de Aprendizado
@@ -20,40 +16,40 @@ aos parâmetros de entrada $x$, mas também ao
 histórico da série temporal, i.e. valores passados do objetivo $y$ e do
 vetor de entrada $\textbf{x}$. 
 Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
-independentes $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
+independentes $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
-de $y$ até da nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
+de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
 observações das diversas variáveis independentes $x_i$ e do alvo $y$ no passado \citep{deepfactors}.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
 
 A distribuição será aprendida por meio de aprendizado supervisionado, onde os
 modelos serão alimentados com diversos pares de entradas,
-$(y_t,\textbf{x}_{(t-W):t})$, onde $\textbf{x}$ é um vetor contendo os valores de
-cada variável independente $X_i$, no instante de tempo $t$. Cada tupla de
+$(y_t,\textbf{X}_{(t-W):t})$, onde $\textbf{x}$ é uma vetor que contém os valores de
+cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
 entrada contém $W$ entradas do vetor de variáveis independentes. O parâmetro $W$, o
 tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
 treino e pode ser alterado na busca de uma melhor acurácia de predição.
 
 \section{Estatística Frequentista e Estatística Bayesiana}
  
-Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a ML,
+Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a Aprendizado Automático,
 cabe então uma breve elaboração das diferenças entre as duas principais
 vertentes da estatística \citep{dlbook}. 
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade
 $p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
-E no campo de ML, as duas maneiras de se gerar predições são estimadores
+E no campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
 frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
 
 
 
 \section{Aprendizado Automático}
 
-O campo de Aprendizado Automático (Machine Learning - ML) é um ramo da Ciência
+O campo de Aprendizado Automático (Machine Learning - Aprendizado Automático) é um ramo da Ciência
 da Computação que utiliza métodos estatísticos para criar sistemas que possam
-aprender a realizar uma determinada tarefa através de dados. Um problema de ML possui
+aprender a realizar uma determinada tarefa através de dados. Um problema de Aprendizado Automático possui
 as seguintes partes \citep{dlbook}: \\
 
 \begin{itemize}
@@ -73,7 +69,7 @@ as seguintes partes \citep{dlbook}: \\
 
 \subsection{A Experiência}
 \label{sec:exp}
-Algoritmos de ML podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
+Algoritmos de Aprendizado Automático podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
 
 
 \subsubsection{Aprendizado Supervisionado}
@@ -102,9 +98,8 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \label{sec:est}
 
 A aprendizagem estatística busca a diminuição de \textit{risco} das predições feitas por
-um modelo \citep{mlprob}.
-
-Um método usual da diminuição de risco é a de buscar guiar o aprendizado pela
+um modelo \citep{mlprob}.  
+Um método possível da diminuição de risco é o de guiar o aprendizado pela
 maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
 observado os dados alvo condicionada pelos parâmetros do modelo e as entradas
 (que iremos representar pelo vetor $\theta$). Uma iteração de
@@ -129,7 +124,7 @@ verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
 probabilidade a priori progressivamente se torna menos importante no calculo da
 probabilidade posterior com muitos dados. Por isso se diz que a Inferência
 Bayesiana é um estimador consistente \citep{mlprob}, i.e. ele converge para uma
-hipótese arbitráriamente próxima da verdade.
+hipótese arbitrariamente próxima da verdade.
 
 
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
@@ -138,7 +133,7 @@ assumindo que o erro do modelo é distribuído normalmente.
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
 
-Uma variável aleatória Y distribuida normalmente possui uma funcão densidade de
+Uma variável aleatória Y distribuída normalmente possui uma função densidade de
 probabilidade da seguinte forma \citep{mlprob}:
 
 \begin{equation}
@@ -148,7 +143,7 @@ p(y| \mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{-\frac{(y - \mu)^2}{2\sig
 
 Esse valor também é chamado de verossimilhança (a probabilidade de termos
 observado um valor de Y, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
-normalmente trabalha-se com o logarítimo desse valor, para podermos trocar um
+normalmente trabalha-se com o logaritmo desse valor, para podermos trocar um
 produtório por somatório para agregar os erros gaussianos de um conjunto de dados
 i.i.d.. Nesse caso, temos pares de predição e valor real, que assumirá o papel
 da média $\mu$. A verossimilhança total de um conjunto de diversos pares
@@ -288,7 +283,7 @@ a aplicação de uma função não-linear $\sigma$: \\
 
 Importante ressaltar que $W$ é uma matriz, assim como $x$ e $b$ são vetores. \\
 
-Auma  computação da saída de uma rede neural então pode ser escrita como:
+A computação da saída de uma rede neural então pode ser escrita como:
 
 \[   y = f_n \circ f_{n-1} \circ f_{n-2} \dots f_1(x)  \]
 
@@ -479,12 +474,21 @@ DL como redes encoder-decoder. \\
 \section{Modelos Bayesianos}
 
 Apesar de se tratarem de aproximações de verdadeiras inferências bayesianas, os
-modelos nessa seção buscam unir a acurácia de métodos frequentistas de ML com a
+modelos nessa seção buscam unir a acurácia de métodos frequentistas de
+Aprendizado Automático com a
 margem de incerteza proveniente do uso da Lei de Bayes.
 
 \subsection{Inferência Bayesiana em Machine Learning}
 \label{sec:bayesinf}
-O tratamento Bayesiano para modelos de ML é bastante diverso dos frequentistas \citep{dlbook}.
+O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso dos frequentistas \citep{dlbook}.
+
+Pode-se considerar que diferença entre as duas escolas de pensamento está em
+\textbf{onde} se considera que a incerteza do problema está presente: Para a
+estatística bayesiana a incerteza está presente no modelo, as observações não
+são consideradas variáveis aleatórias. Para a estatística frequentista
+se considera que os dados de entrada são uma realização possível de uma
+distribuição desconhecida, e nosso modelo gera \textbf{estimativas pontuais} \citep{rethink}.
+
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
 os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
@@ -495,8 +499,7 @@ $p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}.
 
 \[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
 
-Finalmente, para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
-
+Para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
 
 \begin{equation}
   \label{eq:int}
@@ -566,7 +569,7 @@ A função de custo de uma rede neural com dropout em todas as camadas pode ser 
 \[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
 
 
-\citep{dropbayes} demonstram que a aplicação do dropout em todas as camadas da rede faz com que a minimização
+No trabalho \citep{dropbayes}, é demonstrado que a aplicação do dropout em todas as camadas da rede faz com que a minimização
 do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
 
 Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
