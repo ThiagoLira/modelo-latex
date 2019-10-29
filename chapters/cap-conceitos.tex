@@ -6,22 +6,24 @@
 \section{Definição do Problema}
 
 
+A seguir segue uma breve definição do problema que esse trabalho busca
+solucionar comparando diversos métodos. Os termos usados nesse capítulo serão
+elaborados nos capítulos posteriores. \\ 
+
 Os dados da Intercement são anotados temporalmente, então podemos escolher
 trata-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
-importa. A tarefa de regressão se torna então prever próximas anotações desses
-dados num horizonte de tempo futuro finito. O problema é de Aprendizado
-Supervisionado, buscamos a distribuição das anotações $y$ condicionada
+é uma informação relevante. A tarefa de regressão se torna então prever as próximas anotações desses
+dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
+de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independentes. O problema é de Aprendizado
+Supervisionado: Buscamos a distribuição das anotações $y$ condicionada
 aos parâmetros de entrada $x$, mas também ao
-histórico da série temporal, i.e. valores passados do objetivo $y$. A série
-temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
-de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independentes.
-
-
-Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
-independentes $X_i$ com entradas nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
+histórico da série temporal, i.e. valores passados do objetivo $y$ e do
+vetor de entrada $\textbf{x}$. 
+Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
+independentes $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de ambas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
-de $Y$ até da nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis independentes $X_i$ e do alvo $Y$ no passado \citep{deepfactors}.
+de $y$ até da nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
+observações das diversas variáveis independentes $x_i$ e do alvo $y$ no passado \citep{deepfactors}.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
 
@@ -117,20 +119,22 @@ $\mathcal{L}$ é dado por \citep{dlbook}:
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
-
-
 \[
   \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t},\theta)}
 \]
+
+Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
+coincide com a frequentista, convergindo para a \textbf{estimação de máxima
+verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
+probabilidade a priori progressivamente se torna menos importante no calculo da
+probabilidade posterior com muitos dados. Por isso se diz que a Inferência
+Bayesiana é um estimador consistente \citep{mlprob}, i.e. ele converge para uma
+hipótese arbitráriamente próxima da verdade.
 
 
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
 assumindo que o erro do modelo é distribuído normalmente.
 
-Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
-coincide com a frequentista, convergindo para a \textbf{estimação de máxima
-  verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
-probabilidade a priori progressivamente se torna menos importante no calculo da probabilidade posterior com muitos dados.
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
 
@@ -261,8 +265,10 @@ Um modelo de Regressão Linear é da forma \citep{bayesml}:
   p(y| x, \theta) = \mathcal{N}(y | \omega^\intercal x, \sigma^2)
 \end{equation}
 
-O vetor $\omega$ é aprendido por meio do métodos dos mínimos quadrados, que é
-uma maximização da verossimilhança da Equação~\ref{eq:linreg}.
+De acordo com o Teorema de Gauss-Markov, encontramos o modelo dessa forma com a
+menor variância possível pelo método dos mínimos quadrados \citep{bayesml}.  
+O modelo assume que existe uma relação entre a entrada e a saída é linear, somando-se um termo
+de erro normal com média zero e variância constante.
 
 
 \subsection{Redes Neurais}
