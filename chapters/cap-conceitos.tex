@@ -117,11 +117,6 @@ $\mathcal{L}$ é dado por \citep{dlbook}:
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
-Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
-coincide com a frequentista, convergindo para a \textbf{estimação de máxima
-verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
-probabilidade a priori progressivamente se torna menos importante no calculo da
-probabilidade posterior com muitos dados.
 
 
 \[
@@ -132,6 +127,10 @@ probabilidade posterior com muitos dados.
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
 assumindo que o erro do modelo é distribuído normalmente.
 
+Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
+coincide com a frequentista, convergindo para a \textbf{estimação de máxima
+  verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
+probabilidade a priori progressivamente se torna menos importante no calculo da probabilidade posterior com muitos dados.
 \subsubsection{A Distribuicão Normal}
 \label{sec:reglog}
 
@@ -168,8 +167,10 @@ Médio, pode ser escrito apenas como \citep{mlprob}:
 
 \subsubsection{Função de Custo}
 
-A Função de Custo, derivada diretamente da verossimilhança,
-é uma função usada para guiar os algoritmos de otimização na direção de parâmetros que melhorem a performance do modelo \citep{dlbook}. Isso é feito, como explicado na Sessão~\ref{sec:reglog}, aproximando a distribuição gerada pelo modelo da distribuição observada pelos dados. \\
+A Função de Custo é uma função usada para guiar os algoritmos de otimização na
+direção de parâmetros que melhorem a performance do modelo \citep{dlbook}.
+Essa função para alguns modelos pode representar a verossimilhança dos dados,
+mas isso não é necessário para muitos modelos. 
 
 Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
@@ -177,7 +178,7 @@ Nessa sessão iremos definir a função de custo usada em todos os modelos de re
 \label{sec:MSE}
 
 O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
-\citep{dlbook}. Ele é calculado em relação a duas variáveis contínuas
+\citep{dlbook} para o cálculo da verossimilhança de um modelo Gaussiano. Ele é calculado em relação a duas variáveis contínuas
 $(\hat{y},y)$, definido da seguinte forma:
 
 \[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
