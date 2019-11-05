@@ -169,7 +169,7 @@ Médio, pode ser escrito apenas como \citep{mlprob}:
 A Função de Custo é uma função usada para guiar os algoritmos de otimização na
 direção de parâmetros que melhorem a performance do modelo \citep{dlbook}.
 Essa função para alguns modelos pode representar a verossimilhança dos dados,
-mas isso não é necessário para muitos modelos. 
+mas isso não é necessário no geral.
 
 Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
 
@@ -667,7 +667,7 @@ i.e. aqueles não
 usados durante o treinamento. Como
 proposto por \citep{ubertime}, sejam $(X',Y')$ nossos dados de validação, com
 $V$ entradas. Esses dados são independentes do nosso modelo
-treinado $f^W(.)$, então podemos usa-los para estimar o ruído inerente do
+treinado $f^W(.)$, então podemos usá-los para estimar o ruído inerente do
 modelo: \\
 
 \[ \hat{\sigma}^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2 \]
@@ -692,7 +692,7 @@ h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 
 Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
-A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver}:
+A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
 
 \[
 \mathcal{L}(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  

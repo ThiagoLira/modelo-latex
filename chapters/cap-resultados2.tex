@@ -6,7 +6,7 @@
 
 \subsection{RC3, RC7 e RC28}
 
-Assim como proposto em \cite{greciaLin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
+Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
 não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
 i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
 
@@ -22,7 +22,7 @@ i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos.
 
 \subsection{Abordagem Não-Temporal}
 
-Modelos de Machine Learning não-temporais foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
+Modelos de Aprendizagem Automática não-temporais foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
 As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
 
 \begin{figure}[H]
@@ -63,18 +63,20 @@ Todos os modelos foram implementados usando a biblioteca Pytorch \cite{pytorch},
 
 Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emissão de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
 
-As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predição de 24h, 3d e 7d. \\
+% As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predição de 24h, 3d e 7d. \\
+
+% \begin{figure}[H]
+% \label{fig:rmseday}
+% \centering
+% \includegraphics[width=.3\textwidth]{rmse_deep_ar.pdf} \hfill
+% \includegraphics[width=.3\textwidth]{rmse_deep_factors.pdf} \hfill
+% \includegraphics[width=.3\textwidth]{rmse_enc_dec.pdf} 
+% \caption{RMSE médio por dia para cada um dos modelos estudados} 
+% \end{figure}
 
 
-
-\begin{figure}[H]
-\label{fig:rmseday}
-\centering
-\includegraphics[width=.3\textwidth]{rmse_deep_ar.pdf} \hfill
-\includegraphics[width=.3\textwidth]{rmse_deep_factors.pdf} \hfill
-\includegraphics[width=.3\textwidth]{rmse_enc_dec.pdf} 
-\caption{RMSE médio por dia para cada um dos modelos estudados} 
-\end{figure}
+A Tabela \ref{tab:rmse} mostra o RMSE por horizonte de predição de cada modelo.
+Calculado para 24h, 3 dias e 7 dias após a data do último dia com dados de treinamento.
 
 
 \begin{center}
