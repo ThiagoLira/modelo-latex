@@ -6,7 +6,7 @@
 \section{Definição do Problema}
 
 
-Os dados da Intercement são anotados temporalmente, então podemos escolher
+Os dados da produção de cimento são anotados temporalmente, então podemos escolher
 tratá-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
 é uma informação relevante. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
@@ -55,7 +55,7 @@ as seguintes partes \citep{dlbook}: \\
 \begin{itemize}
 
   
-\item A tarefa $T$, no caso dos dados da Intercement, um problema de regressão.
+\item A tarefa $T$, no caso dos dados da produção de cimento, um problema de regressão.
   Onde desejamos estimar valores numéricos a partir de uma matriz de dados $X$ e
   suas anotações numéricas $Y$. 
   
@@ -97,15 +97,22 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \subsubsection{Estimadores}
 \label{sec:est}
 
-A aprendizagem estatística busca a diminuição de \textit{risco} das predições feitas por
-um modelo \citep{mlprob}.  
+A aprendizagem estatística busca a diminuição de \textit{risco empírico} das predições feitas por
+um modelo \citep{mlprob}. O risco empírico é dado pelo somatório de uma função
+de custo por todo o conjunto de dados:
+
+\[
+  \mathcal{L} = \frac{1}{T}\sum_{t=0}^{i=T}L(y_t,\hat{y_t}) 
+\]
+
 Um método possível da diminuição de risco é o de guiar o aprendizado pela
 maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
 observado os dados alvo condicionada pelos parâmetros do modelo e as entradas
 (que iremos representar pelo vetor $\theta$). Uma iteração de
 treino então consistira do produtório de todas as verossimilhanças para cada par
-de entradas. Generalizando essa ideia, na definição do nosso problema, temos que o custo total do modelo
-$\mathcal{L}$ é dado por \citep{dlbook}:
+de entradas. Na definição do nosso problema, temos que o custo total do modelo
+$\mathcal{L}$ é dado pela seguinte equação \citep{dlbook}, considerando que o
+modelo recebe $W$ entradas temporais para o calculo da verossimilhança de uma saída:
 
 \[
 \mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}, \theta) 
@@ -490,42 +497,53 @@ se considera que os dados de entrada são uma realização possível de uma
 distribuição desconhecida, e nosso modelo gera \textbf{estimativas pontuais} \citep{rethink}.
 
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
-predições são feitas a partir desse valor. No caso Bayesiano se consideram todos
-os possíveis valores de $\theta$ ao se fazer uma predição. É preciso especificar
-a incerteza \textbf{a priori} $p(\theta)$ sobre os parâmetros, e então
-consideramos que os dados \textbf{foram observados} e usa-se a lei de Bayes para
-calcular a \textbf{probabilidade} posterior $p(\theta | X,Y)$ usando para tal
-$p(Y |X, \theta)$, a chamada verossimilhança \citep{bayesml}. 
+predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
+a distribuição de possíveis valores de $\theta$ ao se fazer uma predição. \\ 
 
-\[    p(\theta | X,Y) = \frac{p(Y| X,\theta) p(\theta)}{p(Y)}   \]
 
-Para realizar uma inferência devemos integrar por toda a distribuição $p(\theta)$ marginalizando esse parâmetro. Se por exemplo queremos uma nova anotação $y^*$ para um novo dado $x^*$:
+Sejam $X,Y$ conjutos de entradas e anotações para o treinamento de um modelo,
+$x^*,y^*$ um par inédito de entrada e anotação (i.e. dados de teste) e
+$\theta$ os parâmetros dos modelos. $p(y^* | x^*,\theta)$ é a verossimilhança de
+uma nova predição do modelo e $p(\theta | X,Y)$ é a distribuição posterior dos
+parâmetros do modelo.
+
+Para obtermos a distribuição de uma nova
+predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
 
 \begin{equation}
+  p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
   \label{eq:int}
-p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
 \end{equation}
 
-Essa integral é geralmente intratável pela dificuldade de se calcular
-analiticamente $p(\theta | X,Y)$ \citep{ubertime}, devemos então tentar aproximar essa distribuição
-pela chamada distribuição variacional, $q^*(\theta)$, e então a solução numérica da integral, com uma boa escolha de $q^{*}$, se torna uma aproximação $q^{*}(y^{*}| x^{*})$: 
+Para grande parte dos modelos de Aprendizem Automática a distribuição posterior
+$p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
+distribuição $q(\theta)$, essa podendo ser otimizada por métodos numéricos para
+aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
+calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
 
 \begin{align*}
-  \label {eq:pq}
-    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,W) q^*(W)dW \\
-                       &= q^*(y^* | x^*)
+    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,\theta) q(\theta)d\theta \\
+                       &= q(y^* | x^*)
+    \label {eq:pq}
 \end{align*}
 
-Esse processo chama-se Inferência Variacional e seu objetivo ( i.e. aproximar a distribuição variacional da distribuição real $p(\theta | X,Y)$)
-é alcançado minimizando-se a seguinte inequação, o \textit{Variational Lower Bound} \citep{bayesml}: \\
+É importante notar que a Equação~\ref{eq:pq} é verdade para qualquer escolha de
+$q$. Em \citep{dropbayes} escolhe-se uma distribuição altamente multi-modal.
+Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
+Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
+Equação~\ref{eq:ine} é sempre menor que $p(Y|X)$, e igual no limite em que
+$q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
+\textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q^*$ e
+a distribuição alvo:
 
 \begin{equation}
   \label {eq:ine}
-  \mathcal{L}_{VI} = \int q(W) \log p(Y | X,W)dW - \mathnormal{KL}(q(W) ||p(W)) \\
+  \mathcal{L}_{VI} = \int q(\theta) \log p(Y | X,\theta)d\theta - \mathnormal{KL}(q(\theta) ||p(\theta)) \\
                   \leq \log p(Y|X) 
 \end{equation}
 
-
+Pode-se notar que outra distância KL está presente no objetivo de otimização, a
+distância entre a distribuição a priori $p(\theta)$ e a distribuição aproximada $q(\theta)$ dos parâmetros do modelo.
 
 \subsubsection{Rede Neural Bayesiana}
 
@@ -549,28 +567,40 @@ probabilidade $p$.\\
   \caption{Representacão do uso de Dropout em uma rede neural}
 \end{figure}
 
-Formalmente, para um vetor de ativações $a$ na saída de uma
-camada da rede neural, amostramos um vetor de \textit{máscara} $\epsilon$ de uma
-distribuição de Bernoulli cujo parâmetro é $p$, i.e. $\epsilon \sim Bernoulli(p)$.
-Finalmente, o novo vetor de ativações é calculado por $\epsilon * a$. O efeito desse
-processo é de zerar aleatoriamente entradas do vetor de ativação.
-\\
 
-Seja uma rede neural com apenas uma camada, cujos parâmetros são $W$ e $b$, como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos amostrando os próprios pesos da rede a cada computação \citep{dropbayes}. Seja $W$ a matriz de pesos da rede neural, então, escrevemos que a cada computação essa matriz é calculada amostrando-se um vetor $\epsilon$ e multiplicando pelo valor atual dos pesos: \\
+A cada computação da rede amostra-se com geradores de números aleatórios uma
+máscara que ira zerar valores de ativação entre camadas subsequentes.
+
+Seja uma rede neural com apenas uma camada, cuja matriz de parâmetros é $\theta$, 
+como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de
+ativação a cada computação da rede é equivalente a considerar que estamos
+amostrando os próprios pesos da rede a cada computação de uma
+distribuição $q(\theta)$ \citep{dropbayes}. Definimos a distribuição $q(\theta)$
+da seguinte maneira:
 
 \newcommand{\diag}{\mathop{\mathrm{diag}}}
 
-$$    W^*   \sim \mathnormal{q}(W) $$
-$$    W^*  = \diag(\epsilon) * W $$
+\[
+  \theta_i   = M_i   diag (z_{i,j}) 
+\] 
+\[
+  z_{i,j}  \sim Bernoulli(p_i)  
+\]   
 
+$M_i$ e $p_i$ são parâmetros variacionais.
 
 A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinte forma:
 
-\[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{W^*,b}(x_n))^2 + \boldsymbol{\alpha}\{W^2,b^2\} \]
+\[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{\theta^*,b}(x_n))^2 + \boldsymbol{\alpha}\{\theta^2,b^2\} \]
 
 
 No trabalho \citep{dropbayes}, é demonstrado que a aplicação do dropout em todas as camadas da rede faz com que a minimização
-do objetivo de treinamento seja equivalente a minimização da Inequação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
+do objetivo de treinamento seja equivalente a maximização do valor
+$\mathnormal{L_{VI}}$ na Equação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
+
+O termo $\sum^N_{N=1} (y_n - \mathnormal{f}^{\theta^*,b}(x_n))^2$ é equivalente
+a uma aproximação por Monte Carlo da integral no primeiro termo da equação,
+considerando apenas um termo, i.e. $\theta^* \sim q(\theta)$ 
 
 Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
 A média e variância amostrais de um conjunto de diversas realizações estocásticas da saída da rede são estimadores não-enviesados das médias e variâncias reais:
@@ -692,10 +722,10 @@ h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 
 Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
-A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver}:
+A verossimilhança do modelo, $p(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
 
 \[
-\mathcal{L}(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
+  p(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
 \]
 
 A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saída do modelo. Para a média, usamos uma transformação linear parametrizada por $W_{\mu},b_{\mu}$. No caso do desvio-padrão, para garantirmos que ele seja maior que 0, usamos uma função \textit{softplus} após uma transformação linear análoga ao caso da média, parametrizada por  $W_{\sigma},b_{\sigma}$.\\
@@ -742,7 +772,7 @@ O modelo \textit{Deep Factors with Gaussian Process} \citep{deepfactors} separa 
 
 
 Um Processo Gaussiano é uma coleção de variáveis aleatórias,
-sendo que qualquer subconjunto finito das mesmas é descrito por uma Distribuição Gaussiana conjunta \citep{gpml}. \\
+sendo que qualquer subconjunto finito das mesmas é distribuído normalmente \citep{gpml}. \\
 
 Um Processo Gaussiano é descrito completamente pela sua função de média e sua função de covariância. Usamos essas duas funções para amostrar o processo estocástico $f(x)$ que está sendo modelado: \\
 
