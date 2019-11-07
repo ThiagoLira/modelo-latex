@@ -69,7 +69,10 @@ as seguintes partes \citep{dlbook}: \\
 
 \subsection{A Experiência}
 \label{sec:exp}
-Algoritmos de Aprendizado Automático podem ser divididos nas categorias de aprendizado supervisionado, não supervisionado e aprendizado por reforço \citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados da Intercement.
+Algoritmos de Aprendizado Automático podem ser divididos nas categorias de
+aprendizado supervisionado, não supervisionado e aprendizado por reforço
+\citep{dlbook}. Técnicas dos dois primeiros tipos serão usadas para os dados de
+produção de cimento.
 
 
 \subsubsection{Aprendizado Supervisionado}
@@ -258,21 +261,6 @@ calculando o risco apresentado pelos valores menores que 90\% da distribuição 
 \section{Modelos Clássicos} 
 
 
-
-\subsection{Regressão Linear}
-
-Um modelo de Regressão Linear é da forma \citep{bayesml}:
-\begin{equation}
- \label{eq:linreg}
-  p(y| x, \theta) = \mathcal{N}(y | \omega^\intercal x, \sigma^2)
-\end{equation}
-
-De acordo com o Teorema de Gauss-Markov, encontramos o modelo dessa forma com a
-menor variância possível pelo método dos mínimos quadrados \citep{bayesml}.  
-O modelo assume que existe uma relação entre a entrada e a saída é linear, somando-se um termo
-de erro normal com média zero e variância constante.
-
-
 \subsection{Redes Neurais}
 
 \label{sec:nn}
@@ -315,21 +303,27 @@ modelar como saída o índice RC28. \\
 \begin{figure}
   \centering
   \input{chapters/NN.tex}
-  \caption{Um exemplo de Rede Neural no contexto dos dados da Intercement}
+  \caption{Um exemplo de Rede Neural no contexto dos dados de produção de cimento}
   \label{fig:nn}
 \end{figure}
 
 
 \bigskip
 
+\subsubsection{Regularização L2}
  
 \subsection{Random Forest}
 
-Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos "fracos" são usados em conjunto com algum sistema de votação para que a a acurácia do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diversas árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
+Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos \say{fracos} são usados em conjunto com algum sistema de votação para que a a acurácia do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diversas árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
 \section{Modelos Sequenciais}
-Com o sucesso de modelos sequenciais no campo do Deep Learning, iremos averiguar se é possível modelar sequencialmente os dados da produção de cimento usando dois desses modelos. 
+
+Modelos sequenciais consomem sequências de dados e também podem ser usados pra
+criar predições sequenciais \citep{dlbook}. A área de NLP viu muitos novos
+resultados com o uso esses tipos de modelos para geração e classificação de textos, que são dados com
+natureza inerentemente sequencial. Para o caso desse trabalho, séries temporais também podem
+aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tempo.
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
@@ -349,7 +343,8 @@ de usar informações passadas da sequência para o cálculo
 de uma saída. Essa capacidade porém começa a ser dificultada quando o modelo
 realiza muitas iterações temporais. Durante o aprendizado, sequências muito
 extensas criam problemas numéricos para o cálculo dos gradientes, esses podendo
-tomar valores muito pequenos ou muito grandes. Foram propostos outros modelos
+tomar valores muito pequenos ou muito grandes, esse fenômeno recebe o nome de
+\textbf{gradientes desaparecidos}. Foram propostos outros modelos
 que não possuam esse problema, como o modelo LSTM, explicado na sessão~\ref{sec:lstm}. 
 
 %%%
@@ -511,8 +506,8 @@ Para obtermos a distribuição de uma nova
 predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
 
 \begin{equation}
-  p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
   \label{eq:int}
+  p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
 \end{equation}
 
 Para grande parte dos modelos de Aprendizem Automática a distribuição posterior
@@ -522,34 +517,36 @@ aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemo
 calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
 
 \begin{align*}
+  \label {eq:pq}
     p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,\theta) q(\theta)d\theta \\
                        &= q(y^* | x^*)
-    \label {eq:pq}
 \end{align*}
 
-É importante notar que a Equação~\ref{eq:pq} é verdade para qualquer escolha de
-$q$. Em \citep{dropbayes} escolhe-se uma distribuição altamente multi-modal.
-Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
+ Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
 Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
 Equação~\ref{eq:ine} é sempre menor que $p(Y|X)$, e igual no limite em que
 $q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
-\textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q^*$ e
+\textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q$ e
 a distribuição alvo:
 
 \begin{equation}
   \label {eq:ine}
   \mathcal{L}_{VI} = \int q(\theta) \log p(Y | X,\theta)d\theta - \mathnormal{KL}(q(\theta) ||p(\theta)) \\
-                  \leq \log p(Y|X) 
+                  \leq \log p(Y|X)
 \end{equation}
 
-Pode-se notar que outra distância KL está presente no objetivo de otimização, a
-distância entre a distribuição a priori $p(\theta)$ e a distribuição aproximada $q(\theta)$ dos parâmetros do modelo.
+A outra distância KL está presente no objetivo de otimização é a
+distância entre a distribuição a priori $p(\theta)$ e a distribuição aproximada
+$q(\theta)$ dos parâmetros do modelo. É importante notar que a Equação~\ref{eq:ine} é verdade para qualquer escolha de
+$q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o melhor possível.
+
 
 \subsubsection{Rede Neural Bayesiana}
 
-Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $W$ de parâmetros.
-A Lei de Bayes é então aplicada para se calcular a distribuição posterior de $W$, ao invés de uma estimativa pontual, como usualmente é feito no tratamento frequentista.
-Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \cite{Gal2016Uncertainty}.
+Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distribuição \textit{a priori} da matriz $\theta$ de parâmetros.
+A Lei de Bayes é então aplicada para se calcular a distribuição posterior de
+$\theta$, em vez de uma estimativa pontual, como usualmente é feito no tratamento frequentista.
+Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \citep{Gal2016Uncertainty}.
 O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
 
 \subsubsection{Monte Carlo Dropout}
@@ -571,39 +568,61 @@ probabilidade $p$.\\
 A cada computação da rede amostra-se com geradores de números aleatórios uma
 máscara que ira zerar valores de ativação entre camadas subsequentes.
 
-Seja uma rede neural com apenas uma camada, cuja matriz de parâmetros é $\theta$, 
-como explicado na Sessão~\ref{sec:nn}. Amostrar uma máscara para o vetor de
-ativação a cada computação da rede é equivalente a considerar que estamos
-amostrando os próprios pesos da rede a cada computação de uma
-distribuição $q(\theta)$ \citep{dropbayes}. Definimos a distribuição $q(\theta)$
-da seguinte maneira:
+Seja uma rede neural, cuja matriz de parâmetros é $\theta$, com dimensões
+$K_i,K_{i-1}$, para cada camada $i$, e $L$ camadas.
+Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos
+amostrando os próprios pesos da rede de uma distribuição sobre matrizes onde
+colunas são aleatoriamente zeradas \citep{dropbayes}. A distribuição $q(\theta)$
+se comportaria da seguinte maneira:
 
 \newcommand{\diag}{\mathop{\mathrm{diag}}}
 
 \[
-  \theta_i   = M_i   diag (z_{i,j}) 
+  \theta_i   = M_i   diag (z_{i,j}) \quad \text{para} \, j=1, \, \dots  \,K_i
 \] 
 \[
-  z_{i,j}  \sim Bernoulli(p_i)  
+  z_{i,j}  \sim Bernoulli(p_i) \quad  \text{para} \, i=1, \, \dots \, L, \, j=1, \, \dots \, K_{i-1}
 \]   
 
 $M_i$ e $p_i$ são parâmetros variacionais.
 
-A função de custo de uma rede neural com dropout em todas as camadas pode ser escrita da seguinte forma:
+A função de custo de uma rede neural com dropout em todas as camadas  e
+regularização L2 pode ser escrita da seguinte forma:
 
-\[     \mathcal{L}_{dropout} = \sum^N_{N=1} (y_n - \mathnormal{f}^{\theta^*,b}(x_n))^2 + \boldsymbol{\alpha}\{\theta^2,b^2\} \]
+\[     \mathcal{L}_{dropout} = \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*,b}(x_n)]^2 + \boldsymbol{\alpha}\{\theta^2,b^2\} \]
 
 
-No trabalho \citep{dropbayes}, é demonstrado que a aplicação do dropout em todas as camadas da rede faz com que a minimização
-do objetivo de treinamento seja equivalente a maximização do valor
-$\mathnormal{L_{VI}}$ na Equação~\ref{eq:ine}, i.e. o objetivo da Inferência Variacional.\\
+O objetivo de minimização desse Rede Neural com dropout em todas as camadas é
+equivalente a diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
+posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que representa a
+distribuição dos parâmetros da rede \citep{dropbayes}. 
 
-O termo $\sum^N_{N=1} (y_n - \mathnormal{f}^{\theta^*,b}(x_n))^2$ é equivalente
-a uma aproximação por Monte Carlo da integral no primeiro termo da equação,
-considerando apenas um termo, i.e. $\theta^* \sim q(\theta)$ 
+O termo do somatório é equivalente a uma aproximação numérica por Monte Carlo da integral no
+primeiro termo da Equação~\ref{eq:ine} de um Processo Gaussiano Profundo, considerando apenas um termo, i.e. $\theta^* \sim q(\theta)$:
 
-Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da distribuição $q(y^* | x^* , \theta)$.
-A média e variância amostrais de um conjunto de diversas realizações estocásticas da saída da rede são estimadores não-enviesados das médias e variâncias reais:
+\begin{align*}
+                    &\int q(\theta) \log p(Y | X,\theta)d\theta \\ 
+                    &=  \sum^N_{N=1} \int q(\theta) \log p(y_n | x_n,\theta)d\theta \\ 
+                    &\qquad \qquad  \theta^* \sim q(\theta) \\
+                    &\approx \sum^N_{N=1} \log p(y_n | x_n,\theta^*) \\
+                    &= \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*,b}(x_n)]^2
+\end{align*}
+
+
+O termo de regularização por sua vez é uma possível aproximação da distância KL
+entre a distribuição variacional $q(\theta)$ e a distribuição a priori
+$p(\theta)$ do mesmo Processo Gaussiano Profundo: 
+
+\begin{equation}
+    \mathnormal{KL}(q(\theta) ||p(\theta)) \approx \boldsymbol{\alpha}\{\theta^2,b^2\}
+ \end{equation} 
+
+Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da
+distribuição $q(y^* | x^*,X,Y)$. Se realizarmos $B$ computações de uma mesma
+predição e calcularmos a média e variância dessa amostra, esses serão
+estimadores não enviesados da média e variância de $p(y^*|x^*,X,Y)$, a
+distribuição das predições do modelo:
+
 
 \begin{align*}
   \label{eq:aproxs}
@@ -612,6 +631,12 @@ A média e variância amostrais de um conjunto de diversas realizações estocá
    \widetilde{\mathit{Var}}[y^*]  &= \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2 
  \end{align*}
 
+
+Esse método permite obter medida de incerteza a posteriori em modelos de rede
+neural frequentistas sem nenhuma alteração no método de otimização.
+Os resultados apresentados nessa sessão também valem para modelos de rede neural
+mais complexos como LSTMs \citep{dropbayes}.
+ 
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
 Iremos reproduzir nesse trabalho o modelo proposto em \citep{ubertime}. A
