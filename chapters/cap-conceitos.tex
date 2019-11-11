@@ -639,17 +639,19 @@ mais complexos como LSTMs \citep{dropbayes}.
  
 \subsubsection{Modelo Encoder-Decoder-Forecaster}
 
-Iremos reproduzir nesse trabalho o modelo proposto em \citep{ubertime}. A
+Iremos utilizar nesse trabalho o modelo proposto em \citep{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
-série temporal (i.e. uma representação que extraia informações úteis para o
-problema) e então uma rede \textbf{forecaster} que usa essas codificações ao lado de
+série temporal (i.e. uma representação que resuma informações úteis para o
+problema) e então uma rede \textbf{forecaster} que use essas codificações ao lado de
 variáveis exógenas a série temporal para realizar predições.  
+
 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\columnwidth]{uber.png}
-\caption{Arquitetura do modelo proposto por \citep{ubertime}}
+\includegraphics[width=0.9\columnwidth]{uber-train.png}
+\caption{Modelo durante o Treinamento \citep{ubertime}}
+\label{img:uber1}
 \end{figure}
 
 
@@ -661,6 +663,17 @@ entradas da sequência. Para o decoder, se em uma iteração sua entrada é $X_i
 então sua saída será comparada com $X_{i+1}$, e esse erro é propagado após lidas
 todas as entradas para que a representação $h$ proveniente do encoder possa se
 tornar mais informativa.
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{uber-predict.png}
+  \caption{No módulo de inferência usamos uma rede neural simples para gerar
+    predições a partir da codificação aprendida durante o pré-treino \citep{ubertime}}
+  \label{img:uber2}
+\end{figure}
+
+
 
 
 Esse modelo também possui outra característica importante. Todas as camadas da
@@ -693,44 +706,50 @@ como \citep{ubertime}:
 
 
 
-\[ Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] +
-  \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \]
-
-Como o primeiro termo dessa soma dentro do operador do valor esperado segue uma distribuição normal
-(Equação~\ref{eq:reg}), podemos substituí-lo pela sua média. O
-segundo termo será definido como $\sigma^2$: \\ 
- 
-\[ Var(y^* | x^*) = Var(f^W(x^*)) + \sigma^2 \] 
+\begin{equation}
+   Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] + \mathop{\mathbb{E}}[Var(y^* | W,x^*)]
+   \label{eq:vartot}
+ \end{equation}
 
 
-Vemos que nossa incerteza é decomposta em dois termos. $Var(f^W(x^*))$ denota a
-nossa ignorância em relação aos parâmetros do modelo, referida como
-\textit{incerteza do modelo}. $\sigma^2$ seria então o \textit{ruído inerente} ao
-processo gerador de dados.
- 
-A estimativa de $Var(f^W(x^*))$ se dá pela técnica do MC Dropout. A variância
+$\mathbb{E}(y^* | W,x^*)$ é a verossimilhança do modelo, ou seja:
+
+\[
+  Var[\mathbb{E}(y^* | W,x^*)] = Var[f^W(x^*)]
+\]
+
+
+A estimativa de $Var[f^W(x^*)]$ será feita pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
 na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)},\hat{y}^*_{(2)}, \dots
 \hat{y}^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{y}^*$ sua
 média amostral, temos: \\
 
-\[   Var(f^W(x^*))  = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
+\[   Var[f^W(x^*)] \sim \eta_1^2 = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
 
-
-O ruído inerente das medidas é estimado usando os \textit{dados de validação},
-i.e. aqueles não
-usados durante o treinamento. Como
-proposto por \citep{ubertime}, sejam $(X',Y')$ nossos dados de validação, com
-$V$ entradas. Esses dados são independentes do nosso modelo
+O termo $\mathop{\mathbb{E}}[Var(y^* | W,x^*)]$ da Equação~\ref{eq:vartot}, o
+ruído inerente do modelo, será estimado com um conjunto de dados de validação.
+Sejam $(X',Y')$ dados de validação, com
+$V$ entradas. Esses dados são independentes do modelo
 treinado $f^W(.)$, então podemos usá-los para estimar o ruído inerente do
 modelo: \\
 
-\[ \hat{\sigma}^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2 \]
+\[
+  \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \sim \eta_2^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2
+\]
 
-Finalmente, sejam nossa incerteza do modelo $\eta_1^2$ e o ruído inerente
-$\eta^2_2$, calcula-se a incerteza total do modelo por: \\
 
-\[  \eta_{tot} = \sqrt{  \eta_1^2 + \eta_2^2 }  \]
+
+A Equação~\ref{eq:vartot} fica resumida em:
+
+
+\[ Var(y^* | x^*) \sim \eta^2_1 + \eta^2_2 \] 
+
+O desvio-padrão total do modelo é então calculado por:
+
+\[
+  \eta = \sqrt{\eta^2_1 + \eta^2_2}  
+\]
 
 
 \subsection{Modelo DeepAR}
