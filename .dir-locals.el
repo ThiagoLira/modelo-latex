@@ -1,2 +1,2 @@
-((nil . ((compile-command . make clean && latexmk)
+((nil . ((compile-command . latexmk)
          )))

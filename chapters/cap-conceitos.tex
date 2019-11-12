@@ -853,16 +853,33 @@ f(x) \sim \mathcal{GP}( m(x), K(x,x'))
 O modelo Deep Factors então é composto por duas partes, a combinação linear de ambas é a saída do modelo i.e. a emissão de valores de saída amostrados: \\
 
 
+A função $g_t$ é uma RNN, no caso desse trabalho uma célula LSTM, que recebe como entrada um certo número $T$ de passos da série temporal, e então emite como saída um horizonte finito $F$ de predições.
+
+\[
+  \textbf{Gerador da parte fixa aprendida globalmente: }  f_{i,t} = W_ig_t(x_{i,t})
+\]
+
+O ruído é gerado por um Processo Gaussiano com média 0 e função de covariância
+exponencial. O Processo gera incertezas a partir da matriz de covariância
+calculada com todas as predições da parte global do modelo. Seja $f_i$ um vetor
+de predições com $T$ entradas calculado pela rede LSTM para a série temporal $i$, a matriz de covariância
+terá a forma:  
+
+\[
+  \begin{bmatrix}
+    1& K(f_{i,1},f_{i,2}) & \dots &K(f_{i,1},f_{i,T}) \\ 
+    K(f_{i,2},f_{i,1}) &1  & \dots & K(f_{i,2},f_{i,T})\\ 
+    \vdots &  \vdots  & \ddots & \vdots\\
+    K(f_{i,T},f_{i,1})& K(f_{i,T},f_{i,2}) & \dots & 1 
+  \end{bmatrix} 
+\]
 \[
     \textbf{Gerador de ruído local: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
 \]
 
-O ruído é gerado por um Processo Gaussiano com média 0 e função de covariância exponencial. O Processo calcula incertezas em todos os pontos $x_{i,t}$ da série temporal $i$.
+A emissão ira combinar efeitos globais e ruído local para gerar as predições
+finais amostrando-se a variável latente $u$:
   
-\[
-  \textbf{Gerador da parte fixa aprendida globalmente: }  f_{i,t} = W_ig_t(x_{i,t})
-\]
-A função $g_t$ é uma RNN, no caso desse trabalho uma célula LSTM, que recebe como entrada um certo número $T$ de passos da série temporal, e então emite como saída um horizonte finito $F$ de predições.
 \[
   \textbf{Emissão: }  y^*_{i,t} \sim p(. | u_{i,t}) , u_{i,t} = r_{i,t} + f_{i,t}  
 \]
@@ -877,7 +894,7 @@ p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
 
 O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que minimizem a log-verossimilhança conjunta dos dados: \\
 \[
-\theta = argmax \sum_i{\log(p(y_i))}
+\mathcal{L} = argmax \sum_i{\log(p(y_i))}
 \]
 
 
