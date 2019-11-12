@@ -766,41 +766,59 @@ h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 
 Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
-A verossimilhança do modelo, $\mathcal{L}(y_{i,t} | \omega(h_{i,t}))$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
+A verossimilhança do modelo, $p(y_{i,t} | \mu,\sigma)$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
 \[
   p(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
 \]
 
 A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saída do modelo. Para a média, usamos uma transformação linear parametrizada por $W_{\mu},b_{\mu}$. No caso do desvio-padrão, para garantirmos que ele seja maior que 0, usamos uma função \textit{softplus} após uma transformação linear análoga ao caso da média, parametrizada por  $W_{\sigma},b_{\sigma}$.\\
 
-\[ \mu(h_{i,t}) = W_{\mu}h_{i,t} + b_{\mu} \]
-
-\[ \sigma(h_{i,t}) = \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma})) \]
+\begin{align*}
+  \mu(h_{i,t}) &= W_{\mu}h_{i,t} + b_{\mu} \\ 
+  \sigma(h_{i,t}) &= \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma}))
+\end{align*}
 
 
 \subsubsection{Treinamento}
 
 
 
-O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{dig:dar} ilustra como o modelo se comporta em cada um desses momentos: \\
+O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{deepartrain} ilustra como o modelo se comporta em cada um desses momentos: \\
 
 
-TO-DO-IMAGEM \\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{deepar-treino.png}
+  \caption{Para o treino, o modelo é guiado por anotações reais de valores
+    passados da série alvo $y$ e as variáveis independentes $x$. Usamos o estado
+  $h$ da rede LSTM a cada iteração temporal para calcular $\mu$  e $\sigma$.
+  Esses valores são então usados no calculo da verossimilhança $p(y |
+  \mu,\sigma)$, o valor que é minimizado.}
+  \label{fig:deepartrain}
+\end{figure}
 
-
-O funcionamento do modelo é similar ao de uma rede Encoder-Decoder, como visto na Sessão~\ref{sec:encdec}, o modelo deve consumir intervalos de $F$ valores dos parâmetros da série temporal, essa seria a fase do \textit{encoding}, para então gerar $T$ anotações dos dados na fase do \textit{decoding}. Durante o treinamento o erro do modelo é calculado comparando-se uma anotação gerada durante a fase de encoding $y^{*}_{t}$ com o seu valor real $y_{t}$. \\
-
-Durante o \textbf{treinamento} o modelo recebe como entrada do instante $t$, o valor real da série no instante $t-1$. \\
-  
-Durante a \textbf{validação} o modelo é \textbf{realimentado} com a anotação $y^{*}_{t-1}$ gerada na iteração anterior. \\ 
-
-
+%% lembrar que p(y | \mu,\sigma) == l(z| \theta) no diagrama!
+%%
 
 O treinamento do modelo é feito pela maximização da log-verossimilhança: \\
 
 \[
-\theta = argmax \sum_i{\log(\mathcal{L}(y_i | \omega(h_{i})))}
+  \mathcal{L} = argmax \sum_i{\log p(y_i | \mu,\sigma)}
 \]
+
+Durante a etapa de predição, os valores calculados de $\mu$ e $\sigma$ são
+usados como parâmetros de uma distribuição normal que caracteriza a distribuição
+de cada predição $y^*$.
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{deepar-pred.png}
+  \caption{Se desejarmos prever mais de um valor da série-alvo $y$ no futuro. O
+    modelo é realimentado com os valores amostrados de $y^*$ e a rede continua a
+  realizar predições.}
+  \label{fig:deepartrain}
+\end{figure}
 
 
 Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaussiana determinada pela média e variância calculadas: \\
