@@ -783,12 +783,12 @@ A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saí
 
 
 
-O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{deepartrain} ilustra como o modelo se comporta em cada um desses momentos: \\
+O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{fig:deepartrain} ilustra como o modelo se comporta em cada um desses momentos: \\
 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\columnwidth]{deepar-treino.png}
+  \includegraphics[width=0.9\columnwidth]{deepar-train.pdf}
   \caption{Para o treino, o modelo é guiado por anotações reais de valores
     passados da série alvo $y$ e as variáveis independentes $x$. Usamos o estado
   $h$ da rede LSTM a cada iteração temporal para calcular $\mu$  e $\sigma$.
@@ -813,7 +813,7 @@ de cada predição $y^*$.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\columnwidth]{deepar-pred.png}
+  \includegraphics[width=0.9\columnwidth]{deepar-pred.pdf}
   \caption{Se desejarmos prever mais de um valor da série-alvo $y$ no futuro. O
     modelo é realimentado com os valores amostrados de $y^*$ e a rede continua a
   realizar predições.}
