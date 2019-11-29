@@ -566,14 +566,16 @@ probabilidade $p$.\\
 
 
 A cada computação da rede amostra-se com geradores de números aleatórios uma
-máscara que ira zerar valores de ativação entre camadas subsequentes.
+máscara que ira zerar valores de ativação entre camadas subsequentes. Iremos
+reparametrizar a rede neural com o fim de poder mostrar que o objetivo de
+otimização da rede com dropout é equivalente ao método de inferência variacional.
 
 Seja uma rede neural, cuja matriz de parâmetros é $\theta$, com dimensões
-$K_i,K_{i-1}$, para cada camada $i$, e $L$ camadas.
-Amostrar uma máscara para o vetor de ativação a cada computação da rede é equivalente a considerar que estamos
-amostrando os próprios pesos da rede de uma distribuição sobre matrizes onde
-colunas são aleatoriamente zeradas \citep{dropbayes}. A distribuição $q(\theta)$
-se comportaria da seguinte maneira:
+$K_i,K_{i-1}$, para cada camada $i$, e $L$ camadas. Define-se uma distribuição
+de probabilidade sob a matriz de parâmetros $q(\theta)$.
+Essa distribuição usa os pesos $M$ inicializados na rede e associa a eles a incerteza proveninente do
+método de Dropout. A distribuição $q(\theta)$ se comporta da seguinte maneira,
+onde $M_i$ e $p_i$, em cada camada, são considerados parâmetros variacionais:
 
 \newcommand{\diag}{\mathop{\mathrm{diag}}}
 
@@ -584,37 +586,43 @@ se comportaria da seguinte maneira:
   z_{i,j}  \sim Bernoulli(p_i) \quad  \text{para} \, i=1, \, \dots \, L, \, j=1, \, \dots \, K_{i-1}
 \]   
 
-$M_i$ e $p_i$ são parâmetros variacionais.
 
 A função de custo de uma rede neural com dropout em todas as camadas  e
 regularização L2 pode ser escrita da seguinte forma:
 
-\[     \mathcal{L}_{dropout} = \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*,b}(x_n)]^2 + \boldsymbol{\alpha}\{\theta^2,b^2\} \]
+\[     \mathcal{L}_{dropout} = \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*}(x_n)]^2 + \boldsymbol{\alpha}\{\theta^2\} \]
 
 
 O objetivo de minimização desse Rede Neural com dropout em todas as camadas é
 equivalente a diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
 posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que representa a
-distribuição dos parâmetros da rede \citep{dropbayes}. 
+distribuição dos parâmetros da rede \citep{dropbayes}. O objetivo
+$\mathnormal{L}$ da inferência variacional é escrito como:
 
-O termo do somatório é equivalente a uma aproximação numérica por Monte Carlo da integral no
-primeiro termo da Equação~\ref{eq:ine} de um Processo Gaussiano Profundo, considerando apenas um termo, i.e. $\theta^* \sim q(\theta)$:
+\[
+    \mathnormal{L} = - \sum^n_{n=1}\int{q(\theta)  \log p(y_n | \theta,x_n)}d\theta + \mathnormal{KL}(q(\theta),p(\theta))
+\]
+
+
+Cada termo do somatório é uma integral que será aproximada pelo método de Monte Carlo 
+considerando-se apenas um termo, i.e. $\theta^* \sim q(\theta)$:
 
 \begin{align*}
-                    &\int q(\theta) \log p(Y | X,\theta)d\theta \\ 
-                    &=  \sum^N_{N=1} \int q(\theta) \log p(y_n | x_n,\theta)d\theta \\ 
+                    &\sum^N_{N=1} \int q(\theta) \log p(y_n | x_n,\theta)d\theta \\ 
                     &\qquad \qquad  \theta^* \sim q(\theta) \\
                     &\approx \sum^N_{N=1} \log p(y_n | x_n,\theta^*) \\
                     &= \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*,b}(x_n)]^2
 \end{align*}
 
+A verossimilhança $\log p(y_n | \theta^*,x_n)$ é calculada pela
+função de custo $E[y_n,\mathnormal{f}^{\theta^*}(x_n)]$, no exemplo apenas a distância quadrada
+entre $y_n$ e a predição $\mathnormal{f}^{\theta^*}(x_n)$.
 
-O termo de regularização por sua vez é uma possível aproximação da distância KL
-entre a distribuição variacional $q(\theta)$ e a distribuição a priori
-$p(\theta)$ do mesmo Processo Gaussiano Profundo: 
+O segundo termo do objetivo de inferência é aproximado pela norma L2 dos
+parâmetros da rede:
 
 \begin{equation}
-    \mathnormal{KL}(q(\theta) ||p(\theta)) \approx \boldsymbol{\alpha}\{\theta^2,b^2\}
+    \mathnormal{KL}(q(\theta) ||p(\theta)) \approx \boldsymbol{\alpha}\{\theta^2\}
  \end{equation} 
 
 Então, após realizado o treinamento, a saída do nosso modelo é uma amostragem da
