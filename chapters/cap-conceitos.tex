@@ -696,29 +696,28 @@ Essa capacidade do modelo o torna mais interessante do que meramente usar uma
 rede LSTM para o problema de regressão. Agora iremos definir como a informação
 de incerteza pode ser calculada usando esse modelo. \\
 
-Na seção~\ref{sec:reglog} definimos um problema de regressão linear sob o ponto
-de vista Bayesiano. Para esse problema assumimos a verossimilhança como $p(y |f^W(x))$.
+Para esse problema usamos a verossimilhança $p(y |f^W(x))$.
 Onde $f^W(.)$ é a rede Encoder-Forecaster após o treino.
 Como estamos lidando com regressão, podemos especificar ainda essa distribuição
 como \citep{ubertime}:  
 
 \begin{equation}
   \label{eq:reg}
- y| W \sim \mathcal{N}(y;f^W(x),\,\sigma^2)
+ y| W \sim \mathcal{N}(y | f^W(x),\,\sigma^2)
 \end{equation}
 
- Na seção~\ref{sec:bayesinf} explicamos como na Inferência Bayesiana para marginalizamos os parâmetros $W$ e calculamos a distribuição $p(y^*
- | x^*)$ pela Integral~\ref{eq:int}, o que é intratável para esse modelo sem uma aproximação.
- A variância de $p(y^{*} | x^{*})$ quantifica a incerteza das predições
- \citep{dropbayes}, e pode ser decomposta usando a lei da variância total \citep{ubertime}, e parte dessa soma pode ser estimada pela técnica do MC Dropout: \\
-
-
+Desejamos encontrar a distribuição $p(y^*| x^*)$ para dados inéditos. Seguindo
+a formalização bayesiana, é necessário marginalizar os parâmetros do modelo da
+verossimilhança, i.e. resolver a Integral~\ref{eq:int}. Para esse modelo, como
+para muitos outros de interesse, essa integral é intratável. No trabalho
+\citep{ubertime}, os autores estudam a variância de $p(y^{*} | x^{*})$ que
+quantifica a incerteza das predições. Primeiro essa variância é decomposta pela
+lei da variância total, e seus fatores são aproximados independentemente: 
 
 \begin{equation}
    Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] + \mathop{\mathbb{E}}[Var(y^* | W,x^*)]
    \label{eq:vartot}
  \end{equation}
-
 
 $\mathbb{E}(y^* | W,x^*)$ é a verossimilhança do modelo, ou seja:
 
