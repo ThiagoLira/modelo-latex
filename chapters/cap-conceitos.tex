@@ -773,21 +773,21 @@ h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 
 Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
-A verossimilhança do modelo, $p(y_{i,t} | \mu,\sigma)$, é uma distribuição fixa cujos parâmetros são dados por uma função $\omega$ da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
+A verossimilhança do modelo, $p(y_{i,t} | \mu,\sigma)$, é uma distribuição fixa
+cujos parâmetros $\mu, \sigma$ são dados por uma função determinística da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
 \[
   p(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
 \]
 
 A média $\mu$ e o desvio-padrão $\sigma$ são calculados diretamente pela saída do modelo. Para a média, usamos uma transformação linear parametrizada por $W_{\mu},b_{\mu}$. No caso do desvio-padrão, para garantirmos que ele seja maior que 0, usamos uma função \textit{softplus} após uma transformação linear análoga ao caso da média, parametrizada por  $W_{\sigma},b_{\sigma}$.\\
 
-\begin{align*}
+\begin{alignat}{3}
   \mu(h_{i,t}) &= W_{\mu}h_{i,t} + b_{\mu} \\ 
   \sigma(h_{i,t}) &= \log(1 + \exp(W_{\sigma}h_{i,t}+ b_{\sigma}))
-\end{align*}
+\end{alignat}
 
 
 \subsubsection{Treinamento}
-
 
 
 O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~\ref{fig:deepartrain} ilustra como o modelo se comporta em cada um desses momentos: \\
@@ -809,9 +809,9 @@ O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~
 
 O treinamento do modelo é feito pela maximização da log-verossimilhança: \\
 
-\[
-  \mathcal{L} = argmax \sum_i{\log p(y_i | \mu,\sigma)}
-\]
+\begin{equation}
+  \mathcal{L} = argmax \sum^n_t{\log p(y_{i,t} | \mu_{i,t},\sigma_{i,t})}
+  \end{equation}
 
 Durante a etapa de predição, os valores calculados de $\mu$ e $\sigma$ são
 usados como parâmetros de uma distribuição normal que caracteriza a distribuição
@@ -831,7 +831,7 @@ de cada predição $y^*$.
 Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaussiana determinada pela média e variância calculadas: \\
 
 \[
- y^*_{i,t} \sim \mathcal{N}(\mu,\sigma) 
+ y^*_{i,t} \sim \mathcal{N}(\mu_{i,t}\sigma_{i,t}) 
 \]
 
 \subsection{Modelo com Deep Factors}
