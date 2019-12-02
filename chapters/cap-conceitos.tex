@@ -480,16 +480,16 @@ modelos nessa seção buscam unir a acurácia de métodos frequentistas de
 Aprendizado Automático com a
 margem de incerteza proveniente do uso da Lei de Bayes.
 
-\subsection{Inferência Bayesiana em Machine Learning}
+\subsection{Inferência Bayesiana em Aprendizado de Máquinha}
 \label{sec:bayesinf}
 O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso dos frequentistas \citep{dlbook}.
 
 Pode-se considerar que diferença entre as duas escolas de pensamento está em
 \textbf{onde} se considera que a incerteza do problema está presente: Para a
 estatística bayesiana a incerteza está presente no modelo, as observações não
-são consideradas variáveis aleatórias. Para a estatística frequentista
+são consideradas variáveis aleatórias, mas uma realidade observada. Para a estatística frequentista
 se considera que os dados de entrada são uma realização possível de uma
-distribuição desconhecida, e nosso modelo gera \textbf{estimativas pontuais} \citep{rethink}.
+distribuição desconhecida (uma variável aleatória), e nosso modelo gera \textbf{estimativas pontuais} \citep{rethink}.
 
 Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
@@ -615,7 +615,7 @@ considerando-se apenas um termo, i.e. $\theta^* \sim q(\theta)$:
 \end{align*}
 
 A verossimilhança $\log p(y_n | \theta^*,x_n)$ é calculada pela
-função de custo $E[y_n,\mathnormal{f}^{\theta^*}(x_n)]$, no exemplo apenas a distância quadrada
+função de custo $L[y_n,\mathnormal{f}^{\theta^*}(x_n)]$, no exemplo apenas a distância quadrada
 entre $y_n$ e a predição $\mathnormal{f}^{\theta^*}(x_n)$.
 
 O segundo termo do objetivo de inferência é aproximado pela norma L2 dos
