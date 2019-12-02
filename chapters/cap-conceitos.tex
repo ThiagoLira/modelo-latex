@@ -696,14 +696,14 @@ Essa capacidade do modelo o torna mais interessante do que meramente usar uma
 rede LSTM para o problema de regressão. Agora iremos definir como a informação
 de incerteza pode ser calculada usando esse modelo. \\
 
-Para esse problema usamos a verossimilhança $p(y |f^W(x))$.
-Onde $f^W(.)$ é a rede Encoder-Forecaster após o treino.
+Para esse problema usamos a verossimilhança $p(y |f^\theta(x))$.
+Onde $f^\theta(.)$ é a rede Encoder-Forecaster após o treino.
 Como estamos lidando com regressão, podemos especificar ainda essa distribuição
 como \citep{ubertime}:  
 
 \begin{equation}
   \label{eq:reg}
- y| W \sim \mathcal{N}(y | f^W(x),\,\sigma^2)
+ p(y| \theta,x) \sim \mathcal{N}(y | f^{\theta}(x),\,\sigma^2)
 \end{equation}
 
 Desejamos encontrar a distribuição $p(y^*| x^*)$ para dados inéditos. Seguindo
@@ -715,34 +715,34 @@ quantifica a incerteza das predições. Primeiro essa variância é decomposta p
 lei da variância total, e seus fatores são aproximados independentemente: 
 
 \begin{equation}
-   Var(y^* | x^*) = Var[\mathop{\mathbb{E}}(y^* | W,x^*)] + \mathop{\mathbb{E}}[Var(y^* | W,x^*)]
+   Var[y^* | x^*] = Var[\mathop{\mathbb{E}}(y^* | \theta,x^*)] + \mathop{\mathbb{E}}[Var(y^* | \theta,x^*)]
    \label{eq:vartot}
  \end{equation}
 
-$\mathbb{E}(y^* | W,x^*)$ é a verossimilhança do modelo, ou seja:
+$\mathbb{E}[y^* | \theta,x^*]$ é a verossimilhança do modelo, ou seja:
 
 \[
-  Var[\mathbb{E}(y^* | W,x^*)] = Var[f^W(x^*)]
+  Var[\mathbb{E}(y^* | \theta,x^*)] = Var[f^\theta(x^*)]
 \]
 
 
-A estimativa de $Var[f^W(x^*)]$ será feita pela técnica do MC Dropout. A variância
+A estimativa de $Var[f^\theta(x^*)]$ será feita pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
 na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)},\hat{y}^*_{(2)}, \dots
 \hat{y}^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{y}^*$ sua
 média amostral, temos: \\
 
-\[   Var[f^W(x^*)] \sim \eta_1^2 = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
+\[   Var[f^\theta(x^*)] \sim \eta_1^2 = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
 
-O termo $\mathop{\mathbb{E}}[Var(y^* | W,x^*)]$ da Equação~\ref{eq:vartot}, o
+O termo $\mathop{\mathbb{E}}[Var(y^* | \theta,x^*)]$ da Equação~\ref{eq:vartot}, o
 ruído inerente do modelo, será estimado com um conjunto de dados de validação.
 Sejam $(X',Y')$ dados de validação, com
 $V$ entradas. Esses dados são independentes do modelo
-treinado $f^W(.)$, então podemos usá-los para estimar o ruído inerente do
+treinado $f^\theta(.)$, então podemos usá-los para estimar o ruído inerente do
 modelo: \\
 
 \[
-  \mathop{\mathbb{E}}[Var(y^* | W,x^*)] \sim \eta_2^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^W(x'_v))^2
+  \mathop{\mathbb{E}}[Var(y^* | \theta,x^*)] \sim \eta_2^2 = \frac{1}{V}\sum^V_{V=1}(y'_v - f^\theta(x'_v))^2
 \]
 
 
@@ -750,7 +750,7 @@ modelo: \\
 A Equação~\ref{eq:vartot} fica resumida em:
 
 
-\[ Var(y^* | x^*) \sim \eta^2_1 + \eta^2_2 \] 
+\[ Var[y^* | x^*] \sim \eta^2_1 + \eta^2_2 \] 
 
 O desvio-padrão total do modelo é então calculado por:
 
