@@ -762,7 +762,8 @@ O desvio-padrão total do modelo é então calculado por:
 \subsection{Modelo DeepAR}
 
 O modelo \textit{DeepAR}, proposto em \citep{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
-i.e. que tem sua saída realimentada na entrada da iteração posterior. Por meio da função de verossimilhança binomial esse modelo é capaz
+i.e. que tem sua saída realimentada na entrada da iteração posterior para
+poder gerar predições em um horizonte de tempo arbitrário. Por meio da função de verossimilhança binomial esse modelo é capaz
 de realizar predições probabilísticas.
 
 O modelo é descrito pela seguinte equação, onde $h$ é uma RNN implementada com células de LSTMs:
@@ -771,7 +772,8 @@ O modelo é descrito pela seguinte equação, onde $h$ é uma RNN implementada c
 h_{i,t} = h(h_{i,t-1},y^*_{i,t-1},x_{i,t}, \theta)
 \]
 
-Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
+O modelo é treinado em um conjunto de diversas séries temporais $y_i$ do
+processo em estudo, todas representando o mesmo período de tempo. Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
 A verossimilhança do modelo, $p(y_{i,t} | \mu,\sigma)$, é uma distribuição fixa
 cujos parâmetros $\mu, \sigma$ são dados por uma função determinística da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
@@ -810,7 +812,7 @@ O modelo possui uma etapa de treinamento e uma etapa de validação. O Diagrama~
 O treinamento do modelo é feito pela maximização da log-verossimilhança: \\
 
 \begin{equation}
-  \mathcal{L} = argmax \sum^n_t{\log p(y_{i,t} | \mu_{i,t},\sigma_{i,t})}
+  \mathcal{L} = \sum^n_{t=1}{\log p(y_{i,t} | \mu_{i,t},\sigma_{i,t})}
   \end{equation}
 
 Durante a etapa de predição, os valores calculados de $\mu$ e $\sigma$ são
