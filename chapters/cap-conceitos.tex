@@ -10,16 +10,16 @@ Os dados da produção de cimento são anotados temporalmente, então podemos es
 tratá-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
 é uma informação relevante. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
-de predição $y$ e de um vetor $\textbf{x}$ de parâmetros independentes. O problema é de Aprendizado
+de predição $y$ e de um vetor $\textbf{x}$ de parâmetros. O problema é de Aprendizado
 Supervisionado: Buscamos a distribuição das anotações $y$ condicionada
 aos parâmetros de entrada $x$, mas também ao
 histórico da série temporal, i.e. valores passados do objetivo $y$ e do
 vetor de entrada $\textbf{x}$. 
 Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
-independentes $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
+ $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
 de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis independentes $x_i$ e do alvo $y$ no passado \citep{deepfactors}.
+observações das diversas variáveis  $x_i$ e do alvo $y$ no passado \citep{deepfactors}.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
 
@@ -27,7 +27,7 @@ A distribuição será aprendida por meio de aprendizado supervisionado, onde os
 modelos serão alimentados com diversos pares de entradas,
 $(y_t,\textbf{X}_{(t-W):t})$, onde $\textbf{x}$ é uma vetor que contém os valores de
 cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
-entrada contém $W$ entradas do vetor de variáveis independentes. O parâmetro $W$, o
+entrada contém $W$ entradas do vetor das variáveis. O parâmetro $W$, o
 tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
 treino e pode ser alterado na busca de uma melhor acurácia de predição.
 
@@ -118,15 +118,26 @@ $\mathcal{L}$ é dado pela seguinte equação \citep{dlbook}, considerando que o
 modelo recebe $W$ entradas temporais para o calculo da verossimilhança de uma saída:
 
 \[
-\mathcal{L} = \prod_{t=W}^{i=T} p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t}, \theta) 
+\mathcal{L} = \prod_{t=W}^{i=T} p(y_t | \textbf{x}_{(t-W):t}, \theta) 
 \]
 
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
 \[
-  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t=\hat{y_t} | \textbf{x}_{(t-W):t},\theta)}
+  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t | \textbf{x}_{(t-W):t},\theta)}
 \]
+
+Em uma análise bayesiana, também buscaríamos maximizar a verossimilhança dos
+dados condicionados aos parâmetros do modelo. Mas como exige a formalização
+bayesiana, iriamos considerar uma distribuição a priori dos parâmetros do
+modelo, i.e. $p(\theta)$:
+
+
+\[
+  \mathcal{L} = \prod_{t=W}^{i=T}p(y_t|\textbf{x}_{(t-W):t},\theta)p(\theta) 
+\]
+
 
 Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
 coincide com a frequentista, convergindo para a \textbf{estimação de máxima
