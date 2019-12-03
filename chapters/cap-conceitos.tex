@@ -25,9 +25,9 @@ observações das diversas variáveis  $x_i$ e do alvo $y$ no passado \citep{dee
 
 A distribuição será aprendida por meio de aprendizado supervisionado, onde os
 modelos serão alimentados com diversos pares de entradas,
-$(y_t,\textbf{X}_{(t-W):t})$, onde $\textbf{x}$ é uma vetor que contém os valores de
+$(y_t,\textbf{x}_{t:t+W})$, onde $\textbf{x}$ é um vetor que contém os valores de
 cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
-entrada contém $W$ entradas do vetor das variáveis. O parâmetro $W$, o
+entrada contém $W$ entradas do vetor de entrada. O parâmetro $W$, o
 tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
 treino e pode ser alterado na busca de uma melhor acurácia de predição.
 
@@ -38,7 +38,13 @@ cabe então uma breve elaboração das diferenças entre as duas principais
 vertentes da estatística \citep{dlbook}. 
 
 Digamos que exista um evento aleatório que tenha um resultado com probabilidade
-$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a probabilidade $p$ meramente como uma proporção de resultados positivos em uma certa amostra de experimentos. Mas e se o evento não pudesse ser repetido? Quando físicos criam modelos para explicar o nascimento do universo, é impossível pensar em repetir o Big Bang infinitas vezes para que se possam estimar probabilidades de certos eventos cosmológicos acontecerem. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos
+repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá
+acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a
+probabilidade $p$ meramente como uma proporção de resultados positivos em uma
+certa amostra de experimentos. Mas e se o evento não pudesse ser repetido?
+Quando físicos criam modelos para explicar o nascimento do universo, é
+impossível pensar em incerteza como repetições de fenômenos cosmológicos como esse. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
 
 E no campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
 frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
@@ -118,14 +124,14 @@ $\mathcal{L}$ é dado pela seguinte equação \citep{dlbook}, considerando que o
 modelo recebe $W$ entradas temporais para o calculo da verossimilhança de uma saída:
 
 \[
-\mathcal{L} = \prod_{t=W}^{i=T} p(y_t | \textbf{x}_{(t-W):t}, \theta) 
+\mathcal{L} = \prod_{t=0}^{i=T} p(y_t | \textbf{x}_{t}, \theta) 
 \]
 
 É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
 o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
 
 \[
-  \mathcal{L} = \sum_{t=W}^{i=T} \log{p(y_t | \textbf{x}_{(t-W):t},\theta)}
+  \mathcal{L} = \sum_{t=0}^{i=T} \log{p(y_t | \textbf{x}_{t},\theta)}
 \]
 
 Em uma análise bayesiana, também buscaríamos maximizar a verossimilhança dos
@@ -135,7 +141,7 @@ modelo, i.e. $p(\theta)$:
 
 
 \[
-  \mathcal{L} = \prod_{t=W}^{i=T}p(y_t|\textbf{x}_{(t-W):t},\theta)p(\theta) 
+  \mathcal{L} = \prod_{t=0}^{i=T}p(y_t|\textbf{x}_{t},\theta)p(\theta) 
 \]
 
 
@@ -248,8 +254,24 @@ indicando um modelo ideal.\\
 
 \subsubsection{Custo quantílico}
 
-O custo quantílico \citep{deepar} é usado na avaliação de performance de predições temporais. \\
-Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(\rho)$, esse valor é definido por: \\
+O custo quantílico \citep{deepar} é usado na avaliação de performance de
+predições temporais. \\
+
+Para uma predição $y^*$ com desvio-padrão $\sigma$, um quantil $q$ representa o
+valor para o qual uma fração $q$ das predições está fora do grupo.
+
+Por exemplo, usando o quantil $q=0.9=90\%$, assumindo uma distribuição normal,
+podemos calcular exatamente a quantos desvios-padrões estão $10\%$ dos valores
+presentes na distribuição. Para $q=0.9$, uma tabela z nos mostra que devemos
+usar $1.29$ desvios-padrões:
+
+\[
+  y^*(\rho = 0.9) = y^* + 1.29\sigma
+\]
+
+
+Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição
+$y^{*}_{t}(\rho)$, define-se o custo quantílico por: \\
 
 \begin{equation}
   \mathcal{QL}_{\rho}(y_{t},y^{*}_{t}(\rho)) =
@@ -263,8 +285,7 @@ Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição $y^{*}_{t}(
 Esse valor é bastante informativo quando a predição toma a forma de uma faixa de
 valores (como uma distribuição de probabilidade) ao invés de apenas um valor
 pontual, como é comum para problemas de regressão. Ele nos informa o risco
-ponderado de um certo quantil da predição. E.g. para $q = 0.9$ estaríamos
-calculando o risco apresentado pelos valores menores que 90\% da distribuição empírica. 
+ponderado de um certo quantil da predição. 
 
 %% ------------------------------------------------------------------------- %%
 
@@ -714,7 +735,7 @@ como \citep{ubertime}:
 
 \begin{equation}
   \label{eq:reg}
- p(y| \theta,x) \sim \mathcal{N}(y | f^{\theta}(x),\,\sigma^2)
+ p(y| \theta,x) \sim \mathcal{N}(f^{\theta}(x),\,\sigma^2)
 \end{equation}
 
 Desejamos encontrar a distribuição $p(y^*| x^*)$ para dados inéditos. Seguindo
@@ -737,7 +758,7 @@ $\mathbb{E}[y^* | \theta,x^*]$ é a verossimilhança do modelo, ou seja:
 \]
 
 
-A estimativa de $Var[f^\theta(x^*)]$ será feita pela técnica do MC Dropout. A variância
+$Var[f^\theta(x^*)]$ representa a incerteza do modelo, e a estimativa desse valor será feito pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
 na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)},\hat{y}^*_{(2)}, \dots
 \hat{y}^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{y}^*$ sua
@@ -912,9 +933,9 @@ Como $p(. | u_{i,t})$ é distribuida normalmente, não precisamos de inferência
 p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
 \]
 
-O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que minimizem a log-verossimilhança conjunta dos dados: \\
+O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Processo Gaussiano que maximizem a log-verossimilhança dos dados: \\
 \[
-\mathcal{L} = argmax \sum_i{\log(p(y_i))}
+\mathcal{L} = \sum_{t=0}^N{\log p(y_t|x_t)}
 \]
 
 
