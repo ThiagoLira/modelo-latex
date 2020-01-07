@@ -5,40 +5,30 @@
 \section{Preparo dos Dados}
 
 
-Para treinar algum tipo de modelo preditivo com os dados, é necessário parear
-dados de entrada e de saída. Devido a dificuldades logísticas de se casar um
-mesmo lote de cimento em diferentes partes do processo (e.g. no forno e na
-expedição), num primeiro momento estudos serão feitos apenas para os dados de
-\textit{expedição de cimento}. Embora todos os conjuntos de dados tenham sido
-tratados e estudados, para algumas estatísticas serão reproduzidos aqui tabelas computadas dos
-dados de expedição. O restante das estatísticas podem ser encontradas no Apêndice~\ref{ape:tables}
+Os dados estão distribuícdos em colunas com diversas propriedades analisadas em
+laboratório de cada lote retirado da fábrica. Existem diversas planilhas para
+lotes retirados de diversas partes do processo de fabricação. Devido a dificuldades logísticas de se casar um
+mesmo lote de cimento em diferentes partes do processo (e.g. o mesmo lote ao
+sair do forno e depois de finalizado e pronto para vender), estudos serão feitos apenas para os dados de
+\textit{expedição de cimento}. 
 
 Segue uma breve definição de cada coluna dos dados de Expedição de Cimento: \\
 
 \begin{itemize}
-\item (i) Porcentagens relacionadas a Composição Química composition: AL\textsubscript{2}O\textsubscript{3}, SIO\textsubscript{2}, MGO, RICARB, P\textsubscript{2}O\textsubscript{5} and FE\textsubscript{2}O\textsubscript{3}
+\item (i) Porcentagens relacionadas a Composição Química: AL\textsubscript{2}O\textsubscript{3}, SIO\textsubscript{2}, MGO, RICARB, P\textsubscript{2}O\textsubscript{5} and FE\textsubscript{2}O\textsubscript{3}
 \item (ii) Porcentagem de massa de água em relação ao cimento: AGP
 \item (iii) Tempo (em segundos) que o material demora para começar e terminar a endurecer, respectivamente: IP, FP
-\item (iv) Blaine fineness, medido em centimetros quadrados por grama ($Cm^{2}/g)$: SBL
-\item (v) Porcentagem de massa perdida no forno: FP
-\item (vi) As medidas de CSC respectivamente 3, 7 e 28 dias após a expedição do lote de cimento: RC3, RC7, RC28
+\item (iv) Finura Blaine, medido em centimetros quadrados por grama ($Cm^{2}/g)$: SBL
+\item (v) As medidas de CSC respectivamente 3, 7 e 28 dias após a expedição do lote de cimento: RC3, RC7, RC28
 \end{itemize}
 
-\subsection{Contagem de dias válidos}
 
-Os dados da Intercement, por questões logísticas, são anotados em frequencias
-diferentes. Os dados de Clínquer e Farinha são anotados por hora, já os de
-Expedição de Cimento são anotados por dia (esses representando uma média de
-diversos lotes experimentados).
-
-\begin{enumerate}
-    \item Os dados de  Clínquer possuem 3528 linhas de dados de 2936 dias distintos
-\item Os dados de  Expedição de Cimento possuem 3650 linhas de dados de 2520 dias distintos
-\item Os dados de  Farinha possuem 3530 linhas de dados de 2937 dias distintos
-\item Os dados de  Cru possuem 3558 linhas de dados de 3558 dias distintos
-\end{enumerate}
+Os dados de expedição de cimento são anotados aproximadamente por dia, possuindo 2520
+entradas para 3650 dias distintos. Ou seja, existem dias sem dados presentes. O
+período contemplado pela planilha de dados vai do dia 02/01/2008 até o dia 29/12/2018.
 
 \subsection{Dados faltantes}
+
 Embora tenhamos uma quantidade razoável de dias com dados presentes, esses muitas vezes não possuem algum valor de alguma coluna.
 A seguir vemos para os dados de Expedição de Cimento, para cada uma de suas colunas, a porcentagem de dados presentes. 
 
@@ -52,12 +42,17 @@ A seguir vemos para os dados de Expedição de Cimento, para cada uma de suas co
 
 
 \section{Reamostragem dos dados}
-Para maior facilidade de manuseio dos dados foi necessário realizar uma
-\textbf{reamostragem}. Os dados foram modificados para que entradas realizadas no
-mesmo dia sejam unidas tirando por exemplo a sua média. Além disso, dias sem
-dados foram criados como placeholders para facilidade de visualização dos dados.
-A seguir são reproduzidas as contagens de dados após a reamostragem.
-A Figura \ref{fig:reamos} mostra como os dados estavam antes da reamostragem: 
+
+Uma dos requisitos dos dados assumidos pelos modelos temporais, é que os mesmos
+são espaçados regularmente pelo incremento de tempo escolhido, sem lacunas.
+Portanto, os dados foram modificados para que entradas anotadas no mesmo dia
+sejam unificadas em um único dia. Além disso, para dias no intervalo de tempo
+estudado que não possuam entradas, foram criadas entradas com valores
+artificiais que não perturbem a distribuição dos dados, e.g. os valores da
+última entrada válida são copiados para frente até que se possua um novo valor.
+
+A Figura \ref{fig:reamos} mostra como os dados estavam antes da reamostragem
+para que eles se tornem diários: 
 
 \begin{figure}[H]
   \centering
@@ -66,16 +61,6 @@ A Figura \ref{fig:reamos} mostra como os dados estavam antes da reamostragem:
   \label{fig:reamos}
 \end{figure}
 
-\begin{itemize}
-\item Clínquer: Temos dados de entrada do dia 22/04/2008 até o dia 18/12/2017
-\item Clínquer: De um período de 3528 dias temos 2932 dias preenchidos com dados de entrada
-\item Expedição: Temos dados de entrada do dia 02/01/2008 até o dia 29/12/2017
-\item Expedição: De um período de 3650 dias temos 2520 dias preenchidos com dados de entrada
-\item Farinha: Temos dados de entrada do dia 20/04/2008 até o dia 18/12/2017
-\item Farinha: De um período de 3530 dias temos 2937 dias preenchidos com dados de entrada
-\item Cru: Temos dados de entrada do dia 21/04/2008 até o dia 09/12/2016
-\item Cru: De um período de 3155 dias temos 2675 dias preenchidos com dados de entrada
-\end{itemize}
 
 
 \section{Testes de Sazonalidade}

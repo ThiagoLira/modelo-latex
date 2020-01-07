@@ -103,6 +103,28 @@ também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma 
 \subsection{A Performance}
 \label{sec:metricas}
 
+A performance dos modelos de aprendizagem automática é a quantificação da
+qualidade das predições frente a verdade desconhecida do fenômeno modelado.
+Claramente um modelo parametrizado possuirá algum erro de predição \cite{dlbook}, e é esse
+erro que iremos diminuir com o aprendizado. Os estimadores serão a ferramenta
+usada para guiar o treinamento em uma direção que reduza ao máximo o viés das predições.
+
+\subsubsection{O fenômeno do perde-e-ganha entre viés e variância}
+
+Seja um modelo treinado de aprendizagem automática representado por uma função
+$\hat{f}$, que recebe como domínio valores de $x \in \mathbb{R}$, os dados de
+entrada. Iremos estudar como se comporta o valor esperado do erro quadrático do
+modelo, i.e. $\mathbb{E}[(y - \hat{f}(x))^2]$, onde $y$ é o valor real porém
+desconhecido da saída. Estudando esse valor, podemos decompô-lo em
+3 partes \citep{mlprob}:
+
+\[
+  \mathbb{E}[(y - \hat{f}(x))^2] = \text{Viés}[\hat{f}(x)]^2 +
+  \text{Var}[\hat{f}(x)] + \sigma 
+\]
+
+
+
 \subsubsection{Estimadores}
 \label{sec:est}
 
@@ -258,17 +280,19 @@ O custo quantílico \citep{deepar} é usado na avaliação de performance de
 predições temporais. \\
 
 Para uma predição $y^*$ com desvio-padrão $\sigma$, um quantil $q$ representa o
-valor para o qual uma fração $q$ das predições está fora do grupo.
+valor que cobre $q\%$ da distribuição prevista.
 
 Por exemplo, usando o quantil $q=0.9=90\%$, assumindo uma distribuição normal,
-podemos calcular exatamente a quantos desvios-padrões estão $10\%$ dos valores
-presentes na distribuição. Para $q=0.9$, uma tabela z nos mostra que devemos
+podemos calcular exatamente dentro de quantos desvios-padrões estão $90\%$ dos valores
+presentes na distribuição, contando com o erro. Para $q=0.9$, uma tabela z nos mostra que devemos
 usar $1.29$ desvios-padrões:
 
 \[
   y^*(\rho = 0.9) = y^* + 1.29\sigma
 \]
 
+Logo, $y^*(0.9)$ cobre $90\%$ dos possíveis valores de predição feitos pelo
+modelo, levando em consideração o desvio-padrão.
 
 Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição
 $y^{*}_{t}(\rho)$, define-se o custo quantílico por: \\
@@ -285,7 +309,9 @@ $y^{*}_{t}(\rho)$, define-se o custo quantílico por: \\
 Esse valor é bastante informativo quando a predição toma a forma de uma faixa de
 valores (como uma distribuição de probabilidade) ao invés de apenas um valor
 pontual, como é comum para problemas de regressão. Ele nos informa o risco
-ponderado de um certo quantil da predição. 
+ponderado de um certo quantil da predição. Se usarmos o quantil $q=0.5=50\%$,
+esse valor se torna a porcentagem absoluta média de erro. Para $q=0.9=90\%$ será
+calculado o erro máximo esperado por $90\%$ das predições. 
 
 %% ------------------------------------------------------------------------- %%
 
@@ -343,7 +369,20 @@ modelar como saída o índice RC28. \\
 \bigskip
 
 \subsubsection{Regularização L2}
- 
+
+Em \cite{dlbook}, os autores definem regularização como \say{qualquer
+  modificação em um algoritmo de aprendizado que diminua o erro de generalização
+mas não o seu erro de treinamento}. A ideia é se colocar informação objetivo de 
+otimização que diminua a complexidade do modelo encontrado, fazendo assim
+que o modelo tenha menos capacidade de aprender a modelar o ruído inerente
+aos dados de treinamento, i.e. a parte dos dados que é atribuída a erros
+impossíveis de serem modelados.
+
+A regularização L2 consiste em adicionar a norma quadrada de todos os parâmetros
+do modelo ao objetivo de otimização. Dessa maneira o algoritmo é levado a
+encontrar valores menores para os parâmetros, visto que a otimização é
+direcionada a achar o menor valor possível do objetivo.
+
 \subsection{Random Forest}
 
 Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos \say{fracos} são usados em conjunto com algum sistema de votação para que a a acurácia do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diversas árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
@@ -622,14 +661,19 @@ onde $M_i$ e $p_i$, em cada camada, são considerados parâmetros variacionais:
 A função de custo de uma rede neural com dropout em todas as camadas  e
 regularização L2 pode ser escrita da seguinte forma:
 
-\[     \mathcal{L}_{dropout} = \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*}(x_n)]^2 + \boldsymbol{\alpha}\{\theta^2\} \]
+\begin{equation}
+  \mathcal{L}_{dropout} = \sum^N_{N=1} [y_n - \mathnormal{f}^{\theta^*}(x_n)]^2
+  + \boldsymbol{\alpha}\{\theta^2\}
+\label{eq:dropob}
+\end{equation}
 
 
 O objetivo de minimização desse Rede Neural com dropout em todas as camadas é
 equivalente a diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
-posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que representa a
-distribuição dos parâmetros da rede \citep{dropbayes}. O objetivo
-$\mathnormal{L}$ da inferência variacional é escrito como:
+posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que parametriza a
+distribuição dos parâmetros da rede \citep{dropbayes}. Seja $\mathnormal{L}$ o
+objetivo de inferência variacional da distribuição posterior do Processo Gaussiano Profundo, o trabalho
+\citep{dropbayes} mostra como podemos reescrever esse objetivo como a Equação ~\ref{eq:dropob}:
 
 \[
     \mathnormal{L} = - \sum^n_{n=1}\int{q(\theta)  \log p(y_n | \theta,x_n)}d\theta + \mathnormal{KL}(q(\theta),p(\theta))
@@ -683,7 +727,7 @@ Iremos utilizar nesse trabalho o modelo proposto em \citep{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
 série temporal (i.e. uma representação que resuma informações úteis para o
 problema) e então uma rede \textbf{forecaster} que use essas codificações ao lado de
-variáveis exógenas a série temporal para realizar predições.  
+variáveis exógenas a série temporal para realizar predições.  \\ 
 
 
 
@@ -702,7 +746,7 @@ inicialização do estado interno do decoder, e esse então consume mais $F$
 entradas da sequência. Para o decoder, se em uma iteração sua entrada é $X_i$,
 então sua saída será comparada com $X_{i+1}$, e esse erro é propagado após lidas
 todas as entradas para que a representação $h$ proveniente do encoder possa se
-tornar mais informativa.
+tornar mais informativa. \\
 
 
 \begin{figure}[H]
@@ -760,11 +804,11 @@ $\mathbb{E}[y^* | \theta,x^*]$ é a verossimilhança do modelo, ou seja:
 
 $Var[f^\theta(x^*)]$ representa a incerteza do modelo, e a estimativa desse valor será feito pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
-na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)},\hat{y}^*_{(2)}, \dots
-\hat{y}^*_{(B)}\}$ o vetor de predições amostrado dessa forma, e $\hat{y}^*$ sua
+na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)}=f^{\theta_{(1)}}(x^*),\hat{y}^*_{(2)}=f^{\theta_{(2)}}(x^*), \dots
+\hat{y}^*_{(B)}=f^{\theta_{(B)}}(x^*)\}$ o vetor de predições amostrado dessa forma, e $\bar{y}^*$ sua
 média amostral, temos: \\
 
-\[   Var[f^\theta(x^*)] \sim \eta_1^2 = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \hat{y}^*)^2  \]
+\[   Var[f^\theta(x^*)] \sim \eta_1^2 = \frac{1}{B}\sum^B_{B=1}(\hat{y}^*_{(B)} - \bar{y}^*)^2  \]
 
 O termo $\mathop{\mathbb{E}}[Var(y^* | \theta,x^*)]$ da Equação~\ref{eq:vartot}, o
 ruído inerente do modelo, será estimado com um conjunto de dados de validação.
@@ -865,7 +909,7 @@ de cada predição $y^*$.
 Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaussiana determinada pela média e variância calculadas: \\
 
 \[
- y^*_{i,t} \sim \mathcal{N}(\mu_{i,t}\sigma_{i,t}) 
+ y^*_{i,t} \sim \mathcal{N}(\mu_{i,t},\sigma_{i,t}) 
 \]
 
 \subsection{Modelo com Deep Factors}
@@ -893,13 +937,16 @@ f(x) \sim \mathcal{GP}( m(x), K(x,x'))
 
 O modelo Deep Factors então é composto por duas partes, a combinação linear de ambas é a saída do modelo i.e. a emissão de valores de saída amostrados: \\
 
-
-A função $g_t$ é uma RNN, no caso desse trabalho uma célula LSTM, que recebe como entrada um certo número $T$ de passos da série temporal, e então emite como saída um horizonte finito $F$ de predições.
-
 \[
   \textbf{Gerador da parte fixa aprendida globalmente: }  f_{i,t} = W_ig_t(x_{i,t})
 \]
 
+A função $g_t$ é uma RNN, no caso desse trabalho uma célula LSTM, que recebe como entrada um certo número $T$ de passos da série temporal, e então emite como saída um horizonte finito $F$ de predições.
+
+
+\[
+  \textbf{Gerador de ruído local: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
+\]
 O ruído é gerado por um Processo Gaussiano com média 0 e função de covariância
 exponencial. O Processo gera incertezas a partir da matriz de covariância
 calculada com todas as predições da parte global do modelo. Seja $f_i$ um vetor
@@ -914,20 +961,18 @@ terá a forma:
     K(f_{i,T},f_{i,1})& K(f_{i,T},f_{i,2}) & \dots & 1 
   \end{bmatrix} 
 \]
-\[
-    \textbf{Gerador de ruído local: }  r_i \sim \mathcal{GP} (0, K_i(.,.))
-\]
 
-A emissão ira combinar efeitos globais e ruído local para gerar as predições
-finais amostrando-se a variável latente $u$:
-  
 \[
   \textbf{Emissão: }  y^*_{i,t} \sim p(. | u_{i,t}) , u_{i,t} = r_{i,t} + f_{i,t}  
 \]
+A emissão ira combinar efeitos globais e ruído local para gerar as predições
+finais amostrando-se a variável latente $u$:
+  
 
 \subsubsection{Treinamento}
 
-Como $p(. | u_{i,t})$ é distribuida normalmente, não precisamos de inferência para calcular a verossimilhança marginal do modelo, que é dada por: \\
+Para o problema de regressão, podemos assumir que $p(. | u_{i,t})$ é distribuida
+normalmente, então não precisamos de inferência para calcular a verossimilhança do modelo, que é dada por: \\
 
 \[
 p(y_{i}) = \mathcal{N}(f_i,K_i + \sigma_i^2\mathcal{I})
