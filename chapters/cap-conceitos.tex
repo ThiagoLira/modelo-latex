@@ -123,7 +123,19 @@ desconhecido da saída. Estudando esse valor, podemos decompô-lo em
   \text{Var}[\hat{f}(x)] + \sigma 
 \]
 
+O erro quadrático médio de um modelo de aprendizado
+é sempre composto por esses 3 termos. O viés nos informa o valor esperado do
+erro das predições, i.e. um modelo sem viés tem a sua média de predições
+consistente com o valor real. Porém, por mais que um modelo sem viés seja
+altamente desejável, esse termo de erro deve ser negociado em frente a variância
+das predições, o segundo termo. Por mais que a média das predições de um modelo
+se aproximem do valor real, isso de nada adianta se, por diversos ruídos na
+modelagem, o modelo apresentar uma alta sensibilidade a pequenas alterações em
+parâmetros ou dados, i.e. uma alta variância nas predições.
 
+O último termo do erro denotado por $\sigma$ é a parte aleatória do erro
+impossível de ser reduzida devido a impossibilidade de modelagem de toda a
+distribuição geradora dos dados.
 
 \subsubsection{Estimadores}
 \label{sec:est}
@@ -837,9 +849,12 @@ O desvio-padrão total do modelo é então calculado por:
 
 \subsection{Modelo DeepAR}
 
-O modelo \textit{DeepAR}, proposto em \citep{deepar}, é baseado em redes neurais recorrentes auto-regressivas,
-i.e. que tem sua saída realimentada na entrada da iteração posterior para
-poder gerar predições em um horizonte de tempo arbitrário. Por meio da função de verossimilhança binomial esse modelo é capaz
+O modelo \textit{DeepAR}, proposto em \citep{deepar}, é baseado em redes neurais
+recorrentes auto-regressivas. Essa classe de modelos, que é bastante usada em
+econometria, usa saídas passadas como entradas para o cálculo de próximos
+valores. Dessa maneira em tese esses modelos podem gerar predições em horizontes
+de tempo arbitrários no futuro.
+Usa-se a função de verossimilhança binomial para que o modelo seja capaz
 de realizar predições probabilísticas.
 
 O modelo é descrito pela seguinte equação, onde $h$ é uma RNN implementada com células de LSTMs:
