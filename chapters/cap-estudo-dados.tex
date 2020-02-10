@@ -109,24 +109,42 @@ vetor $X$: \\
 
 \bigskip
 
+\subsection{RC3, RC7 e RC28}
 
-A Tabela~\ref{corr3728} mostra correlação entre os índices de resistência dos dados de
-expedição de cimento. \\
+Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
+não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
+i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
 
-\begin{table}[H]
-\centering
-\begin{tabular}{l|lll}
-\cline{2-4}
-\textbf{}                  & \multicolumn{1}{l|}{RC3} & \multicolumn{1}{l|}{RC7} & \multicolumn{1}{l|}{RC28} \\ \hline
-\multicolumn{1}{|l|}{RC3}  & 1                        & 0.734201                 & 0.388973                  \\ \cline{1-1}
-\multicolumn{1}{|l|}{RC7}  & 0.734201                 & 1                        & 0.484725                  \\ \cline{1-1}
-\multicolumn{1}{|l|}{RC28} & 0.388973                 & 0.484725                 & 1                         \\ \cline{1-1}
+A Figura~\ref{fig:gridcorr} mostra um correlamograma entre os índices RC
+atrasados e o RC28 diário. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{corr_grid.pdf}
+  \caption{Correlamograma dos índices de resistência compressiva}
+  \label{fig:gridcorr}
+\end{figure}
+
+A Tabela~\ref{tabelacorr} mostra o restante das correlações entre as demais
+colunas de dados:
+
+\begin{tabular}{lr}
+  \toprule
+  {} &      RC28 \\
+  \midrule
+  AGP   &  0.592847 \\
+  AL2O3 &  0.463414 \\
+  SIO2  & -0.053178 \\
+  MGO   & -0.371414 \\
+  IP    & -0.132297 \\
+  FP    & -0.419800 \\
+  SBL   &  0.396555 \\
+  PF    & -0.480720 \\
+  P2O5  &  0.292252 \\
+  RC28  &  1.000000 \\
+  \bottomrule
+  \label{tabelacorr}
 \end{tabular}
-\caption{Correlação entre Índices de Resistência dos dados de
-  Expedição de Cimento}
-\label{corr3728}
-\end{table}
-
 
 
 
