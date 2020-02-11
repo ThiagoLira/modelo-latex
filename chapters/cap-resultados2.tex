@@ -3,13 +3,6 @@
 
 \section{Resultados}
 
-
-\subsection{RC3, RC7 e RC28}
-
-Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
-não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponíveis para o lote expedido no dia $t$,
-i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
-
 \subsection{Divisão dos dados entre treino e validação}
 
 \begin{figure}[H]
@@ -63,23 +56,14 @@ Todos os modelos foram implementados usando a biblioteca Pytorch \cite{pytorch},
 
 Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emissão de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
 
-% As Imagem \ref{fig:rmseday}, mostra o RMSE médio dos modelos por dia a medida que o horizonte de predição aumenta. A Tabela \ref{tab:rmse} mostra o mesmo resultado porém apenas para a predição de 24h, 3d e 7d. \\
-
-% \begin{figure}[H]
-% \label{fig:rmseday}
-% \centering
-% \includegraphics[width=.3\textwidth]{rmse_deep_ar.pdf} \hfill
-% \includegraphics[width=.3\textwidth]{rmse_deep_factors.pdf} \hfill
-% \includegraphics[width=.3\textwidth]{rmse_enc_dec.pdf} 
-% \caption{RMSE médio por dia para cada um dos modelos estudados} 
-% \end{figure}
-
-
+Na Tabela~\ref{tb:rmse} reportamos os erros para predições imediatamente no
+começo após o fim do último dia de dados usados para treino. Iremos mostrar o
+erro para o dia seguinte, três dias depois e então uma semana após o último dia
+de dados usados para treinamento.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{\label{tab:rmse}
-RMSE values by forecast span}
+\caption{RMSE values by forecast span}
 \centering
 \begin{tabular}{rr}
 \hline
@@ -97,15 +81,18 @@ Deep AR & RMSE\\
 \hline
 Encoder Decoder & RMSE\\
 \hline
-24h & 0.22\\
-3d & 0.36\\
-7d & 1.04\\
+24h & 0.06\\
+3d & 0.44\\
+7d & 0.80\\
 \end{tabular}
+
+\label{tb:rmse}
 \end{table}
 \end{center}
 
 
-Também estudamos a distribuição dos valores previstos, até 150 dias após a data onde começam os dados de validação, a Imagem \ref{fig:distr} permite comparar as distribuições previstas pelos 3 modelos:
+Também estudamos a distribuição dos valores previstos, até 1 mês após a data
+onde começam os dados de validação (i.e. os dados não usamos para treinamento), a Imagem \ref{fig:distr} permite comparar as distribuições previstas pelos 3 modelos:
 
 \begin{figure}[H]
 \label{fig:distr}
@@ -142,7 +129,9 @@ Finalmente, os valores e incertezas previstos pelos modelos:
 \end{figure}
 
 
-Para modelagem de séries temporais, é também comum estudarmos o resíduo das predições. A sua distribuição deve ser randômica para garantirmos que nosso modelo não está cometendo algum viés que seria modelável com mudanças no aprendizado. \\
+Para modelagem de séries temporais, é também comum estudarmos o resíduo das
+predições. É assumido em uma tarefa de regressão que o resíduo é distribuído
+normalmente com média zero.
 
 
 \begin{figure}[H]
