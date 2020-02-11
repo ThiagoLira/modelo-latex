@@ -128,7 +128,21 @@ expedição de cimento. \\
 \end{table}
 
 
+\section{Normalização}
 
+Os dados foram normalizados pelo método min-max. Essa técnica foi escolhida pelo
+fato da distribuição dos dados não ser normal.
+
+Seja um vetor $X$ com $N$ entradas. Podemos normaliza-lo por esse método usando a
+seguinte transformação:
+
+
+\[
+x^*_{n} = ( x_n - Min(X))/(Max(X) - Min(X)) 
+\]
+
+$Min(X)$  e $Max(X)$ são constantes que devem ser guardadas para posterior
+desnormalização do vetor.
 
 
 

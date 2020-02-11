@@ -7,7 +7,7 @@
 \subsection{RC3, RC7 e RC28}
 
 Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
-não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
+não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponíveis para o lote expedido no dia $t$,
 i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
 
 \subsection{Divisão dos dados entre treino e validação}
@@ -27,9 +27,9 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
 
 \begin{figure}[H]
   \centering
-  \label{fig:linmodels}
 \includegraphics[width=0.9\columnwidth]{linear_exp.pdf}
 \caption{Predições nos dados de validação nos experimentos com modelos não-temporais. }
+\label{fig:linmodels}
 \end{figure}
 
 \subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
@@ -142,8 +142,7 @@ Finalmente, os valores e incertezas previstos pelos modelos:
 \end{figure}
 
 
-Para modelagem de séries temporais, é também comum estudarmos o resíduo das predições. A sua distribuição deve ser randômica para garantirmos que nosso modelo não está cometendo algum viés que seria
-modelável com mudanças no aprendizado. \\
+Para modelagem de séries temporais, é também comum estudarmos o resíduo das predições. A sua distribuição deve ser randômica para garantirmos que nosso modelo não está cometendo algum viés que seria modelável com mudanças no aprendizado. \\
 
 
 \begin{figure}[H]
