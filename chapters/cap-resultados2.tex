@@ -114,7 +114,12 @@ reportados a seguir:
 
 Todos os modelos foram implementados usando a biblioteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
-Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após uma janela inteira de dias ser codificada pelas redes Encoder. Apenas então os modelos terão informação para gerar predições. O Modelo Deep Factors não necessita de uma janela pois sua arquitetura permite e emissão de predições imediatamente após o primeiro timestep ser recebido, e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
+Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após
+uma janela inteira de dias ser codificada pelas redes Encoder.
+Apenas então os modelos terão informação para gerar predições. O Modelo Deep
+Factors não necessita de uma janela pois sua arquitetura permite e emissão de
+predições imediatamente após o primeiro timestep ser recebido,
+e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
 
 Na Tabela~\ref{tb:rmse} reportamos os erros para predições imediatamente no
 começo após o fim do último dia de dados usados para treino. Iremos mostrar o
