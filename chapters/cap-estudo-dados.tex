@@ -12,16 +12,21 @@ mesmo lote de cimento em diferentes partes do processo (e.g. o mesmo lote ao
 sair do forno e depois de finalizado e pronto para vender), estudos serão feitos apenas para os dados de
 \textit{expedição de cimento}. 
 
-Segue uma breve definição de cada coluna dos dados de Expedição de Cimento: \\
+A Tabela~\ref{tb:vars} define todas as variáveis, dependentes e independentes,
+que são usadas na modelagem. 
 
-\begin{itemize}
-\item (i) Porcentagens relacionadas a Composição Química: AL\textsubscript{2}O\textsubscript{3}, SIO\textsubscript{2}, MGO, RICARB, P\textsubscript{2}O\textsubscript{5} and FE\textsubscript{2}O\textsubscript{3}
-\item (ii) Porcentagem de massa de água em relação ao cimento: AGP
-\item (iii) Tempo (em segundos) que o material demora para começar e terminar a endurecer, respectivamente: IP, FP
-\item (iv) Finura Blaine, medido em centimetros quadrados por grama ($Cm^{2}/g)$: SBL
-\item (v) As medidas de CSC respectivamente 3, 7 e 28 dias após a expedição do lote de cimento: RC3, RC7, RC28
-\end{itemize}
-
+\begin{table}[]
+  \begin{tabular}{llllllllll}
+    Unidade/ Variáveis                                               &       &      &      &        &      &            \\
+    Porcentagens relacionadas a Composição Química (\%)              & $AL_20_3$ & $SIO_2$ & $MGO$  & RICARB & $P_2O_5$ & $Fe_2O_3$ \\
+    Porcentagem de massa de água em relação ao resto do cimento (\%) & AGP   &      &      &        &      &            \\
+    Tempo até o começo e fim do endurecimento do material (s)        & IP    & FP   &      &        &      &            \\
+    Finura Blaine ($cm^2$/g)                      & SBL   &      &      &        &      &            \\
+    Resistência Compressiva do Cimento (kPA)                         & RC3   & RC7  & RC28 &        &      &           
+  \end{tabular}
+  \caption{Variáveis presentes nos dados de expedição de cimento cedidos pela Intercement}
+  \label{tb:vars}
+\end{table}
 
 Os dados de expedição de cimento são anotados aproximadamente por dia, possuindo 2520
 entradas para 3650 dias distintos. Ou seja, existem dias sem dados presentes. O
@@ -112,21 +117,22 @@ vetor $X$: \\
 \subsection{RC3, RC7 e RC28}
 
 Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
-não podemos usar os índices RC3 e RC7 para auxiliar na predição de RC28. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponível para o lote expedido no dia $t$,
-i.e. o índice RC3 do dia $t-3$ e RC7 do dia $t-7$, que acabaram de ser medidos. 
+não podemos usar os índices RC3 e RC7 desse mesmo lote para auxiliar na predição
+de RC28, visto que esses ainda não foram experimentados em laboratório. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponíveis para o lote expedido no dia $t$,
+i.e. o índice RC3 do lote do dia $t-3$ e RC7 do lote dia $t-7$, que acabaram de ser medidos. 
 
-A Figura~\ref{fig:gridcorr} mostra um correlamograma entre os índices RC
+A Figura~\ref{fig:gridcorr} mostra um correlograma entre os índices RC3 e RC7
 atrasados e o RC28 diário. 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\columnwidth]{corr_grid.pdf}
-  \caption{Correlamograma dos índices de resistência compressiva}
+  \caption{Correlograma dos índices de resistência compressiva}
   \label{fig:gridcorr}
 \end{figure}
 
 A Tabela~\ref{tabelacorr} mostra o restante das correlações entre as demais
-colunas de dados:
+colunas de dados e o nosso objetivo, o índice RC28:
 
 \begin{tabular}{lr}
   \toprule
