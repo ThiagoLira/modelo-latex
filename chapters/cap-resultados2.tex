@@ -25,6 +25,66 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
 \label{fig:linmodels}
 \end{figure}
 
+Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente no
+começo após o fim do último dia de dados usados para treino. Iremos mostrar o
+erro para o dia seguinte, três dias depois e então uma semana após o último dia
+de dados usados para treinamento.
+
+\begin{center}
+\begin{table}[htbp]
+\caption{RMSE values by forecast span}
+\centering
+\begin{tabular}{rr}
+\hline
+ Regressão Linear & RMSE\\
+\hline
+24h & 2.94\\
+3d & 0.13\\
+7d & 5.43\\
+\hline
+Rede Neural & RMSE\\
+\hline
+24h & 3.70\\
+3d & 1.26\\
+7d & 6.04\\
+\hline
+Random Forest & RMSE\\
+\hline
+24h & 1.61\\
+3d & 1.36\\
+7d & 5.83\\
+\end{tabular}
+
+\label{tb:rmse_lin}
+\end{table}
+\end{center}
+
+
+Também estudamos a distribuição dos valores previstos, até 1 mês após a data
+onde começam os dados de validação (i.e. os dados não usamos para treinamento), a Imagem \ref{fig:distr_lin} permite comparar as distribuições previstas pelos 3 modelos:
+
+\begin{figure}[H]
+\label{fig:distr_lin}
+\centering
+\includegraphics[width=.3\textwidth]{qq-LinearRegression.pdf} \hfill
+\includegraphics[width=.3\textwidth]{qq-NeuralNet.pdf} \hfill
+\includegraphics[width=.3\textwidth]{qq-RandomForest.pdf} 
+\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\end{figure}
+
+Para modelagem de séries temporais, é também comum estudarmos o resíduo das
+predições. É assumido em uma tarefa de regressão que o resíduo é distribuído
+normalmente com média zero.
+
+\begin{figure}[H]
+  \label{fig:res_lin}
+  \centering
+  \includegraphics[width=.3\textwidth]{residuals-LinearRegression.pdf} \hfill
+  \includegraphics[width=.3\textwidth]{residuals-NeuralNet.pdf} \hfill
+  \includegraphics[width=.3\textwidth]{residuals-RandomForest.pdf} 
+  \caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
+\end{figure}
+
 \subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
 
 Para efeito de comparação de resultados, iremos aplicar o método proposto em
@@ -135,7 +195,7 @@ normalmente com média zero.
 
 
 \begin{figure}[H]
-\label{fig:distr}
+\label{fig:res}
 \centering
 \includegraphics[width=.3\textwidth]{res_deep_ar.pdf} \hfill
 \includegraphics[width=.3\textwidth]{res_deep_factors.pdf} \hfill
