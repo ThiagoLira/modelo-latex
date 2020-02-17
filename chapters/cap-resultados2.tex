@@ -25,8 +25,8 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
 \label{fig:linmodels}
 \end{figure}
 
-Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente no
-começo após o fim do último dia de dados usados para treino. Iremos mostrar o
+Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente
+após o fim do último dia de dados usados para treino. Iremos mostrar o
 erro para o dia seguinte, três dias depois e então uma semana após o último dia
 de dados usados para treinamento.
 
@@ -59,8 +59,7 @@ Random Forest & RMSE\\
 \end{table}
 \end{center}
 
-
-Também estudamos a distribuição dos valores previstos, até 1 mês após a data
+ Reportamos distribuição dos valores previstos, até 1 mês após a data
 onde começam os dados de validação (i.e. os dados não usamos para treinamento), a Imagem \ref{fig:distr_lin} permite comparar as distribuições previstas pelos 3 modelos:
 
 \begin{figure}[H]
@@ -72,9 +71,9 @@ onde começam os dados de validação (i.e. os dados não usamos para treinament
 \caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
 \end{figure}
 
-Para modelagem de séries temporais, é também comum estudarmos o resíduo das
+Para modelagem de séries temporais, é comum se estudar o resíduo das
 predições. É assumido em uma tarefa de regressão que o resíduo é distribuído
-normalmente com média zero.
+normalmente e com média zero.
 
 \begin{figure}[H]
   \label{fig:res_lin}
@@ -155,9 +154,8 @@ Encoder Decoder & RMSE\\
 \end{table}
 \end{center}
 
-
-Também estudamos a distribuição dos valores previstos, até 1 mês após a data
-onde começam os dados de validação (i.e. os dados não usamos para treinamento), a Imagem \ref{fig:distr} permite comparar as distribuições previstas pelos 3 modelos:
+A Imagem \ref{fig:distr} permite comparar as distribuições previstas para o mês
+de dados de validação pelos 3 modelos:
 
 \begin{figure}[H]
 \label{fig:distr}
