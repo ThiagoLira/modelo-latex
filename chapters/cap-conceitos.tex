@@ -328,7 +328,7 @@ calculado o erro máximo esperado por $90\%$ das predições.
 %% ------------------------------------------------------------------------- %%
 
 
-\section{Modelos Clássicos} 
+\section{Abordagem Não-Temporal} 
 
 
 \subsection{Redes Neurais}
@@ -407,6 +407,38 @@ criar predições sequenciais \citep{dlbook}. A área de NLP viu muitos novos
 resultados com o uso esses tipos de modelos para geração e classificação de textos, que são dados com
 natureza inerentemente sequencial. Para o caso desse trabalho, séries temporais também podem
 aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tempo.
+
+
+
+\subsection{Janela Móvel com Filtragem Exponencial}
+
+A abordagem usada em \cite{grecialin} consiste em aplicar regressões lineares em
+uma janela móvel de dados, i.e. para a predição do índice RC28 de um dia $t$ é
+realizada uma regressão pelo método dos mínimos quadrados para o conjunto de
+dados desde o dia $t -29 -t_d$ até $t -t_d$, $t_d$ sendo um parâmetro
+selecionado após testes.
+Esse intervalo é escolhido visto que um novo resultado de RC28 de um lote de
+cimento demora 29 dias após a expedição desse lote,
+então poderíamos usar no dia $t$ apenas a informação do RC28 de um lote
+28 dias no passado.
+
+Esse modelo treinado na faixa temporal $[t -29 -t_d,t - t_d]$ é usado para predições em um
+horizonte de tempo definido por um outro parâmetro escolhido pelo programador,
+$t_f$. Usamos o modelo na faixa temporal $[t -29 -t_d,t -t_d]$ para prever o índice RC28
+do intervalo $[t,t+t_f-1]$. O modelo é retreinado com uma nova janela sempre que um novo valor de
+$t$ ultrapassa $t + t_f -1$ do último modelo treinado.
+
+Os resultados do modelo treinado dessa maneira são então filtrados
+usando uma média móvel exponencial. Seja um vetor de predições $Y$ gerado pelo
+modelo, o vetor filtrado $Y^*$ é calculado usando a recursão: 
+
+
+  \begin{align}
+  Y^*_0 &= Y_0 \\ 
+  Y^*_t &= (1- \alpha)Y_{t-1} + \alpha Y_t 
+  \end{align}
+
+  O valor de $\alpha$ também se torna um hiper-parâmetro a ser selecionado.
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
