@@ -1,0 +1,19 @@
+#+TITLE: Resultados AI no Cimento
+#+AUTHOR:    Thiago Lira
+#+EMAIL:     thlira15@gmail.com
+#+latex_compiler: pdflatex
+#+date: \today
+#+LATEX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+OPTIONS: H:2 toc:t num:t
+#+BEAMER_THEME: Madrid
+* Resumo
+** Os dados
+** Os dados (Transformações) 
+** Aplicações de AI existentes 
+    - cite:grecialin 
+** Modelo Linear com Filtragem Exp.
+** Os Modelos de Deep Learning
+
+* Resultados
+** Métricas 
