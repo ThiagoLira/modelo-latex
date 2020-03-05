@@ -4,21 +4,49 @@
 #+latex_compiler: pdflatex
 #+date: \today
 #+LATEX_CLASS: beamer
-#+LATEX_HEADER: \usepackage[backend=bibtex]{biblatex}
+#+LATEX_HEADER: \usepackage[style=authoryear]{biblatex}
 #+LaTeX_CLASS_OPTIONS: [bigger]
 #+OPTIONS: H:2 toc:t num:t
 #+BEAMER_THEME: Madrid 
 #+LATEX_HEADER: \bibliography{bibliografia.bib}
 * Resumo
 ** Os dados
+ :PROPERTIES:
+ :BEAMER_opt: allowframebreaks,label=
+ :END:
+#+BEGIN_EXPORT latex
+\begin{table}[]
+  \resizebox{\textwidth}{!}{\begin{tabular}{|l|llllll}
+\cline{1-1}
+\multicolumn{1}{|c|}{\textbf{Unidade/ Variáveis}}         &                                &                              &                           &                             &                               &                               \\ \hline
+Composição Química (\%)                                   & \multicolumn{1}{l|}{$AL_20_3$} & \multicolumn{1}{l|}{$SIO_2$} & \multicolumn{1}{l|}{MGO}  & \multicolumn{1}{l|}{RICARB} & \multicolumn{1}{l|}{$P_2O_5$} & \multicolumn{1}{l|}{$F_2O_3$} \\ \hline
+Água (\%)                                                 & \multicolumn{1}{l|}{AGP}       &                              &                           &                             &                               &                               \\ \cline{1-3}
+Tempo até o começo e fim do endurecimento do material (s) & \multicolumn{1}{l|}{IP}        & \multicolumn{1}{l|}{FP}      &                           &                             &                               &                               \\ \cline{1-3}
+Finura Blaine ($cm^{2}$/g)                                & \multicolumn{1}{l|}{SBL}       &                              &                           &                             &                               &                               \\ \cline{1-4}
+Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}{RC3}       & \multicolumn{1}{l|}{RC7}     & \multicolumn{1}{l|}{RC28} &                             &                               &                               \\ \cline{1-4}
+\end{tabular}}
+\caption{Variáveis presentes nos dados de expedição de cimento.}
+\label{tb:vars}
+\end{table}
+#+END_EXPORT 
 ** Os dados (Transformações) 
+   - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
+$z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}$ 
+   - Reamostragem para frequência diária
+     [[file:Figuras/]]slides_dados_antes_resample.pdf 
 ** Aplicações de AI existentes 
-    - cite:grecialin 
+    - Em cite:grecialin temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
+    - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial  
 ** Modelo Linear com Filtragem Exp.
-** Os Modelos de Deep Learning
+** Os Modelos de Deep Learning Bayesianos
+   - Consideram a incerteza do modelo e a propagam até a predicão.
+   - Consomem janelas de W dias do passado (parâmetro customizável) e realizam um número arbitrário de predicões.
+   - Podem facilmente agregar séries exógenas na predicão 
 
 * Resultados
 ** Métricas 
+   - $R^2$
+   - RMSE 
 ** Bibliografia
  :PROPERTIES:
  :BEAMER_opt: allowframebreaks,label=
