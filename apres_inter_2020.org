@@ -9,6 +9,7 @@
 #+OPTIONS: H:2 toc:t num:t
 #+BEAMER_THEME: Madrid 
 #+LATEX_HEADER: \bibliography{bibliografia.bib}
+#+LATEX_HEADER: \usepackage{animate} 
 * Resumo
 ** Os dados
  :PROPERTIES:
@@ -38,6 +39,10 @@ $z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}$
     - Em cite:grecialin temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
     - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial  
 ** Modelo Linear com Filtragem Exp.
+   
+#+BEGIN_EXPORT latex
+\animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/line-}{0}{9}
+#+END_EXPORT 
 ** Os Modelos de Deep Learning Bayesianos
    - Consideram a incerteza do modelo e a propagam até a predicão.
    - Consomem janelas de W dias do passado (parâmetro customizável) e realizam um número arbitrário de predicões.
