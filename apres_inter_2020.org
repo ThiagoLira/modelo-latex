@@ -31,7 +31,7 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 #+END_EXPORT 
 ** Os dados (Transformações) 
    - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
-$z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}$ 
+          $z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}$ 
    - Reamostragem para frequência diária
      [[file:Figuras/]]slides_dados_antes_resample.pdf 
 ** Aplicações de AI existentes 
@@ -39,9 +39,9 @@ $z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}$
     - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial  
 ** Modelo Linear com Filtragem Exp.
 ** Os Modelos de Deep Learning Bayesianos
-   - Consideram a incerteza do modelo e a propagam até a predicão.
-   - Consomem janelas de W dias do passado (parâmetro customizável) e realizam um número arbitrário de predicões.
-   - Podem facilmente agregar séries exógenas na predicão 
+   - Consideram a incerteza do modelo e a propagam até a predição.
+   - Consomem janelas de W dias do passado (parâmetro customizável) e realizam um número arbitrário de predições.
+   - Podem facilmente agregar séries exógenas na predição 
 
 * Resultados
 ** Métricas 
