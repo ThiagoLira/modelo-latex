@@ -1,9 +1,15 @@
-\chapter{Resultados Experimentais }
+\chapter{ Resultados Experimentais }
 \label{cap:resultados}
+\section{Experimentos}
 
-\section{Resultados}
 
 \subsection{Divisão dos dados entre treino e validação}
+
+Para que obtenhamos um modelo que generalize em um novo conjunto de dados
+inéditos, devemos usar parte dos dados que possuímos não para treinar o modelo,
+mas para testá-lo. O erro nesse conjunto de dados separados apenas para teste é
+chamado de erro de validação, e o usamos como uma estimativa da capacidade de
+generalização dos modelos de aprendizagem automática.
 
 \begin{figure}[H]
   \centering
@@ -13,9 +19,14 @@
   \label{fig:divrc28}
 \end{figure}
 
+
 \subsection{Abordagem Não-Temporal}
 
-Modelos de Aprendizagem Automática não-temporais foram usados para treinar e validar os dados, para esses modelos usamos a biblioteca Sklearn.
+Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
+Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
+treinamos os modelos. 
+
+Os modelos de Aprendizagem Automática não-temporais foram usados pela biblioteca Sklearn.
 As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
 
 \begin{figure}[H]
@@ -87,7 +98,10 @@ normalmente e com média zero.
 \subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
 
 Para efeito de comparação de resultados, iremos aplicar o método proposto em
-\citep{grecialin}. Primeiramente apresentamos a variação do erro de treino em
+\citep{grecialin}. Para tal criamos as janelas de dados de treinamento e teste
+como explicado anteriormente nesse trabalho. 
+
+Primeiramente apresentamos a variação do erro de treino em
 função do parâmetro $t_d$ i.e. o tamanho do conjunto de treino para cada
 regressão. Apresentamos os resultados com e sem a aplicação da filtragem
 proposta no trabalho \citep{grecialin}.
@@ -145,6 +159,12 @@ São reportadas também a distribuição das predições e dos resíduos do mode
 
 \subsection{Modelos Bayesianos para Séries Temporais}
 
+
+Agora em se tratando de modelos para séries temporais, tratamos os dados
+sequencialmente, treinando e testando o modelo a partir de janelas de $w$
+entradas consumidas em sequência pelo o modelo. A tarefa destes é então gerar
+predições que continuem essa janela de dados. Em uma situação real daríamos
+alguns dias de dados como entrada e calcularíamos a medida alvo para os próximos dias. 
 
 Todos os modelos foram implementados usando a biblioteca Pytorch \cite{pytorch}, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
