@@ -264,11 +264,27 @@ normalmente com média zero.
 
 
 
+
+
+
 Os modelos de DL obtiveram um erro menor na predição do dia seguinte bem como em
 horizontes próximos de tempo, tanto em relação aos modelos não-temporais como em
 relação ao modelo filtrado expoencialmente.
 
-
+\begin{center}
+  \begin{table}[htbp]
+    \caption{Comparação dos modelos de Deep Learning e o modelo Linear}
+    \centering
+  \begin{tabular}{l|llll}
+    \cline{2-4}
+    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} & \multicolumn{1}{l|}{RMSE 72h} &  \\ \cline{1-4}
+    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                     &           1.44                    &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                       &       0.80                        &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                    &                   1.83            &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                        &     2.36                          &  \\ \cline{1-1}
+  \end{tabular}
+  \end{table}
+\end{center}
 % Local Variables:
 % TeX-master: "../quali"
 % End:
