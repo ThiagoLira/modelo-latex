@@ -31,7 +31,7 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 \end{table}
 #+END_EXPORT 
 ** Treino e Validação 
-[[file:Figuras/train_dev.pdf]]
+[[file:figuras/train_dev.pdf]]
 ** Os dados (Transformações) 
    - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
 #+BEGIN_EXPORT latex
@@ -41,7 +41,7 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 #+END_EXPORT 
 ** Os dados (Transformações) 2
    - Reamostragem para frequência diária
-     [[file:Figuras/slides_dados_antes_resample.pdf]]
+     [[file:figuras/slides_dados_antes_resample.pdf]]
 ** Aplicações de AI existentes 
     - Em [[cite:grecialin]] temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
     - [[cite:cementlin,nncement]] apresentam uma solucao compatível com o ambiente laboratorial  
@@ -62,13 +62,32 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 * Resultados
 ** Métricas 
    - $R^2$
-   - RMSE
+   Reporta a proporcão da variância da variável dependente que foi explicada pelo modelo.
+#+BEGIN_EXPORT latex
+\begin{align}
+&R^2 = 1 - \frac{SS_{res}}{SS_{tot}} &\\
+&SS_{tot} = \sum^n_{i=1} (y_i- \bar{y_i})^2 &\\
+&SS_{res} = \sum^n_{i=1} (y_i - \tot{y})^2 &\\
+&\bar{y} = \frac{1}{n} \sum^n_{i=1} y &
+\end{align}
+#+END_EXPORT 
+   
+** Métricas (2)
+- RMSE
+Raiz do erro quadrático médio para obtermos um erro na mesma ordem de grandeza da variável alvo.
+
+#+BEGIN_EXPORT latex
+\[
+RMSE = \sqrt{\sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}}
+\]
+#+END_EXPORT 
+
 ** Resultados Deep AR 
-[[file:Figuras/forecast_deep_ar.pdf]]
+[[file:figuras/forecast_deep_ar.pdf]]
 ** Resultados Encoder Decoder Forecaster 
-[[file:Figuras/forecast_enc_dec.pdf]]
+[[file:figuras/forecast_enc_dec.pdf]]
 ** Resultados Deep Factors
-[[file:Figuras/forecast_deep_factors.pdf]]
+[[file:figuras/forecast_deep_factors.pdf]]
 ** Bibliografia
  :PROPERTIES:
  :BEAMER_opt: allowframebreaks,label=
