@@ -30,14 +30,53 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 \label{tb:vars}
 \end{table}
 #+END_EXPORT 
+** Os dados (2)
+- Objetivo (RC28) possui baixa correlação com as variáveis fornecidas.
+
+#+BEGIN_EXPORT latex
+\begin{table}[H]
+  \centering
+\begin{tabular}{lr}
+  \toprule
+  {} &      RC28 \\
+  \midrule
+  AGP   &  0.592847 \\
+  AL2O3 &  0.463414 \\
+  SIO2  & -0.053178 \\
+  MGO   & -0.371414 \\
+  IP    & -0.132297 \\
+  FP    & -0.419800 \\
+  SBL   &  0.396555 \\
+  PF    & -0.480720 \\
+  P2O5  &  0.292252 \\
+  \bottomrule
+  \label{tabelacorr}
+\end{tabular}
+\end{table}
+
+#+END_EXPORT
+** Os dados (3)
+   
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+\centering
+\includegraphics[width=.3\textwidth]{Figuras/rc28scat.pdf} \hfill
+\includegraphics[width=.3\textwidth]{Figuras/rc3scat.pdf} \hfill
+\includegraphics[width=.3\textwidth]{Figuras/rc7scat.pdf} 
+\caption{Plots de correlação entre os índices e seus valores atrasados.} 
+\end{figure}
+#+END_EXPORT
+
+
 ** Treino e Validação 
+- Série **não estacionária**.
 [[file:Figuras/train_dev.pdf]]
 ** Os dados (Transformações) 
    - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
 #+BEGIN_EXPORT latex
           \[
 z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
-          \]
+\]
 #+END_EXPORT 
 ** Os dados (Transformações) 2
    - Reamostragem para frequência diária
@@ -51,10 +90,11 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 #+END_EXPORT 
 ** Os Modelos de Deep Learning Bayesianos
 - Consideram a incerteza do modelo e a propagam até a predição.
-- Empíricamente calculam a distribuição de cada predição.
+- Geram uma distribuição de probabilidade para cada predição.
 - Escalam facilmente para dezenas ou centenas de milhares de entradas de dados.
-- Consomem janelas de W dias do passado (parâmetro customizável) e realizam um número arbitrário de predições.
-- Podem facilmente agregar séries exógenas na predição. 
+- Podem facilmente agregar séries exógenas na predição.
+- Não dependem de estacionariedade dos dados. 
+    **i.e. podem gerar predições em regimes de anomalia**
 ** Treinamento 
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/dl-}{0}{9}
@@ -63,6 +103,51 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 ** Métricas 
    - $R^2$
    - RMSE
+** Resultados (Tabela)
+#+BEGIN_EXPORT latex
+\begin{center}
+\begin{table}[htbp]
+\caption{RMSE values by forecast span}
+\centering
+\begin{tabular}{rr}
+\hline
+Deep Factors & RMSE\\
+\hline
+24h & 0.18\\
+3d & 2.36\\
+7d & 1.83\\
+\hline
+Deep AR & RMSE\\
+\hline
+24h & 0.07\\
+3d & 1.37\\
+7d & 1.44\\
+\hline
+Encoder Decoder & RMSE\\
+\hline
+24h & 0.06\\
+3d & 0.44\\
+7d & 0.80\\
+\end{tabular}
+
+\label{tb:rmse}
+\end{table}
+\end{center}
+#+END_EXPORT 
+
+** Resultados (Distribuição)
+#+BEGIN_EXPORT latex
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.3\textwidth]{figuras/qq_deep_ar.pdf} \hfill
+\includegraphics[width=.3\textwidth]{figuras/qq_deep_factors.pdf} \hfill
+\includegraphics[width=.3\textwidth]{figuras/qq_enc_dec.pdf} 
+\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\label{fig:distr}
+\end{figure}
+
+#+END_EXPORT 
 ** Resultados Deep AR 
 [[file:Figuras/forecast_deep_ar.pdf]]
 ** Resultados Encoder Decoder Forecaster 
