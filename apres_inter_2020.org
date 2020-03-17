@@ -82,7 +82,6 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 ** Aplicações de AI existentes 
     - Em cite:grecialin temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
     - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial
-    - \cite{grecialin}
 ** Modelo Linear com Filtragem Exp.
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/line-}{0}{9}
@@ -94,6 +93,66 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 - Podem facilmente agregar séries exógenas na predição.
 - Não dependem de estacionariedade dos dados. 
     **i.e. podem gerar predições em regimes de anomalia**
+** Rede Encoder Decoder (Treino)
+   
+
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figuras/uber-train.png}
+  \caption{Modelo durante o Treinamento }
+
+\label{img:uber1}
+\end{figure}
+#+END_EXPORT
+
+** Rede Encoder Decoder (Inferência)
+   
+
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figuras/uber-predict.png}
+  \caption{No módulo de inferência usamos uma rede neural simples para gerar
+    predições a partir da codificação aprendida durante o pré-treino }
+  \label{img:uber2}
+\end{figure}
+
+#+END_EXPORT
+** Deep AR (Treino)
+- Modelo Auto-regressivo 
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figuras/deepar-train.pdf}
+  \caption{Para o treino, o modelo é guiado por anotações reais de valores
+    passados da série alvo $y$ e as variáveis independentes $x$. Usamos o estado
+  $h$ da rede LSTM a cada iteração temporal para calcular $\mu$  e $\sigma$.
+  Esses valores são então usados no calculo da verossimilhança $p(y |
+  \mu,\sigma)$, o valor que é minimizado.}
+  \label{fig:deepartrain}
+\end{figure}
+#+END_EXPORT
+
+** Deep AR (Inferência)
+- Modelo Auto-regressivo 
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figuras/deepar-pred.pdf}
+  \caption{Se desejarmos prever mais de um valor da série-alvo $y$ no futuro. O
+    modelo é realimentado com os valores amostrados de $y^*$ e a rede continua a
+  realizar predições.}
+  \label{fig:deepartrain}
+\end{figure}
+
+#+END_EXPORT
+** Deep Factors
+   - Gera predições de maneira similar ao Encoder-Decoder.
+   - Gera incerteza por meio de um Processo Gaussiano.
+   - O Processo Gaussiano supõe que as predições são normalmente distribuídas 2 a 2.
+   - O Kernel escolhido como função de covariância do processo 
+   é usado para maximizar a verossimilhança das predições.
 ** Treinamento 
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/dl-}{0}{9}
