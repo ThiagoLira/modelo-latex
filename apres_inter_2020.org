@@ -2,13 +2,14 @@
 #+AUTHOR:    Thiago Lira
 #+EMAIL:     thlira15@gmail.com
 #+latex_compiler: pdflatex
+#+LATEX_CMD: pdflatex
 #+date: \today
 #+LATEX_CLASS: beamer
-#+LATEX_HEADER: \usepackage[style=authoryear]{biblatex}
+#+LATEX_HEADER: \usepackage[backend=bibtex]{biblatex}
+#+LATEX_HEADER: \bibliography{bibliografia.bib}
 #+LaTeX_CLASS_OPTIONS: [bigger]
 #+OPTIONS: H:2 toc:t num:t
 #+BEAMER_THEME: Madrid 
-#+LATEX_HEADER: \bibliography{bibliografia.bib}
 #+LATEX_HEADER: \usepackage{animate} 
 * Resumo
 ** Os dados
@@ -37,9 +38,7 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 \begin{table}[H]
   \centering
 \begin{tabular}{lr}
-  \toprule
   {} &      RC28 \\
-  \midrule
   AGP   &  0.592847 \\
   AL2O3 &  0.463414 \\
   SIO2  & -0.053178 \\
@@ -49,7 +48,6 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
   SBL   &  0.396555 \\
   PF    & -0.480720 \\
   P2O5  &  0.292252 \\
-  \bottomrule
   \label{tabelacorr}
 \end{tabular}
 \end{table}
@@ -82,8 +80,9 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
    - Reamostragem para frequência diária
      [[file:figuras/slides_dados_antes_resample.pdf]]
 ** Aplicações de AI existentes 
-    - Em [[cite:grecialin]] temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
-    - [[cite:cementlin,nncement]] apresentam uma solucao compatível com o ambiente laboratorial  
+    - Em cite:grecialin temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
+    - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial
+    - \cite{grecialin}
 ** Modelo Linear com Filtragem Exp.
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/line-}{0}{9}
