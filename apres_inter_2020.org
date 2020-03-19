@@ -94,6 +94,15 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/line-}{0}{9}
 #+END_EXPORT 
+
+** Modelo Econométrico (Processo AR)
+   - Processo AR 
+   - Usa atrasos de RC3, RC7 e RC28 de respectivamente 3, 7 e 28 dias.
+#+BEGIN_EXPORT latex
+          \[
+          RC28_t = \beta_0 + \beta_1*RC28_{t-27} + \beta_2*RC3_{t-3} + \beta_3*RC7_{t-7} + \epsilon_t
+          \]
+#+END_EXPORT 
 ** Os Modelos de Deep Learning Bayesianos
 - Consideram a incerteza do modelo e a propagam até a predição.
 - Geram uma distribuição de probabilidade para cada predição.
@@ -188,36 +197,25 @@ RMSE = \sqrt{\sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}}
 \]
 #+END_EXPORT 
 
-** Resultados (Tabela)
+** Resultados (Tabela) 
 #+BEGIN_EXPORT latex
-\begin{center}
-\begin{table}[htbp]
-\caption{RMSE values by forecast span}
-\centering
-\begin{tabular}{rr}
-\hline
-Deep Factors & RMSE\\
-\hline
-24h & 0.18\\
-3d & 2.36\\
-7d & 1.83\\
-\hline
-Deep AR & RMSE\\
-\hline
-24h & 0.07\\
-3d & 1.37\\
-7d & 1.44\\
-\hline
-Encoder Decoder & RMSE\\
-\hline
-24h & 0.06\\
-3d & 0.44\\
-7d & 0.80\\
-\end{tabular}
 
-\label{tb:rmse}
-\end{table}
+\begin{center}
+  \begin{table}[htbp]
+    \caption{Comparação dos modelos de Deep Learning e o modelo Linear}
+    \centering
+  \begin{tabular}{l|llll}
+    \cline{2-4}
+    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} & \multicolumn{1}{l|}{RMSE 72h} &  \\ \cline{1-4}
+    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                     &           1.44                    &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                       &       0.80                        &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                    &                   1.83            &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                        &     2.36                          &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{AR Process} &                  0.33             &       4.32                        &     5.48                          &  \\ \cline{1-1}
+  \end{tabular}
+  \end{table}
 \end{center}
+
 #+END_EXPORT 
 
 ** Resultados (Distribuição)
@@ -239,6 +237,12 @@ Encoder Decoder & RMSE\\
 [[file:figuras/forecast_enc_dec.pdf]]
 ** Resultados Deep Factors
 [[file:figuras/forecast_deep_factors.pdf]]
+** Resultados Processo AR
+  - Realizado em período estacionário dos dados de treino 
+  [[file:figuras/arppreds.pdf]]
+
+** Resultados Modelo Exponcial  
+  [[file:figuras/predgrecialin.pdf]]
 ** Bibliografia
  :PROPERTIES:
  :BEAMER_opt: allowframebreaks,label=
