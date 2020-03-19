@@ -11,6 +11,7 @@
 #+OPTIONS: H:2 toc:t num:t
 #+BEAMER_THEME: Madrid 
 #+LATEX_HEADER: \usepackage{animate} 
+#+LATEX_HEADER: \usepackage{graphicx} 
 * Resumo
 ** Os dados
  :PROPERTIES:
@@ -54,21 +55,28 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 
 #+END_EXPORT
 ** Os dados (3)
+- Objetivo (RC28) possui correlação com os outros índices de RC 
+#+BEGIN_EXPORT latex
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth,height=0.7\textheight,keepaspectratio]{figuras/corr_grid.pdf}
+\end{figure}
+#+END_EXPORT
+** Os dados (4)
    
 #+BEGIN_EXPORT latex
 \begin{figure}[H]
 \centering
-\includegraphics[width=.3\textwidth]{Figuras/rc28scat.pdf} \hfill
-\includegraphics[width=.3\textwidth]{Figuras/rc3scat.pdf} \hfill
-\includegraphics[width=.3\textwidth]{Figuras/rc7scat.pdf} 
+\includegraphics[width=.3\textwidth]{figuras/rc28scat.pdf} \hfill
+\includegraphics[width=.3\textwidth]{figuras/rc3scat.pdf} \hfill
+\includegraphics[width=.3\textwidth]{figuras/rc7scat.pdf} 
 \caption{Plots de correlação entre os índices e seus valores atrasados.} 
 \end{figure}
 #+END_EXPORT
 
-
 ** Treino e Validação 
 - Série **não estacionária**.
-[[file:Figuras/train_dev.pdf]]
+[[file:figuras/train_dev.pdf]]
 ** Os dados (Transformações) 
    - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
 #+BEGIN_EXPORT latex
