@@ -241,7 +241,7 @@ RMSE = \sqrt{\sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}}
   - Realizado em período estacionário dos dados de treino 
   [[file:figuras/arppreds.pdf]]
 
-** Resultados Modelo Exponcial  
+** Resultados Coupled Linear Model
   [[file:figuras/predgrecialin.pdf]]
 ** Bibliografia
  :PROPERTIES:
