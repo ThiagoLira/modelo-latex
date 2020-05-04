@@ -194,7 +194,7 @@ Deep Factors & RMSE\\
 \hline
 Deep AR & RMSE\\
 \hline
-24h & 0.07\\
+  24h & 0.07\\
 3d & 1.37\\
 7d & 1.44\\
 \hline
@@ -222,8 +222,9 @@ de dados de validação pelos 3 modelos:
 \end{figure}
 
 
-Finalmente, os valores e incertezas previstos pelos modelos:
-
+Finalmente, os valores e incertezas previstos pelos modelos são mostrados nas
+Figuras~\ref{fig:fordeepar},\ref{fig:fordeepfactors} e \ref{fig:forencdec}. Nas
+figuras são representados as margens de incerteza para $50%$ e $90%$ das predições.
 
 \begin{figure}[H]
   \label{fig:fordeepar}
@@ -248,9 +249,9 @@ Finalmente, os valores e incertezas previstos pelos modelos:
 
 
 Para modelagem de séries temporais, é também comum estudarmos o resíduo das
-predições. É assumido em uma tarefa de regressão que o resíduo é distribuído
-normalmente com média zero.
-
+predições. Idealmente o resíduo deve ter uma distribuição próxima a uma normal
+com média zero, significando que esse erro dos modelos não contém nenhuma parte
+não-aleatória que poderia ter sido capturada durante o treino. 
 
 \begin{figure}[H]
 \label{fig:res}
@@ -260,11 +261,6 @@ normalmente com média zero.
 \includegraphics[width=.3\textwidth]{res_enc_dec.pdf} 
 \caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
 \end{figure}
-
-
-
-
-
 
 
 Os modelos de DL obtiveram um erro menor na predição do dia seguinte bem como em
