@@ -78,7 +78,7 @@ Resistência Compressiva do Cimento (kPA)                  & \multicolumn{1}{l|}
 - Série **não estacionária**.
 [[file:figuras/train_dev.pdf]]
 ** Os dados (Transformações) 
-   - Normalizacao Minmax: Valores transformados no intervalo $[0,1]$. 
+   - Normalização Minmax: Valores transformados no intervalo $[0,1]$. 
 #+BEGIN_EXPORT latex
           \[
 z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
@@ -88,8 +88,8 @@ z^*_{i} = \frac{x_i - min(X)}{max(X) - min(X)}
    - Reamostragem para frequência diária
      [[file:figuras/slides_dados_antes_resample.pdf]]
 ** Aplicações de AI existentes 
-    - Em cite:grecialin temos um tratamento temporal dos dados, com regressão lineares treinadas em janelas móveis
-    - cite:cementlin,nncement apresentam uma solucao compatível com o ambiente laboratorial
+    - Em cite:grecialin temos um tratamento temporal dos dados, com regressões lineares treinadas em janelas móveis
+    - cite:cementlin,nncement apresentam uma solução compatível com o ambiente laboratorial
 ** Modelo Linear com Filtragem Exp.
 #+BEGIN_EXPORT latex
 \animategraphics[loop,controls,width=\linewidth]{50}{figuras/gifs/line-}{0}{9}

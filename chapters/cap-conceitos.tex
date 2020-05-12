@@ -19,9 +19,11 @@ Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
  $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
 de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis  $x_i$ e do alvo $y$ no passado \citep{deepfactors}.
+observações das diversas variáveis  $x_i$ e do alvo $y$ no passado
+\citep{deepfactors}. Nota-se que se supõe que possuímos entradas das
+variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
 
-\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:T}) \]
+\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:F}) \]
 
 A distribuição será aprendida por meio de aprendizado supervisionado, onde os
 modelos serão alimentados com diversos pares de entradas,

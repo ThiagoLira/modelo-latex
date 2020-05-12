@@ -34,7 +34,7 @@ possam entregar resultados imediatos para a ação dos operadores.
 
 O trabalho \citep{dynstat} propõe uma regressão linear cujos parâmetros são recalculados
 sempre que um novo valor RC28 é amostrado pelo laboratório. Nossa contribuição é
-o tratamento completo dos dados providenciados na operação da fábrica como
+similar, por meio de um tratamento completo dos dados providenciados na operação da fábrica como
 \textbf{séries temporais} i.e. dados indexados por anotações de tempo.
 
 Por muitas décadas o estado da arte desse tipo de análise temporal centrou-se
@@ -69,7 +69,18 @@ Nossa metodologia deve ser capaz de prever o sensível nível de imprecisão e
 incerteza que ocorre no processo industrial,
 refletindo assim as condições reais observadas na fábrica. A estatística bayesiana oferece técnicas
 mais robustas para a modelagem de incerteza \citep{bayesml}. E num contexto em
-que possuímos muitos dados, técnicas de DL também podem ser aplicadas com um desenvolvimento bayesiano para a propagação de erro e cálculo de incertezas \citep{ubertime,Gal2016Uncertainty}. 
+que possuímos muitos dados, técnicas de DL também podem ser aplicadas com um
+desenvolvimento bayesiano para a propagação de erro e cálculo de incertezas
+\citep{ubertime,Gal2016Uncertainty}. Outro benefício de técnicas propostas
+recentemente na área de predição de séries temporais com DL consiste no uso de diversas séries temporais similares para o treinamento de uma
+única tarefa, e.g. históricos de consumo de energia elétrica de milhares
+de residências diferentes. Métodos clássicos como ARIMA tem 
+dificuldade na incorporação de diversas séries temporais para a resolução de uma
+só tarefa, sendo necessário que os modelos sejam treinados individualmente para
+cada série temporal e então agregados para a tomada de decisões. Trabalhos como
+\citep{ubertime,deepar,deepfactors} propõe métodos robustos e com parâmetros
+compartilhados (i.e. globais) no uso de um número arbitrário de séries temporais
+para uma mesma tarefa.
 
 
 
