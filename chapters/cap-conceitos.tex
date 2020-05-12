@@ -847,7 +847,6 @@ $\mathbb{E}[y^* | \theta,x^*]$ é a verossimilhança do modelo, ou seja:
   Var[\mathbb{E}(y^* | \theta,x^*)] = Var[f^\theta(x^*)]
 \]
 
-
 $Var[f^\theta(x^*)]$ representa a incerteza do modelo, e a estimativa desse valor será feito pela técnica do MC Dropout. A variância
 será aproximada pela variância amostral de $B$ predições estocásticas calculadas
 na rede com camadas de Dropout ativadas. Seja $\{\hat{y}^*_{(1)}=f^{\theta_{(1)}}(x^*),\hat{y}^*_{(2)}=f^{\theta_{(2)}}(x^*), \dots
