@@ -7,14 +7,15 @@
 
 
 Os dados da produção de cimento são anotados temporalmente, então podemos escolher
-tratá-los como uma série temporal, i.e. a ordem de entrada dos dados no modelo
-é uma informação relevante. A tarefa de regressão se torna então prever as próximas anotações desses
+tratá-los como uma série temporal, i.e. usaremos o tempo como uma informação
+relevante na tarefa de aprendizado.
+A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
 de predição $y$ e de um vetor $\textbf{x}$ de parâmetros. O problema é de Aprendizado
-Supervisionado: Buscamos a distribuição das anotações $y$ condicionada
+Supervisionado(Tópico explicado na Sessão~\ref{sec:aprenauto}): Buscamos a distribuição das anotações $y$ condicionada
 aos parâmetros de entrada $x$, mas também ao
-histórico da série temporal, i.e. valores passados do objetivo $y$ e do
-vetor de entrada $\textbf{x}$. 
+histórico da série temporal, i.e. valores passados do objetivo $y$ e dos valores
+passados do vetor de entrada $\textbf{x}$. 
 Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
  $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
@@ -25,13 +26,15 @@ variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:F}) \]
 
-A distribuição será aprendida por meio de aprendizado supervisionado, onde os
+A distribuição será buscada por meio de aprendizado supervisionado, onde os
 modelos serão alimentados com diversos pares de entradas,
 $(y_t,\textbf{x}_{t:t+W})$, onde $\textbf{x}$ é um vetor que contém os valores de
 cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
 entrada contém $W$ entradas do vetor de entrada. O parâmetro $W$, o
 tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
 treino e pode ser alterado na busca de uma melhor acurácia de predição.
+
+
 
 \section{Estatística Frequentista e Estatística Bayesiana}
  
@@ -54,7 +57,7 @@ frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:
 
 
 \section{Aprendizado Automático}
-
+\label{sec:aprenauto}
 O campo de Aprendizado Automático (Machine Learning - Aprendizado Automático) é um ramo da Ciência
 da Computação que utiliza métodos estatísticos para criar sistemas que possam
 aprender a realizar uma determinada tarefa através de dados. Um problema de Aprendizado Automático possui
@@ -85,20 +88,25 @@ produção de cimento.
 
 \subsubsection{Aprendizado Supervisionado}
 \label{sec:apren} 
-Aprendizado Supervisionado consiste, do ponto de vista estatístico, em aprender uma distribuição
-de probabilidade condicional do tipo $p(y | x)$. Nos são fornecidos diversos vetores de
-entrada $x$ associados a uma anotação $y$ e gostaríamos de modelar essa relação
-entre dados e anotações para que possamos anotar novos dados inéditos para os
-modelos. Ou seja, para diversos exemplos de vetores
-$x$ são fornecidas anotações $y$, e desejamos então criar predições de anotações
-$y'$ para novas entradas $x'$.
+Aprendizado Supervisionado consiste, do ponto de vista estatístico, no
+aprendizado de uma distribuição de probabilidade do tipo $p(y | x)$. Uma
+regressão linear pode ser entendida como a distribuição $p(y | x) = \theta^Tx + \epsilon =
+\mathcal{N}(\theta^Tx,\sigma) $, $\epsilon \sim \mathcal{N}(0,\sigma)$. Esse ponto será melhor
+explorado na Sessão~\ref{sec:est}. \\ 
+
+Dados vetores de entrada $x$ associados a uma anotação $y$, a tarefa consiste na busca de uma
+função dentro de uma família de funções que melhor generalize a relação entre
+$x$ e $y$. De modo que os modelos possam gerar anotações inéditas $y'$ para
+dados $x'$ nunca antes vistos. 
 
 
 \subsubsection{Aprendizado Não Supervisionado}
 
 Para o caso de Aprendizado Não Supervisionado, mantendo a estrutura do exemplo
 anterior, desejaríamos então modelar uma distribuição do tipo $p(x)$, onde temos
-também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma propriedade importante dessa distribuição.
+também diversos exemplos de vetores aleatórios $x$ e estamos estudando alguma
+propriedade importante dessa distribuição.
+Esse tipo de problema é mais comum em tarefas de Visão Computacional e NLP.
 
 
 
