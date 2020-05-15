@@ -7,20 +7,33 @@
 
 
 Os dados da produção de cimento são anotados temporalmente, então podemos escolher
-tratá-los como uma série temporal, i.e. usaremos o tempo como uma informação
+tratá-los como uma série temporal, i.e. usaremos a ordem temporal como uma informação
 relevante na tarefa de aprendizado.
 A tarefa de regressão se torna então prever as próximas anotações desses
-dados num horizonte de tempo futuro finito. A série temporal é composta por diversas medições indexadas pelo tempo $t$ do objetivo
-de predição $y$ e de um vetor $\textbf{x}$ de parâmetros. O problema é de Aprendizado
-Supervisionado(Tópico explicado na Sessão~\ref{sec:aprenauto}): Buscamos a distribuição das anotações $y$ condicionada
-aos parâmetros de entrada $x$, mas também ao
-histórico da série temporal, i.e. valores passados do objetivo $y$ e dos valores
-passados do vetor de entrada $\textbf{x}$. 
-Seja um série temporal alvo, $y$, e diversas séries temporais de variáveis
- $x_i$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
+dados num horizonte de tempo futuro finito.
+Na tarefa de aprendizado será usada a série temporal alvo $Y$, dos índices
+$RC_{28}$ de resistência compressiva, $Y = \{y_t , t \in \mathbb{Z}^+ \}$.
+Também serão usadas séries temporais de
+\textbf{covariados}, i.e. variáveis também anotadas temporalmente de composições
+químicas de reagentes presentes na produção de cimento, $\textbf{X}$. $\textbf{X} = \{ \textbf{x}_t  \, , t
+\in \mathbb{Z}^+  \}$, onde cada $\textbf{x}_t \in \mathbb{R}^K$.
+
+Para k séries temporais de covariados i.e. parâmetros de
+entrada. Para simplificar a notação, o índice $t$ será por vezes omitido.
+
+O problema é de Aprendizado Supervisionado(Tópico explicado na
+Sessão~\ref{sec:aprenauto}). Usaremos valores passados dos covariados a da
+própria série alvo para a predição de novas anotações $y$. A literatura de predição de séries
+temporais chama esse tipo de problema onde são usadas valores passadas de uma série
+para a predição do futuro da mesma de \textbf{auto-regressão}, para um resumo
+das diversas tarefas de aprendizado relacionadas a séries temporais, ver \cite{gluonts}.
+
+
+Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
+ $x_k$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
 de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis  $x_i$ e do alvo $y$ no passado
+observações das diversas variáveis  $x_k$ e do alvo $y$ no passado
 \citep{deepfactors}. Nota-se que se supõe que possuímos entradas das
 variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
 
@@ -90,7 +103,7 @@ produção de cimento.
 \label{sec:apren} 
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, no
 aprendizado de uma distribuição de probabilidade do tipo $p(y | x)$. Uma
-regressão linear pode ser entendida como a distribuição $p(y | x) = \theta^Tx + \epsilon =
+regressão linear pode ser entendida como a distribuição do alvo $y$, $p(y | x) = \theta^Tx + \epsilon =
 \mathcal{N}(\theta^Tx,\sigma) $, $\epsilon \sim \mathcal{N}(0,\sigma)$. Esse ponto será melhor
 explorado na Sessão~\ref{sec:est}. \\ 
 
