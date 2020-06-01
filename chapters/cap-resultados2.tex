@@ -3,7 +3,15 @@
 \section{Experimentos}
 
 
-\subsection{Divisão dos dados entre treino e validação}
+
+
+\subsection{Abordagem Não-Temporal}
+
+Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
+Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
+treinamos os modelos. 
+
+\subsubsection{Divisão dos dados entre treino e validação}
 
 Para que obtenhamos um modelo que generalize em um novo conjunto de dados
 inéditos, devemos usar parte dos dados que possuímos não para treinar o modelo,
@@ -18,14 +26,6 @@ generalização dos modelos de aprendizagem automática.
     treino e os pontos azuis usados para validação.}
   \label{fig:divrc28}
 \end{figure}
-
-
-\subsection{Abordagem Não-Temporal}
-
-Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
-Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
-treinamos os modelos. 
-
 
 Foram usadas implementacões dos modelos fornecidos pela biblioteca Sklearn.
 As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
@@ -98,8 +98,9 @@ normalmente e com média zero.
 
 \subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
 
-Para efeito de comparação de resultados, iremos aplicar o método proposto em
-\citep{grecialin}. Para tal criamos as janelas de dados de treinamento e teste
+Com o fim de termos uma baseline com a qual compararmos os modelos de Deep
+Learning, aplicaremos o modelo proposto em \citep{grecialin}.
+Para tal criamos as janelas de dados de treinamento e teste
 como explicado anteriormente nesse trabalho. 
 
 Primeiramente apresentamos a variação do erro de treino em
@@ -158,7 +159,7 @@ São reportadas também a distribuição das predições e dos resíduos do mode
   \caption{Distribuição dos resíduos do modelo exponencial} 
 \end{figure}
 
-\subsection{Modelos Bayesianos para Séries Temporais}
+\subsection{Modelos de Aprendizam Profunda Bayesianos para Séries Temporais}
 
 
 Agora com um tratamento completo do problema como o de previsão de séries
@@ -166,6 +167,38 @@ temporais, consideramos os dados sequencialmente, treinando e testando o modelo 
 entradas consumidas em sequência pelo o modelo. A tarefa destes é então gerar
 predições que continuem essa janela de dados. Em uma situação real daríamos
 alguns dias de dados como entrada e calcularíamos a medida alvo para os próximos dias. 
+
+
+Como mencionado na introdução desse trabalho, um benefício das técnicas de
+Aprendizado Profundo é a de escalar tarefas de aprendizado para datasets de
+tamanho muito maior que era possível com modelos clássicos \citep{dlbook}.
+Para tarefas de regressão de séries temporais, modelos recentes de Aprendizado
+Profundo permitem que sejam usadas diversas séries temporais para a tarefa de
+aprendizado. Os modelos poderão então ter parâmetros tanto locais (calculados
+para cada série) como globais (dividimos por todas as séries de treinamento).
+
+\subsubsection{Divisão dos dados entre treino e validação}
+
+Com o fim de explorar essa capacidade dos modelos de consumirem diversas séries
+temporais, os dados da fábrica de Cajati foram separados por ano e consideramos
+cada ano como um exemplo do processo a ser modelado, fornecendo-os separadamente
+aos modelos. Os modelos de Aprendizado
+Profundo irão então usar parametros locais para cada ano de produção de cimento,
+mas globalmente buscar padrões para o funcionamento da fábrica. 
+
+Para cada ano de 2009 até 2019 usaremos os primeiros 11 meses como dados de
+treinamento e os últimos 30 dias como dados de validação.
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=.99\textwidth]{train_val_all_years.pdf} 
+  \caption{Os dados são divididos em 11 datasets separados, onde temos por
+    dataset 11 meses usados para treino e os últimos dias do ano para validação.} 
+  \label{fig:trainvalallyears}
+\end{figure}
+
 
 Usamos a implementacão da biblioteca Pytorch \cite{pytorch} dos modelos, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
