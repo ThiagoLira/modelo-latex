@@ -202,41 +202,44 @@ treinamento e os últimos 30 dias como dados de validação.
 
 Usamos a implementacão da biblioteca Pytorch \cite{pytorch} dos modelos, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
-Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após
-uma janela inteira de dias ser codificada pelas redes Encoder.
-Apenas então os modelos terão informação para gerar predições. O Modelo Deep
-Factors não necessita de uma janela pois sua arquitetura permite e emissão de
-predições imediatamente após o primeiro timestep ser recebido,
-e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
-
 Na Tabela~\ref{tb:rmse} reportamos os erros para predições imediatamente no
 começo após o fim do último dia de dados usados para treino. Iremos mostrar o
-erro para o dia seguinte, três dias depois e então uma semana após o último dia
-de dados usados para treinamento.
+erro para o dia seguinte e para três dias após o horizonte dos dados de treino.
+Os modelos comparados são o \textbf{DeepAR},\textbf{Deep Factors} e
+\textbf{Encoder-Decoder-Forecaster}. Como comparacão, usaremos um modelo chamado
+de \textbf{Naive}, ou \textbf{Ingênuo}, que apenas prevê o alvo no instante $t$ como o valor
+correto no instante $t-1$.
+
+Os resultados são gerados por aplicar os modelos nos períodos de teste (i.e. o
+último mês de cada ano) e agregam-se os indicadores de erro em todos os
+datasets. No caso do RMSE, fazemos uma simples média entre os erros de cada
+dataset.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{RMSE values by forecast span}
+\caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 3 dias.}
 \centering
 \begin{tabular}{rr}
 \hline
 Deep Factors & RMSE\\
 \hline
-24h & 0.18\\
-3d & 2.36\\
-7d & 1.83\\
+24h & 5.7\\
+3d & 3.4\\
 \hline
 Deep AR & RMSE\\
 \hline
-  24h & 0.07\\
-3d & 1.37\\
-7d & 1.44\\
+  24h & 2.02 \\
+3d & 1.59\\
 \hline
 Encoder Decoder & RMSE\\
 \hline
 24h & 0.06\\
 3d & 0.44\\
-7d & 0.80\\
+\hline
+Naive & RMSE\\
+\hline
+24h & 1.62\\
+3d & 1.50\\
 \end{tabular}
 
 \label{tb:rmse}
