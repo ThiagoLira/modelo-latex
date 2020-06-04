@@ -5,7 +5,7 @@
 
 
 
-\subsection{Abordagem Não-Temporal}
+\subsection{Modelos Simples de Aprendizado de Máquina}
 
 Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
@@ -13,11 +13,10 @@ treinamos os modelos.
 
 \subsubsection{Divisão dos dados entre treino e validação}
 
-Para que obtenhamos um modelo que generalize em um novo conjunto de dados
-inéditos, devemos usar parte dos dados que possuímos não para treinar o modelo,
-mas para testá-lo. O erro nesse conjunto de dados separados apenas para teste é
-chamado de erro de validação, e o usamos como uma estimativa da capacidade de
-generalização dos modelos de aprendizagem automática.
+
+A divisão entre dados de treino e validação é feita da maneira padrão com
+modelos de Aprendizado de Máquina, separando-se $80\%$ dos dados para treino e
+$20\%$ para validação, i.e. testar o poder de generalizacão dos modelos. 
 
 \begin{figure}[H]
   \centering
@@ -308,13 +307,13 @@ relação ao modelo filtrado exponencialmente.
   \begin{table}[htbp]
     \caption{Comparação dos modelos de Deep Learning e o modelo Linear}
     \centering
-  \begin{tabular}{l|llll}
+  \begin{tabular}{l|lll}
     \cline{2-4}
-    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} & \multicolumn{1}{l|}{RMSE 72h} &  \\ \cline{1-4}
-    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                     &           1.44                    &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                       &       0.80                        &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                    &                   1.83            &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                        &     2.36                          &  \\ \cline{1-1}
+    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} &   \\ \cline{1-4}
+    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                                         &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                                             &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                                &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                                            &  \\ \cline{1-1}
   \end{tabular}
   \end{table}
 \end{center}
