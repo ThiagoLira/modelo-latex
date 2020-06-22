@@ -95,70 +95,7 @@ normalmente e com média zero.
   \caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
 \end{figure}
 
-\subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
-
-Com o fim de termos uma baseline com a qual compararmos os modelos de Deep
-Learning, aplicaremos o modelo proposto em \citep{grecialin}.
-Para tal criamos as janelas de dados de treinamento e teste
-como explicado anteriormente nesse trabalho. 
-
-Primeiramente apresentamos a variação do erro de treino em
-função do parâmetro $t_d$ i.e. o tamanho do conjunto de treino para cada
-regressão. Apresentamos os resultados com e sem a aplicação da filtragem
-proposta no trabalho \citep{grecialin}.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{tdparameter.pdf}
-  \caption{Erro de treino em função do parâmetro $t_d$}
-  \label{fig:tdparam}
-\end{figure}
-
-Os resultados do modelo em todo o período de validação, bem como o erro são
-reportados a seguir:
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{forecast_lin_reg_win.pdf}
-  \caption{Predições no conjunto de validação do modelo de regressão linear dinâmico}
-  \label{fig:tdparam}
-\end{figure}
-
-\begin{center}
-  \begin{table}[htbp]
-    \caption{RMSE values by forecast span}
-    \centering
-    \begin{tabular}{rr}
-      \hline
-      Reg. Linear com Filtragem Exponencial & RMSE\\
-      \hline
-      24h & 1.79 \\ 
-      3d & 1.47\\
-      7d & 2.36\\
-    \end{tabular}
-
-    \label{tb:rmse_exp}
-  \end{table}
-\end{center}
-São reportadas também a distribuição das predições e dos resíduos do modelo exponencial.
-
-\begin{figure}[H]
-  \label{fig:distr_exp}
-  \centering
-  \includegraphics[width=.5\textwidth]{qq_forecast_lin_reg_win.pdf} \hfill
-  \caption{Valores reais plotados contra os valores previstos para análise da
-    distribuição aprendida pelo modelo exponencial} 
-\end{figure}
-
-
-\begin{figure}[H]
-  \label{fig:res_exp}
-  \centering
-  \includegraphics[width=.5\textwidth]{res_forecast_lin_reg_win.pdf} \hfill
-  \caption{Distribuição dos resíduos do modelo exponencial} 
-\end{figure}
-
-\subsection{Modelos de Aprendizam Profunda Bayesianos para Séries Temporais}
+\subsection{Modelos para Séries Temporais}
 
 
 Agora com um tratamento completo do problema como o de previsão de séries
@@ -198,125 +135,129 @@ treinamento e os últimos 30 dias como dados de validação.
   \label{fig:trainvalallyears}
 \end{figure}
 
+\subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
 
-Usamos a implementacão da biblioteca Pytorch \cite{pytorch} dos modelos, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
+Com o fim de termos uma baseline com a qual compararmos os modelos de Deep
+Learning, aplicaremos o modelo proposto em \citep{grecialin}.
+Para tal criamos as janelas de dados de treinamento e teste
+como explicado anteriormente nesse trabalho.  
 
-Na Tabela~\ref{tb:rmse} reportamos os erros para predições imediatamente no
-começo após o fim do último dia de dados usados para treino. Iremos mostrar o
-erro para o dia seguinte e para três dias após o horizonte dos dados de treino.
-Os modelos comparados são o \textbf{DeepAR},\textbf{Deep Factors} e
-\textbf{Encoder-Decoder-Forecaster}. Como comparacão, usaremos um modelo chamado
-de \textbf{Naive}, ou \textbf{Ingênuo}, que apenas prevê o alvo no instante $t$ como o valor
-correto no instante $t-1$.
+Usaremos 3 modelos com diferentes grupos de variáveis, a tabela a seguir mostra
+as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
+desse trabalho.
 
-Os resultados são gerados por aplicar os modelos nos períodos de teste (i.e. o
-último mês de cada ano) e agregam-se os indicadores de erro em todos os
-datasets. No caso do RMSE, fazemos uma simples média entre os erros de cada
-dataset.
 
-\begin{center}
-\begin{table}[htbp]
-\caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 3 dias.}
-\centering
-\begin{tabular}{rr}
-\hline
-Deep Factors & RMSE\\
-\hline
-24h & 3.4\\
-3d & 3.2\\
-\hline
-Deep AR & RMSE\\
-\hline
-  24h & 1.65 \\
-3d & 1.68\\
-\hline
-Encoder Decoder & RMSE\\
-\hline
-24h & 0.06\\
-3d & 0.44\\
-\hline
-Naive & RMSE\\
-\hline
-24h & 1.62\\
-3d & 1.50\\
+% copiar output do pandas aqui
+% esta no notebook papergrecia
+\begin{table}[]
+\centering 
+\begin{tabular}{llllllllllllll}
+\toprule
+reglin\_1 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &      &      \\
+reglin\_3 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &  RC3 &      \\
+reglin\_7 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &  RC3 &  RC7 \\
+\bottomrule
 \end{tabular}
-
-\label{tb:rmse}
+\caption{O conjunto de variáveis usado para cada um dos modelos, de maneira análoga ao apresentado no trabalho \cite{grecialin}}
+\label{tab:modelslin}
 \end{table}
-\end{center}
 
-A Imagem \ref{fig:distr} compara as distribuições previstas para o mês
-de dados de validação pelos 3 modelos:
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=.3\textwidth]{qq_deep_ar.pdf} \hfill
-\includegraphics[width=.3\textwidth]{qq_deep_factors.pdf} \hfill
-\includegraphics[width=.3\textwidth]{qq_enc_dec.pdf} 
-\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
-\label{fig:distr}
-\end{figure}
-
-
-Finalmente, os valores e incertezas previstos pelos modelos são mostrados nas
-Figuras~\ref{fig:fordeepar},\ref{fig:fordeepfactors} e \ref{fig:forencdec}. Nas
-figuras são representados as margens de incerteza para $50\%$ e $90\%$ das predições.
+Os resultados para cada modelo no período de validação de cada ano são reportados a seguir:
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=.99\textwidth]{forecast_deep_ar.pdf} 
-\caption{Predição para todos os dados de validação para o modelo Deep AR}
-\label{fig:fordeepar}
+  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_1.pdf}
+  \caption{Predições no período de teste para cada período de validação pelo
+    modelo reglin\_1}
+  \label{fig:rc281preds}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=.99\textwidth]{forecast_deep_factors.pdf} 
-\caption{Predição para todos os dados de validação para o modelo Deep Factors}
-\label{fig:fordeepfactors}
-\end{figure}
+  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_3.pdf}
+  \caption{Predições no período de teste para cada período de validação pelo
+    modelo reglin\_3}
+  \label{fig:rc281preds}
 
+\end{figure}
 \begin{figure}[H]
   \centering
-\includegraphics[width=.99\textwidth]{forecast_enc_dec.pdf} 
-\caption{Predição para todos os dados de validação para o modelo Encoder Decoder Forecaster} 
-\label{fig:forencdec}
+  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_7.pdf}
+  \caption{Predições no período de teste para cada período de validação pelo
+    modelo reglin\_7}
+  \label{fig:rc281preds}
+
 \end{figure}
 
-
-Para modelagem de séries temporais, é também comum estudarmos o resíduo das
-predições. Idealmente o resíduo deve ter uma distribuição próxima a uma normal
-com média zero, significando que esse erro dos modelos não contém nenhuma parte
-não-aleatória que poderia ter sido capturada durante o treino. 
-
-\begin{figure}[H]
-\label{fig:res}
-\centering
-\includegraphics[width=.3\textwidth]{res_deep_ar.pdf} \hfill
-\includegraphics[width=.3\textwidth]{res_deep_factors.pdf} \hfill
-\includegraphics[width=.3\textwidth]{res_enc_dec.pdf} 
-\caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
-\end{figure}
-
-
-Os modelos de DL obtiveram um erro menor na predição do dia seguinte bem como em
-horizontes próximos de tempo, tanto em relação aos modelos não-temporais como em
-relação ao modelo filtrado exponencialmente.
+Agregando esses valores, podemos apresentar o RMSE médio para cada modelo para
+todo o dataset, para predições de 24h e 7 dias.
 
 \begin{center}
-  \begin{table}[htbp]
-    \caption{Comparação dos modelos de Deep Learning e o modelo Linear}
+  \begin{table}[]
     \centering
-  \begin{tabular}{l|lll}
-    \cline{2-4}
-    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} &   \\ \cline{1-4}
-    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                                         &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                                             &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                                &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                                            &  \\ \cline{1-1}
-  \end{tabular}
+    \begin{tabular}{l|lll}
+      \cline{2-3}
+      & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 7 dias} &  \\ \cline{1-3}
+      \multicolumn{1}{|l|}{reglin\_1} & 1.66                          & 2.19                             &  \\ \cline{1-1}
+      \multicolumn{1}{|l|}{reglin\_3} & 2.12                          & 2.02                             &  \\ \cline{1-1}
+      \multicolumn{1}{|l|}{reglin\_7} & 2.09                          & 1.63                             &  \\ \cline{1-1}
+    \end{tabular}
+    \caption{Valores agregados de RMSE para os modelos de Regressão Linear Dinâmica}
+
+    \label{tb:rmse_exp}
   \end{table}
 \end{center}
-% Local Variables:
-% TeX-master: "../quali"
-% End:
+
+
+
+\subsection{Modelos de Deep Learning Bayesianos}
+
+\subsubsection{DeepAr}
+
+Usamos a implementação do modelo DeepAR da bibliteca GluonTS \citep{gluonts}. Separamos as variáveis para treinarmos 3 modelos distintos da mesma maneira
+apresentada na Tabela~\ref{tab:modelslin}. Esses modelos serão chamados de \textbf{DeepAR\_1}, \textbf{DeepAR\_3} e \textbf{DeepAR\_7}. 
+As Figuras~\ref{fig:fordeepar1},\ref{fig:fordeepar3} e \ref{fig:fordeepar7} reportam as
+predições geradas em cada dataset de treino por cada modelo.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.99\textwidth]{forecast_deep_ar1.pdf} 
+  \caption{Predição para todos os dados de validação para o modelo DeepAR\_1}
+  \label{fig:fordeepar1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.99\textwidth]{forecast_deep_ar3.pdf} 
+  \caption{Predição para todos os dados de validação para o modelo DeepAR\_3}
+  \label{fig:fordeepar3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.99\textwidth]{forecast_deep_ar7.pdf} 
+  \caption{Predição para todos os dados de validação para o modelo DeepAR\_7}
+  \label{fig:fordeepar7}
+\end{figure}
+
+
+A Tabela~\ref{tb:rmsedeepar} agrega os resultados do modelo DeepAR, para cada
+conjuntos de variáveis. Comparando esses resultados com os obtidos pelo modelo
+linear dinâmico. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
+após a implementação do modelo em produção. As predições de 24h são naturalmente
+ruidosas para todos os modelos testados nesse trabalho.
+
+\begin{center}
+\begin{table}[]
+  \centering
+  \begin{tabular}{l|lll}
+    \cline{2-3}
+    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 7 dias} &  \\ \cline{1-3}
+    \multicolumn{1}{|l|}{reglin\_1/DeepAR\_1} & 1.66 / 1.68                   & 2.19 / 1.75                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_3/DeepAR\_3} & 2.12 / 1.86                   & 2.02 / 1.68                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
+  \end{tabular}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+\label{tb:rmsedeepar}
+\end{table}
+\end{center}
