@@ -5,7 +5,7 @@
 
 
 
-\subsection{Abordagem Não-Temporal}
+\subsection{Modelos Simples de Aprendizado de Máquina}
 
 Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
@@ -13,11 +13,10 @@ treinamos os modelos.
 
 \subsubsection{Divisão dos dados entre treino e validação}
 
-Para que obtenhamos um modelo que generalize em um novo conjunto de dados
-inéditos, devemos usar parte dos dados que possuímos não para treinar o modelo,
-mas para testá-lo. O erro nesse conjunto de dados separados apenas para teste é
-chamado de erro de validação, e o usamos como uma estimativa da capacidade de
-generalização dos modelos de aprendizagem automática.
+
+A divisão entre dados de treino e validação é feita da maneira padrão com
+modelos de Aprendizado de Máquina, separando-se $80\%$ dos dados para treino e
+$20\%$ para validação, i.e. testar o poder de generalizacão dos modelos. 
 
 \begin{figure}[H]
   \centering
@@ -202,41 +201,44 @@ treinamento e os últimos 30 dias como dados de validação.
 
 Usamos a implementacão da biblioteca Pytorch \cite{pytorch} dos modelos, para os Processos Gaussianos usamos a biblioteca GPyTorch \cite{gpytorch}. As tuplas de treino são da forma $(RC28_{t},\{\})$. 
 
-Para os modelos DeepAR e Encoder-Decoder-Forecaster, as predições começam após
-uma janela inteira de dias ser codificada pelas redes Encoder.
-Apenas então os modelos terão informação para gerar predições. O Modelo Deep
-Factors não necessita de uma janela pois sua arquitetura permite e emissão de
-predições imediatamente após o primeiro timestep ser recebido,
-e o Processo Gaussiano gera incertezas para todo o dataset de validação ao mesmo tempo, visto que é uma operação matricial. \\
-
 Na Tabela~\ref{tb:rmse} reportamos os erros para predições imediatamente no
 começo após o fim do último dia de dados usados para treino. Iremos mostrar o
-erro para o dia seguinte, três dias depois e então uma semana após o último dia
-de dados usados para treinamento.
+erro para o dia seguinte e para três dias após o horizonte dos dados de treino.
+Os modelos comparados são o \textbf{DeepAR},\textbf{Deep Factors} e
+\textbf{Encoder-Decoder-Forecaster}. Como comparacão, usaremos um modelo chamado
+de \textbf{Naive}, ou \textbf{Ingênuo}, que apenas prevê o alvo no instante $t$ como o valor
+correto no instante $t-1$.
+
+Os resultados são gerados por aplicar os modelos nos períodos de teste (i.e. o
+último mês de cada ano) e agregam-se os indicadores de erro em todos os
+datasets. No caso do RMSE, fazemos uma simples média entre os erros de cada
+dataset.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{RMSE values by forecast span}
+\caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 3 dias.}
 \centering
 \begin{tabular}{rr}
 \hline
 Deep Factors & RMSE\\
 \hline
-24h & 0.18\\
-3d & 2.36\\
-7d & 1.83\\
+24h & 3.4\\
+3d & 3.2\\
 \hline
 Deep AR & RMSE\\
 \hline
-  24h & 0.07\\
-3d & 1.37\\
-7d & 1.44\\
+  24h & 1.65 \\
+3d & 1.68\\
 \hline
 Encoder Decoder & RMSE\\
 \hline
 24h & 0.06\\
 3d & 0.44\\
-7d & 0.80\\
+\hline
+Naive & RMSE\\
+\hline
+24h & 1.62\\
+3d & 1.50\\
 \end{tabular}
 
 \label{tb:rmse}
@@ -262,21 +264,21 @@ figuras são representados as margens de incerteza para $50\%$ e $90\%$ das pred
 
 \begin{figure}[H]
   \centering
-\includegraphics[height=.3\textwidth]{forecast_deep_ar.pdf} 
+\includegraphics[width=.99\textwidth]{forecast_deep_ar.pdf} 
 \caption{Predição para todos os dados de validação para o modelo Deep AR}
 \label{fig:fordeepar}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-\includegraphics[height=.3\textwidth]{forecast_deep_factors.pdf} 
+\includegraphics[width=.99\textwidth]{forecast_deep_factors.pdf} 
 \caption{Predição para todos os dados de validação para o modelo Deep Factors}
 \label{fig:fordeepfactors}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-\includegraphics[height=.3\textwidth]{forecast_enc_dec.pdf} 
+\includegraphics[width=.99\textwidth]{forecast_enc_dec.pdf} 
 \caption{Predição para todos os dados de validação para o modelo Encoder Decoder Forecaster} 
 \label{fig:forencdec}
 \end{figure}
@@ -305,13 +307,13 @@ relação ao modelo filtrado exponencialmente.
   \begin{table}[htbp]
     \caption{Comparação dos modelos de Deep Learning e o modelo Linear}
     \centering
-  \begin{tabular}{l|llll}
+  \begin{tabular}{l|lll}
     \cline{2-4}
-    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} & \multicolumn{1}{l|}{RMSE 72h} &  \\ \cline{1-4}
-    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                     &           1.44                    &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                       &       0.80                        &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                    &                   1.83            &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                        &     2.36                          &  \\ \cline{1-1}
+    & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 48h} &   \\ \cline{1-4}
+    \multicolumn{1}{|l|}{DeepAR}               &               0.07                &          1.37                                         &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Enc-Dec-Forecaster}   &                   0.06            &        0.44                                             &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Deep Factors}         &              0.18                 &           2.36                                &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{Linear Coupled Model} &                  1.79             &       1.47                                            &  \\ \cline{1-1}
   \end{tabular}
   \end{table}
 \end{center}
