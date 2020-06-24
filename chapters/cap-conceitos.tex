@@ -1,4 +1,4 @@
-%% ------------------------------------------------------------------------- %%
+% ------------------------------------------------------------------------- %%
 \chapter{Conceitos}
 \label{cap:conceitos}
 
@@ -436,20 +436,56 @@ aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tem
 \subsection{Janela Móvel com Filtragem Exponencial}
 
 A abordagem usada em \cite{grecialin} consiste em aplicar regressões lineares em
-uma janela móvel de dados, i.e. para a predição do índice RC28 de um dia $t$ é
-realizada uma regressão pelo método dos mínimos quadrados para o conjunto de
-dados desde o dia $t -29 -t_d$ até $t -t_d$, $t_d$ sendo um parâmetro
-selecionado após testes.
-Esse intervalo é escolhido visto que um novo resultado de RC28 de um lote de
-cimento demora 29 dias após a expedição desse lote,
-então poderíamos usar no dia $t$ apenas a informação do RC28 de um lote
-28 dias no passado.
+uma janela móvel de dados, simulando limitações reais do chão de fábrica.
 
-Esse modelo treinado na faixa temporal $[t -29 -t_d,t - t_d]$ é usado para predições em um
-horizonte de tempo definido por um outro parâmetro escolhido pelo programador,
-$t_f$. Usamos o modelo na faixa temporal $[t -29 -t_d,t -t_d]$ para prever o índice RC28
-do intervalo $[t,t+t_f-1]$. O modelo é retreinado com uma nova janela sempre que um novo valor de
-$t$ ultrapassa $t + t_f -1$ do último modelo treinado.
+Seja um dia $T$ onde começa a aplicação do modelo. Acaba de ficar pronto o ensaio
+de RC28 do lote expedido 29 dias no passado, i.e. $T-29$.  O dataset móvel é o
+intervalo $[T-29-t_d,t-29]$, $t_d$ um hiperparâmetro que deve ser ajustado
+durante o treino. Usa-se esse dataset para calcular parâmetro de 3 regressões
+diferentes.
+
+
+% copiar output do pandas aqui
+% esta no notebook papergrecia
+\begin{table}[]
+  \centering 
+  \begin{tabular}{llllllllllllll}
+    \toprule
+    reglin\_1 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &      &      \\
+    reglin\_3 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &  RC3 &      \\
+    reglin\_7 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2O3 &  RC1 &  RC3 &  RC7 \\
+    \bottomrule
+  \end{tabular}
+  \caption{O conjunto de variáveis usado para cada um dos modelos, de maneira análoga ao apresentado no trabalho \cite{grecialin}}
+  \label{tab:modelslin}
+\end{table}
+
+
+No dia $T$ acabaram de ficar prontos os ensaios RC1, RC3 e RC7 respectivamente
+dos lotes expedidos nos dias $T-1$,$T-4$ e $T-7$. Os modelos descritos na
+Tabela~\ref{tab:modelslin} são aplicados para prever o RC28 de acordo com a
+disponibilidade dos ensaios nessas 3 datas. i.e. reglin\_1 é aplicado em $T-1$,
+reglin\_3 em $T-4$ e reglin\_7 em $T-8$. Os modelos são usados com os parâmetros
+obtidos pela regressão por $t_f$, a medida que novos índices de resistência são
+calculados. A Tabela~\ref{tab:ranges} mostra para cada modelo as datas de
+treinamento e predição.
+
+
+\begin{table}[]
+  \begin{tabular}{lll}
+    Modelo    & Intervalo de Treinamento & Intervalo de Predição \\
+    reglin\_1 & $[T-29-t_d,T-29]$        & $[T-1, T-1+t_f]$      \\
+    reglin\_3 &  $[T-29-t_d,T-29]$       &  $[T-4, T-4+t_f]$      \\
+    reglin\_7 &   $[T-29-t_d,T-29]$      &   $[T-8, T-8+t_f]$       
+  \end{tabular}
+  \caption{Intervalos de tempo usados como dados de treinamento e predição dos modelos.}
+  \label{tab:ranges}
+\end{table}
+
+
+Após $t_f$ dias o processo é repetido e um novo dataset é escolhido para
+recalcular os parâmetros das regressões.
+
 
 Os resultados do modelo treinado dessa maneira são então filtrados
 usando uma média móvel exponencial. Seja um vetor de predições $Y$ gerado pelo
