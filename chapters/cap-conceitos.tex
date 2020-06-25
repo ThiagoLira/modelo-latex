@@ -484,8 +484,7 @@ treinamento e predição.
 
 
 Após $t_f$ dias o processo é repetido e um novo dataset é escolhido para
-recalcular os parâmetros das regressões.
-
+recalcular os parâmetros das regressões e se repete o processo com $T' = T + t_f$.
 
 Os resultados do modelo treinado dessa maneira são então filtrados
 usando uma média móvel exponencial. Seja um vetor de predições $Y$ gerado pelo
