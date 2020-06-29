@@ -219,7 +219,9 @@ todo o dataset, para predições de 24h e 7 dias.
 Usamos a implementação do modelo DeepAR da bibliteca GluonTS \citep{gluonts}. Separamos as variáveis para treinarmos 3 modelos distintos da mesma maneira
 apresentada na Tabela~\ref{tab:modelslin}. Esses modelos serão chamados de \textbf{DeepAR\_1}, \textbf{DeepAR\_3} e \textbf{DeepAR\_7}. 
 As Figuras~\ref{fig:fordeepar1},\ref{fig:fordeepar3} e \ref{fig:fordeepar7} reportam as
-predições geradas em cada dataset de treino por cada modelo.
+predições geradas em cada dataset de treino por cada modelo. Também corrigimos o
+modelo \textbf{DeepAR\_1} com o modelo \textbf{DeepAR\_7} de maneira análoga a
+Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}. 
 
 \begin{figure}[H]
   \centering
@@ -252,12 +254,13 @@ ruidosas para todos os modelos testados nesse trabalho.
 \begin{center}
 \begin{table}[]
   \centering
-  \begin{tabular}{l|lll}
+  \begin{tabular}{l|llll}
     \cline{2-3}
     & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 7 dias} &  \\ \cline{1-3}
     \multicolumn{1}{|l|}{reglin\_1/DeepAR\_1} & 1.66 / 1.68                   & 2.19 / 1.75                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_3/DeepAR\_3} & 2.12 / 1.86                   & 2.02 / 1.68                      &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{reglin\_7/reglin\_ew/DeepAR\_7} & 2.09 / 2.12/ 1.82                   & 1.63 / 1.42 / 1.42                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_ew/DeepAR\_ew} & 2.12/ 1.16                   & 1.42 / 1.12                      &  \\ \cline{1-1}
   \end{tabular}
   \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
 \label{tb:rmsedeepar}
