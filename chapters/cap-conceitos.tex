@@ -472,6 +472,7 @@ treinamento e predição.
 
 
 \begin{table}[]
+  \centering 
   \begin{tabular}{lll}
     Modelo    & Intervalo de Treinamento & Intervalo de Predição \\
     reglin\_1 & $[T-29-t_d,T-29]$        & $[T-1, T-1+t_f]$      \\
@@ -484,19 +485,38 @@ treinamento e predição.
 
 
 Após $t_f$ dias o processo é repetido e um novo dataset é escolhido para
-recalcular os parâmetros das regressões e se repete o processo com $T' = T + t_f$.
+recalcular os parâmetros das regressões e repetindo-se o processo com $T' = T + t_f$.
 
-Os resultados do modelo treinado dessa maneira são então filtrados
-usando uma média móvel exponencial. Seja um vetor de predições $Y$ gerado pelo
-modelo, o vetor filtrado $Y^*$ é calculado usando a recursão: 
+Um quarto modelo é criado corrigindo as predições de reglin\_1 com as de
+reglin\_7, esse modelo será nomeado reglin\_ew. Primeiramente calcula-se a
+diferença entre as predições de $reglin\_7$ e as medidas reais de RC28 do período
+$[T-29,T-29 + t_f]$, visto que usamos os modelos por $t_f$ dias, então novas
+anotações de RC28 se tornaram disponíveis. 
+
+
+\[
+  \mathit{diff}[i] = reglin\_7[i] - RC28[i]
+\]
+
+É aplicada então uma média móvel exponencial no vetor diff, com parâmetro
+$\alpha$, cujo resultado é o vetor filtrado diff\_ew. O algoritmo da média móvel é 
+definido na Equação~\ref{eq:ew}.
 
 
   \begin{align}
-  Y^*_0 &= Y_0 \\ 
+  Y^*_0 &= Y_0 \\
   Y^*_t &= (1- \alpha)Y_{t-1} + \alpha Y_t 
+  \label{eq:ew}
   \end{align}
 
-  O valor de $\alpha$ também se torna um hiper-parâmetro a ser selecionado.
+
+O valor das predições de reglin\_1 são então corrigidos usando o vetor filtrado
+diff\_ew. Os intervalos usados (emparelhados) são $t \in [T-1,T-1+t_f]$ e $i \in
+[T-29,T-29+t_f]$.
+
+\[
+reglin\_ew[t] = reglin\_1[t] + k * \mathit{diff\_ew}[i] 
+\]
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}

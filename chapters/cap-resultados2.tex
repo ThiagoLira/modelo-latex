@@ -144,7 +144,8 @@ como explicado anteriormente nesse trabalho.
 
 Usaremos 3 modelos com diferentes grupos de variáveis, a tabela a seguir mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
-desse trabalho.
+desse trabalho. Também mostraremos resultados para o modelo corrigido
+reglin\_ew, que é uma combinação dos modelos reglin\_1 e reglin\_7.
 
 
 % copiar output do pandas aqui
@@ -195,12 +196,13 @@ todo o dataset, para predições de 24h e 7 dias.
 \begin{center}
   \begin{table}[]
     \centering
-    \begin{tabular}{l|lll}
+    \begin{tabular}{l|llll}
       \cline{2-3}
       & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 7 dias} &  \\ \cline{1-3}
       \multicolumn{1}{|l|}{reglin\_1} & 1.66                          & 2.19                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_3} & 2.12                          & 2.02                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_7} & 2.09                          & 1.63                             &  \\ \cline{1-1}
+      \multicolumn{1}{|l|}{reglin\_ew} & 2.12                          & 1.42                             &  \\ \cline{1-1}
     \end{tabular}
     \caption{Valores agregados de RMSE para os modelos de Regressão Linear Dinâmica}
 
@@ -255,7 +257,7 @@ ruidosas para todos os modelos testados nesse trabalho.
     & \multicolumn{1}{l|}{RMSE 24h} & \multicolumn{1}{l|}{RMSE 7 dias} &  \\ \cline{1-3}
     \multicolumn{1}{|l|}{reglin\_1/DeepAR\_1} & 1.66 / 1.68                   & 2.19 / 1.75                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_3/DeepAR\_3} & 2.12 / 1.86                   & 2.02 / 1.68                      &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_7/reglin\_ew/DeepAR\_7} & 2.09 / 2.12/ 1.82                   & 1.63 / 1.42 / 1.42                      &  \\ \cline{1-1}
   \end{tabular}
   \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
 \label{tb:rmsedeepar}
