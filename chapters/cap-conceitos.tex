@@ -489,7 +489,7 @@ recalcular os parâmetros das regressões e repetindo-se o processo com $T' = T 
 
 Um quarto modelo é criado corrigindo as predições de reglin\_1 com as de
 reglin\_7, esse modelo será nomeado reglin\_ew. Primeiramente calcula-se a
-diferença entre as predições de $reglin\_7$ e as medidas reais de RC28 do período
+diferença entre as predições de $reglin\_7$ e as medidas reais de RC28 para o período
 $[T-29,T-29 + t_f]$, visto que usamos os modelos por $t_f$ dias, então novas
 anotações de RC28 se tornaram disponíveis. 
 
@@ -499,8 +499,11 @@ anotações de RC28 se tornaram disponíveis.
 \]
 
 É aplicada então uma média móvel exponencial no vetor diff, com parâmetro
-$\alpha$, cujo resultado é o vetor filtrado diff\_ew. O algoritmo da média móvel é 
-definido na Equação~\ref{eq:ew}.
+$\alpha$, cujo resultado é o vetor filtrado diff\_ew.
+
+
+Seja um vetor $\textbf{Y}$, calcula-se a sua média móvel exponencial
+$\textbf{Y}^*$ pelo algoritmo definido na Equação~\ref{eq:ew}.
 
 
   \begin{align}
@@ -511,8 +514,9 @@ definido na Equação~\ref{eq:ew}.
 
 
 O valor das predições de reglin\_1 são então corrigidos usando o vetor filtrado
-diff\_ew. Os intervalos usados (emparelhados) são $t \in [T-1,T-1+t_f]$ e $i \in
-[T-29,T-29+t_f]$.
+diff\_ew. Os intervalos usados (emparelhados) são $t \in [T-1,T-1+t_f]$ para
+reglin\_1 e $i \in [T-29,T-29+t_f]$ para diff\_ew. O parâmetro $k$ também se
+torna um hiperparâmetro a ser escolhido.
 
 \[
 reglin\_ew[t] = reglin\_1[t] + k * \mathit{diff\_ew}[i] 
