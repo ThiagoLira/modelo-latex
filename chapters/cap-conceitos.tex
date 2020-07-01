@@ -495,20 +495,17 @@ anotações de RC28 se tornaram disponíveis.
 
 
 \[
-  \mathit{diff}[i] = reglin\_7[i] - RC28[i]
+  \mathit{diff}_i = reglin\_7_i - RC28_i
 \]
 
 É aplicada então uma média móvel exponencial no vetor diff, com parâmetro
-$\alpha$, cujo resultado é o vetor filtrado diff\_ew.
-
-
-Seja um vetor $\textbf{Y}$, calcula-se a sua média móvel exponencial
-$\textbf{Y}^*$ pelo algoritmo definido na Equação~\ref{eq:ew}.
+$\alpha$, cujo resultado é o vetor filtrado diff\_ew. O algoritmo da média móvel
+é mostrado na Equação~\ref{eq:ew}:
 
 
   \begin{align}
-  Y^*_0 &= Y_0 \\
-  Y^*_t &= (1- \alpha)Y_{t-1} + \alpha Y_t 
+    \mathit{diff\_ew}_0 &= \mathit{diff}_0 \\
+  \mathit{diff\_ew}_t &= (1- \alpha)\mathit{diff}_{t-1} + \alpha \mathit{diff}_t 
   \label{eq:ew}
   \end{align}
 
@@ -519,7 +516,7 @@ reglin\_1 e $i \in [T-29,T-29+t_f]$ para diff\_ew. O parâmetro $k$ também se
 torna um hiperparâmetro a ser escolhido.
 
 \[
-reglin\_ew[t] = reglin\_1[t] + k * \mathit{diff\_ew}[i] 
+reglin\_ew_t = reglin\_1_t + k * \mathit{diff\_ew}_i
 \]
 
 \subsection{Rede Neural Recorrente}
