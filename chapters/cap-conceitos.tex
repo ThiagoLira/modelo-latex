@@ -435,13 +435,13 @@ aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tem
 
 \subsection{Janela Móvel com Filtragem Exponencial}
 \label{ses:ewma}
-A abordagem usada em \cite{grecialin} consiste em aplicar regressões lineares em
+
+A abordagem usada em \cite{grecialin} consiste em calcular regressões lineares em
 uma janela móvel de dados, simulando limitações reais do chão de fábrica.
 
-Seja um dia $T$ onde começa a aplicação do modelo. Acaba de ficar pronto o ensaio
+Seja o dia $T$ onde começa a aplicação do modelo. Acaba de ficar pronto o ensaio
 de RC28 do lote expedido 29 dias no passado, i.e. $T-29$.  O dataset móvel é o
-intervalo $[T-29-t_d,t-29]$, $t_d$ um hiperparâmetro que deve ser ajustado
-durante o treino. Usa-se esse dataset para calcular parâmetro de 3 regressões
+intervalo $[T-29-t_d,t-29]$, $t_d$ um hiper-parâmetro. Usa-se esse dataset para calcular pesos de 3 regressões
 diferentes.
 
 
@@ -462,13 +462,13 @@ diferentes.
 
 
 No dia $T$ acabaram de ficar prontos os ensaios RC1, RC3 e RC7 respectivamente
-dos lotes expedidos nos dias $T-1$,$T-4$ e $T-7$. Os modelos descritos na
+dos lotes expedidos nos dias $T-1$,$T-4$ e $T-8$. Os modelos descritos na
 Tabela~\ref{tab:modelslin} são aplicados para prever o RC28 de acordo com a
-disponibilidade dos ensaios nessas 3 datas. i.e. reglin\_1 é aplicado em $T-1$,
-reglin\_3 em $T-4$ e reglin\_7 em $T-8$. Os modelos são usados com os parâmetros
-obtidos pela regressão por $t_f$, a medida que novos índices de resistência são
-calculados. A Tabela~\ref{tab:ranges} mostra para cada modelo as datas de
-treinamento e predição.
+disponibilidade dos ensaios nessas 3 datas i.e. reglin\_1 é aplicado em $T-1$,
+reglin\_3 em $T-4$ e reglin\_7 em $T-8$. Os modelos treinados dessa maneira são
+aplicados por $t_f$ dias, a medida que novos índices de resistência são
+calculados. A Tabela~\ref{tab:ranges} mostra para cada modelo os intervalos de
+datas usadas para treinamento e predição.
 
 
 \begin{table}[]
@@ -484,14 +484,13 @@ treinamento e predição.
 \end{table}
 
 
-Após $t_f$ dias o processo é repetido e um novo dataset é escolhido para
-recalcular os parâmetros das regressões e repetindo-se o processo com $T' = T + t_f$.
+Após $t_f$ dias um novo dataset é escolhido para recalcular os parâmetros das regressões e repete-se o processo com $T' = T + t_f$.
 
 Um quarto modelo é criado corrigindo as predições de reglin\_1 com as de
 reglin\_7, esse modelo será nomeado reglin\_ew. Primeiramente calcula-se a
 diferença entre as predições de $reglin\_7$ e as medidas reais de RC28 para o período
-$[T-29,T-29 + t_f]$, visto que usamos os modelos por $t_f$ dias, então novas
-anotações de RC28 se tornaram disponíveis. 
+$[T-29,T-29 + t_f]$, visto que usamos os modelos por $t_f$ dias, novas
+anotações de RC28 se tornaram disponíveis nesse período. 
 
 
 \[
@@ -512,12 +511,16 @@ $\alpha$, cujo resultado é o vetor filtrado diff\_ew. O algoritmo da média mó
 
 O valor das predições de reglin\_1 são então corrigidos usando o vetor filtrado
 diff\_ew. Os intervalos usados (emparelhados) são $t \in [T-1,T-1+t_f]$ para
-reglin\_1 e $i \in [T-29,T-29+t_f]$ para diff\_ew. O parâmetro $k$ também se
-torna um hiperparâmetro a ser escolhido.
+reglin\_1 e $i \in [T-29,T-29+t_f]$ para diff\_ew. $k$ também é um hiper-parâmetro.
 
 \[
 reglin\_ew_t = reglin\_1_t + k * \mathit{diff\_ew}_i
 \]
+
+
+Levantando-se os erros quadráticos para os 4 modelos em seus períodos de
+teste, escolhem-se os hiper-parâmetros $t_d$, $k$ e $\alpha$. $t_f$ pode ser
+escolhido de acordo com a necessidade de controle de qualidade da fábrica. 
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
