@@ -310,7 +310,7 @@ indicando um modelo ideal.\\
 
 
 \subsubsection{Custo quantílico}
-
+\label{sec:quant}
 O custo quantílico \citep{deepar} é usado na avaliação de performance de
 predições temporais. \\
 
@@ -442,7 +442,7 @@ uma janela móvel de dados, simulando limitações reais do chão de fábrica.
 Seja o dia $T$ onde começa a aplicação do modelo. Acaba de ficar pronto o ensaio
 de RC28 do lote expedido 29 dias no passado, i.e. $T-29$.  O dataset móvel é o
 intervalo $[T-29-t_d,t-29]$, $t_d$ um hiper-parâmetro. Usa-se esse dataset para calcular pesos de 3 regressões
-diferentes.
+diferentes para a predição de RC28.
 
 
 % copiar output do pandas aqui

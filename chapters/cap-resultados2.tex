@@ -266,3 +266,27 @@ ruidosas para todos os modelos testados nesse trabalho.
 \label{tb:rmsedeepar}
 \end{table}
 \end{center}
+
+
+Os modelos de Aprendizado Profundo Bayesianos retornam, para cada predição, uma distribuição de
+probabilidade definida por média e variância, ou diversas realizações de uma
+distribuição desconhecida, a qual podemos estimar seus momentos com esses
+valores. Usamos a média dessas distribuições para calcular o erro quadrático
+como reportado na Tabela~\ref{tb:rmsedeepar}. Porém, com o desvio-padrão também podemos
+reportar o risco das predições para diversos percentis, como explicado na Sessão~\ref{sec:quant}.
+
+\begin{center}
+\begin{table}[]
+  \begin{tabular}{llllllll}
+    & \multicolumn{3}{l}{50\%}           & \multicolumn{3}{l}{90\%}          &  \\
+    & DeepAR\_7 & Enc-Dec & Deep Factors & DeepAR\_7 & Enc-Dec & DeepFactors &  \\
+    7d  &           &         &              &           &         &             &  \\
+    24h &           &         &              &           &         &             & 
+  \end{tabular}
+  \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
+  das predições.}
+  \label{tb:quants}
+\end{table}
+\end{center}
+
+
