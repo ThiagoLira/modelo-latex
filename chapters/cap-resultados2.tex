@@ -276,13 +276,14 @@ como reportado na Tabela~\ref{tb:rmsedeepar}. Porém, com o desvio-padrão tamb�
 reportar o risco das predições para diversos percentis, como explicado na Sessão~\ref{sec:quant}.
 
 \begin{center}
-\begin{table}[]
-  \begin{tabular}{llllllll}
-    & \multicolumn{3}{l}{50\%}           & \multicolumn{3}{l}{90\%}          &  \\
-    & DeepAR\_7 & Enc-Dec & Deep Factors & DeepAR\_7 & Enc-Dec & DeepFactors &  \\
-    7d  &           &         &              &           &         &             &  \\
-    24h &           &         &              &           &         &             & 
-  \end{tabular}
+ \begin{table} 
+\begin{tabular}{l|l|l|l|l|l|l|}
+  \cline{2-7}
+  & \multicolumn{3}{l|}{P50QL}        & \multicolumn{3}{l|}{P90QL}        \\ \cline{2-7} 
+  & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 \\ \hline
+  \multicolumn{1}{|l|}{7d}  & 0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
+  \multicolumn{1}{|l|}{24h} &  0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
+\end{tabular}
   \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
   das predições.}
   \label{tb:quants}

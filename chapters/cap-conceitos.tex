@@ -314,13 +314,12 @@ indicando um modelo ideal.\\
 O custo quantílico \citep{deepar} é usado na avaliação de performance de
 predições temporais. \\
 
-Para uma predição $y^*$ com desvio-padrão $\sigma$, um quantil $q$ representa o
-valor que cobre $q\%$ da distribuição prevista.
+Para uma predição com desvio-padrão $\sigma$, um quantil $q$ representa o
+valor que cobre $\rho\%$ da distribuição de probabilidade dessa predição.
 
-Por exemplo, usando o quantil $q=0.9=90\%$, assumindo uma distribuição normal,
-podemos calcular exatamente dentro de quantos desvios-padrões estão $90\%$ dos valores
-presentes na distribuição, contando com o erro. Para $q=0.9$, uma tabela z nos mostra que devemos
-usar $1.29$ desvios-padrões:
+Por exemplo, usando o quantil $\rho=0.9=90\%$, podemos calcular quantos
+desvios-padrões cobrem $90\%$ dos valores presentes na distribuição.
+Assumindo distribuição normal das predições, com média $y^*$, para $\rho=0.9$, uma tabela z nos mostra que devemos usar $1.29$ desvios-padrões:
 
 \[
   y^*(\rho = 0.9) = y^* + 1.29\sigma
@@ -329,7 +328,7 @@ usar $1.29$ desvios-padrões:
 Logo, $y^*(0.9)$ cobre $90\%$ dos possíveis valores de predição feitos pelo
 modelo, levando em consideração o desvio-padrão.
 
-Dado um quantil $p \in (0,1)$ um valor real $y_{t}$ e uma predição
+Dado um quantil $\rho \in (0,1)$ um valor real $y_{t}$ e um quantil de previsão 
 $y^{*}_{t}(\rho)$, define-se o custo quantílico por: \\
 
 \begin{equation}
@@ -341,12 +340,25 @@ $y^{*}_{t}(\rho)$, define-se o custo quantílico por: \\
 \end{equation}
 
 
-Esse valor é bastante informativo quando a predição toma a forma de uma faixa de
-valores (como uma distribuição de probabilidade) ao invés de apenas um valor
-pontual, como é comum para problemas de regressão. Ele nos informa o risco
-ponderado de um certo quantil da predição. Se usarmos o quantil $q=0.5=50\%$,
-esse valor se torna a porcentagem absoluta média de erro. Para $q=0.9=90\%$ será
-calculado o erro máximo esperado por $90\%$ das predições. 
+Esse valor é somado em todas as séries temporais $i$ no horizonte de predição
+representado pelos valores de $t$ e normalizado usando os valores da série temporal.
+
+
+\[
+   p(\rho)QL = \frac{\sum_{i,t}\mathcal{QL}_{\rho}(y_{t},y^{*}_{t}(\rho))}{\sum_{i,t}\abs{y_{i,t}}}
+\]
+
+
+Esse valor é bastante informativo quando as saídas dos modelos são distribuições
+de probabilidades. Esse valor nos informa o risco ponderado de um certo quantil
+da predição.
+
+Se usarmos o quantil $\rho=0.5=50\%$, p50QL,
+esse valor se torna a porcentagem absoluta média de erro (MAPE). Para
+$\rho=0.9=90\%$, p90QL, será
+calculado o erro máximo esperado por $90\%$ das predições.
+
+
 
 %% ------------------------------------------------------------------------- %%
 
