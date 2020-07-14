@@ -16,7 +16,7 @@ treinamos os modelos.
 
 A divisão entre dados de treino e validação é feita da maneira padrão com
 modelos de Aprendizado de Máquina, separando-se $80\%$ dos dados para treino e
-$20\%$ para validação, i.e. testar o poder de generalizacão dos modelos. 
+$20\%$ para validação, i.e. testar o poder de generalização dos modelos. 
 
 \begin{figure}[H]
   \centering
@@ -26,7 +26,7 @@ $20\%$ para validação, i.e. testar o poder de generalizacão dos modelos.
   \label{fig:divrc28}
 \end{figure}
 
-Foram usadas implementacões dos modelos fornecidos pela biblioteca Sklearn.
+Foram usadas implementações dos modelos fornecidos pela biblioteca Sklearn.
 As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
 
 \begin{figure}[H]
@@ -119,7 +119,7 @@ Com o fim de explorar essa capacidade dos modelos de consumirem diversas séries
 temporais, os dados da fábrica de Cajati foram separados por ano e consideramos
 cada ano como um exemplo do processo a ser modelado, fornecendo-os separadamente
 aos modelos. Os modelos de Aprendizado
-Profundo irão então usar parametros locais para cada ano de produção de cimento,
+Profundo irão então usar parâmetros locais para cada ano de produção de cimento,
 mas globalmente buscar padrões para o funcionamento da fábrica. 
 
 Para cada ano de 2009 até 2019 usaremos os primeiros 11 meses como dados de
@@ -167,7 +167,7 @@ Os resultados para cada modelo no período de validação de cada ano são repor
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_1.pdf}
+  \includegraphics[width=0.6\columnwidth]{predgrecialin-rc28_1.pdf}
   \caption{Predições no período de teste para cada período de validação pelo
     modelo reglin\_1}
   \label{fig:rc281preds}
@@ -175,7 +175,7 @@ Os resultados para cada modelo no período de validação de cada ano são repor
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_3.pdf}
+  \includegraphics[width=0.6\columnwidth]{predgrecialin-rc28_3.pdf}
   \caption{Predições no período de teste para cada período de validação pelo
     modelo reglin\_3}
   \label{fig:rc281preds}
@@ -183,7 +183,7 @@ Os resultados para cada modelo no período de validação de cada ano são repor
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\columnwidth]{predgrecialin-rc28_7.pdf}
+  \includegraphics[width=0.6\columnwidth]{predgrecialin-rc28_7.pdf}
   \caption{Predições no período de teste para cada período de validação pelo
     modelo reglin\_7}
   \label{fig:rc281preds}
@@ -225,21 +225,21 @@ Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.99\textwidth]{forecast_deep_ar1.pdf} 
+  \includegraphics[width=.6\textwidth]{forecast_deep_ar1.pdf} 
   \caption{Predição para todos os dados de validação para o modelo DeepAR\_1}
   \label{fig:fordeepar1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.99\textwidth]{forecast_deep_ar3.pdf} 
+  \includegraphics[width=.6\textwidth]{forecast_deep_ar3.pdf} 
   \caption{Predição para todos os dados de validação para o modelo DeepAR\_3}
   \label{fig:fordeepar3}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.99\textwidth]{forecast_deep_ar7.pdf} 
+  \includegraphics[width=.6\textwidth]{forecast_deep_ar7.pdf} 
   \caption{Predição para todos os dados de validação para o modelo DeepAR\_7}
   \label{fig:fordeepar7}
 \end{figure}
@@ -260,7 +260,7 @@ ruidosas para todos os modelos testados nesse trabalho.
     \multicolumn{1}{|l|}{reglin\_1/DeepAR\_1} & 1.66 / 1.68                   & 2.19 / 1.75                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_3/DeepAR\_3} & 2.12 / 1.86                   & 2.02 / 1.68                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
-    \multicolumn{1}{|l|}{reglin\_ew/DeepAR\_ew} & 2.12/ 1.16                   & 1.42 / 1.12                      &  \\ \cline{1-1}
+    \multicolumn{1}{|l|}{reglin\_ew/DeepAR\_ew} & 2.12 / 1.16                   & 1.42 / 1.12                      &  \\ \cline{1-1}
   \end{tabular}
   \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
 \label{tb:rmsedeepar}

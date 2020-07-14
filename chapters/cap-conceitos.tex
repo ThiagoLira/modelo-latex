@@ -214,7 +214,7 @@ hipótese arbitrariamente próxima da verdade.
 Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
 assumindo que o erro do modelo é distribuído normalmente.
 
-\subsubsection{A Distribuicão Normal}
+\subsubsection{A Distribuição Normal}
 \label{sec:reglog}
 
 Uma variável aleatória Y distribuída normalmente possui uma função densidade de
@@ -438,7 +438,7 @@ Modelos sequenciais consomem sequências de dados e também podem ser usados pra
 criar predições sequenciais \citep{dlbook}. A área de NLP viu muitos novos
 resultados com o uso esses tipos de modelos para geração e classificação de textos, que são dados com
 natureza inerentemente sequencial. Para o caso desse trabalho, séries temporais também podem
-aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo
+aproveitar da capacidade desses modelos de lerem múltiplas entradas ao mesmo
 tempo. Modelos sequenciais são bastante comuns para processamento de texto e
 áudio e outras famílias de dados cuja natureza é eminentemente uma sucessão de
 eventos no tempo. Dados de processos industriais comumente se encaixam nessa
@@ -456,7 +456,7 @@ objetivo da regressão é sempre o índice RC28 de um determinado lote de ciment
 do qual possuímos análises químicas e resultados de outros ensaios usados como
 variáveis. Essa abordagem irá utilizar a ordem temporal desses dados para
 modelagem e predições. Diferentes conjuntos de variáveis serão usados dependendo
-da sua disponilidade considerando a ordem e dia que essas ficam disponíveis na
+da sua disponibilidade considerando a ordem e dia que essas ficam disponíveis na
 operação normal da fábrica.
 
 Para um dia $t$ possuímos $RC28_t$ e $\textbf{x}_t$, respectivamente o objetivo
@@ -496,13 +496,13 @@ reglin\_3 em $T-4$ para prever $RC28_{T-4}$ e reglin\_7 em $T-8$ para prever
 $RC28_{T-8}$.
 
 Continuamos aplicando os modelos por $t_f$ dias,
-no dia $T+1$, por exemplo, iremos poder aplicar reglin\_1,reglin\_3 e
+no dia $T+1$, por exemplo, iremos aplicar reglin\_1,reglin\_3 e
 reglin\_7 respectivamente nos dias $T-1$,$T-3$ e $T-7$ e gerar novas predições
 para RC28 nessas datas.  
 
 A Tabela~\ref{tab:ranges} mostra para cada modelo os intervalos de
-datas usadas para treinamento e predição, usando $t_d$ e $t_f$ como parametros
-que determinam o tamanho do dataset móvel e do horizonte de predição, respectivamente.
+datas usadas para treinamento e predição, usando $t_d$ e $t_f$ como parâmetros
+determinantes do tamanho do dataset móvel e do horizonte de predição, respectivamente.
 
 
 \begin{table}[]
@@ -743,7 +743,7 @@ predição do modelo devemos marginalizar os parâmetros $\theta$ usando a segui
   p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
 \end{equation}
 
-Para grande parte dos modelos de Aprendizem Automática a distribuição posterior
+Para grande parte dos modelos de Aprendizado Automático a distribuição posterior
 $p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
 distribuição $q(\theta)$, essa podendo ser otimizada por métodos numéricos para
 aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
