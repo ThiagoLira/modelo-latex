@@ -430,9 +430,6 @@ do modelo ao objetivo de otimização. Dessa maneira o algoritmo é levado a
 encontrar valores menores para os parâmetros, visto que a otimização é
 direcionada a achar o menor valor possível do objetivo.
 
-\subsection{Random Forest}
-
-Random Forests são um método de \textbf{Ensemble Learning} para classificação ou regressão. \textbf{Ensemble Learning} é uma família de técnicas no qual diversos modelos \say{fracos} são usados em conjunto com algum sistema de votação para que a a acurácia do sistema em conjunto se torne melhor que a de qualquer um dos modelos sozinho. Seguindo essa ideia, Random Forests são conjuntos de diversas árvores de decisão simples unidas por um meta-algoritmo de votação para que se produza uma predição muito mais eficaz.
 
 
 \section{Modelos Sequenciais}
@@ -441,7 +438,12 @@ Modelos sequenciais consomem sequências de dados e também podem ser usados pra
 criar predições sequenciais \citep{dlbook}. A área de NLP viu muitos novos
 resultados com o uso esses tipos de modelos para geração e classificação de textos, que são dados com
 natureza inerentemente sequencial. Para o caso desse trabalho, séries temporais também podem
-aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tempo.
+aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo
+tempo. Modelos sequenciais são bastante comuns para processamento de texto e
+áudio e outras famílias de dados cuja natureza é eminentemente uma sucessão de
+eventos no tempo. Dados de processos industriais comumente se encaixam nessa
+categoria, inclusive produção de cimento, logo, passíveis de serem usados
+juntamente com esses modelos.
 
 
 
@@ -449,12 +451,23 @@ aproveitar da capacidade desses modelos de lerem multiplas entradas ao mesmo tem
 \label{ses:ewma}
 
 A abordagem usada em \cite{grecialin} consiste em calcular regressões lineares em
-uma janela móvel de dados, simulando limitações reais do chão de fábrica.
+uma janela móvel de dados, simulando limitações reais do chão de fábrica. O
+objetivo da regressão é sempre o índice RC28 de um determinado lote de cimento,
+do qual possuímos análises químicas e resultados de outros ensaios usados como
+variáveis. Essa abordagem irá utilizar a ordem temporal desses dados para
+modelagem e predições. Diferentes conjuntos de variáveis serão usados dependendo
+da sua disponilidade considerando a ordem e dia que essas ficam disponíveis na
+operação normal da fábrica.
 
+Para um dia $t$ possuímos $RC28_t$ e $\textbf{x}_t$, respectivamente o objetivo
+da regressão e o vetor de entradas. A Tabela~\ref{tb:vars} determina quais entradas estão presentes em $\textbf{x}_{t}$ para cada modelo usado.
 Seja o dia $T$ onde começa a aplicação do modelo. Acaba de ficar pronto o ensaio
-de RC28 do lote expedido 29 dias no passado, i.e. $T-29$.  O dataset móvel é o
-intervalo $[T-29-t_d,t-29]$, $t_d$ um hiper-parâmetro. Usa-se esse dataset para calcular pesos de 3 regressões
-diferentes para a predição de RC28.
+de RC28 do lote expedido 29 dias no passado, i.e. $RC28_{T-29}$.  O dataset móvel está no
+intervalo $[T-29-t_d,T-29]$ i.e. os pares
+$\{(\textbf{x}_{T-29-t_d},RC28_{T-29-t_d}), (\textbf{x}_{T-28-t_d},RC28_{T-28-t_d})
+\dots (\textbf{x}_{T-29},RC28_{T-29})\}$, $t_d$ um hiper-parâmetro.
+
+Usa-se esse dataset para calcular pesos de 3 regressões diferentes para a predição de RC28.
 
 
 % copiar output do pandas aqui
@@ -474,13 +487,22 @@ diferentes para a predição de RC28.
 
 
 No dia $T$ acabaram de ficar prontos os ensaios RC1, RC3 e RC7 respectivamente
-dos lotes expedidos nos dias $T-1$,$T-4$ e $T-8$. Os modelos descritos na
-Tabela~\ref{tab:modelslin} são aplicados para prever o RC28 de acordo com a
-disponibilidade dos ensaios nessas 3 datas i.e. reglin\_1 é aplicado em $T-1$,
-reglin\_3 em $T-4$ e reglin\_7 em $T-8$. Os modelos treinados dessa maneira são
-aplicados por $t_f$ dias, a medida que novos índices de resistência são
-calculados. A Tabela~\ref{tab:ranges} mostra para cada modelo os intervalos de
-datas usadas para treinamento e predição.
+dos lotes expedidos nos dias $T-2$,$T-4$ e $T-8$. Os modelos descritos na 
+Tabela~\ref{tab:modelslin} e treinados com o dataset do período 
+$[T-29-t_d,T-29]$ são aplicados para prever o RC28 de acordo com a
+disponibilidade dos ensaios nessas 3 datas. reglin\_1 é aplicado em $T-1$
+para prever $RC28_{T-1}$,
+reglin\_3 em $T-4$ para prever $RC28_{T-4}$ e reglin\_7 em $T-8$ para prever
+$RC28_{T-8}$.
+
+Continuamos aplicando os modelos por $t_f$ dias,
+no dia $T+1$, por exemplo, iremos poder aplicar reglin\_1,reglin\_3 e
+reglin\_7 respectivamente nos dias $T-1$,$T-3$ e $T-7$ e gerar novas predições
+para RC28 nessas datas.  
+
+A Tabela~\ref{tab:ranges} mostra para cada modelo os intervalos de
+datas usadas para treinamento e predição, usando $t_d$ e $t_f$ como parametros
+que determinam o tamanho do dataset móvel e do horizonte de predição, respectivamente.
 
 
 \begin{table}[]
@@ -532,7 +554,9 @@ reglin\_ew_t = reglin\_1_t + k * \mathit{diff\_ew}_i
 
 Levantando-se os erros quadráticos para os 4 modelos em seus períodos de
 teste, escolhem-se os hiper-parâmetros $t_d$, $k$ e $\alpha$. $t_f$ pode ser
-escolhido de acordo com a necessidade de controle de qualidade da fábrica. 
+escolhido de acordo com a necessidade de controle de qualidade da fábrica. Nos
+testes realizados nesse trabalho, usamos $t_f=7$ para efeito de comparação com
+os modelos de Aprendizagem Profunda. 
 
 \subsection{Rede Neural Recorrente}
 % \input{tiks/RNNSimplified.tex}
