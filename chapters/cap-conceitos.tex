@@ -3,20 +3,44 @@
 \label{cap:conceitos}
 
 
+
+
+\section{Séries Temporais}
+
+Séries temporais são dados indexados em ordem temporal. Formalmente, podemos
+representar uma série temporal como uma lista de números ou vetores ordenados
+por índices naturais \citep{spec}.
+
+\[
+X = \{x_0,x_1,x_2 \dots x_T\}
+\]
+
+Ou ainda, especificando o conjunto de índices, $T$, que representa o período
+completo onde os dados foram amostrados:
+
+
+\[
+  X = \{x_t \, , t \in T\}
+\]
+
+
+Os índices da série temporal não precisam representar momentos igualmente
+espaçados no tempo, embora isso seja necessário para diversas técnicas de
+modelagem e análise \citep{ARIMA_LSTM}.
+
+
 \section{Definição do Problema}
 
 
 Os dados da produção de cimento são anotados temporalmente, então podemos escolher
-tratá-los como uma série temporal, i.e. usaremos a ordem temporal como uma informação
-relevante na tarefa de aprendizado.
-A tarefa de regressão se torna então prever as próximas anotações desses
+tratá-los como uma série temporal. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito.
 Na tarefa de aprendizado será usada a série temporal alvo $Y$, dos índices
-$RC_{28}$ de resistência compressiva, $Y = \{y_t , t \in \mathbb{Z}^+ \}$.
+$RC_{28}$ de resistência compressiva, $Y = \{y_t , t \in T \}$.
 Também serão usadas séries temporais de
 \textbf{covariados}, i.e. variáveis também anotadas temporalmente de composições
-químicas de reagentes presentes na produção de cimento, $\textbf{X}$. $\textbf{X} = \{ \textbf{x}_t  \, , t
-\in \mathbb{Z}^+  \}$, onde cada $\textbf{x}_t \in \mathbb{R}^K$.
+químicas de reagentes presentes na produção de cimento, $\textbf{X} = \{ \textbf{x}_t  \, , t
+\in T  \}$, onde cada $\textbf{x}_t \in \mathbb{R}^K$.
 
 Para k séries temporais de covariados i.e. parâmetros de
 entrada. Para simplificar a notação, o índice $t$ será por vezes omitido.
@@ -463,9 +487,10 @@ juntamente com esses modelos.
 
 A abordagem usada em \cite{grecialin} consiste em calcular regressões lineares em
 uma janela móvel de dados, simulando limitações reais do chão de fábrica. O
-objetivo da regressão é sempre o índice RC28 de um determinado lote de cimento,
+objetivo da regressão é estimar o índice RC28 de um determinado lote de cimento,
 do qual possuímos análises químicas e resultados de outros ensaios usados como
-variáveis. Essa abordagem irá utilizar a ordem temporal desses dados para
+variáveis. Com o uso das regressões lineares também obtemos desvios-padrões de
+todos os coeficientes calculados relacionados a essas variáveis. Essa abordagem irá utilizar a ordem temporal desses dados para
 modelagem e predições. Diferentes conjuntos de variáveis serão usados dependendo
 da sua disponibilidade considerando a ordem e dia que essas ficam disponíveis na
 operação normal da fábrica.
@@ -531,6 +556,10 @@ determinantes do tamanho do dataset móvel e do horizonte de predição, respect
 
 Após $t_f$ dias um novo dataset é escolhido para recalcular os parâmetros das regressões e repete-se o processo com $T' = T + t_f$.
 
+
+Para um tempo $t$, iremos designar as predições de cada um desses modelos,
+respectivamente, por $\hat{RC28}^{reglin\_1}_t$, $\hat{RC28}^{reglin\_3}_t$ e $\hat{RC28}^{reglin\_7}_t$.
+
 Um quarto modelo é criado corrigindo as predições de reglin\_1 com as de
 reglin\_7, esse modelo será nomeado reglin\_ew. Primeiramente calcula-se a
 diferença entre as predições de $reglin\_7$ e as medidas reais de RC28 para o período
@@ -539,10 +568,10 @@ anotações de RC28 se tornaram disponíveis nesse período.
 
 
 \[
-  \mathit{diff}_i = reglin\_7_i - RC28_i
+  \mathit{diff}_i = \hat{RC28}^{reglin\_7}_i - RC28_i
 \]
 
-É aplicada então uma média móvel exponencial no vetor diff, com parâmetro
+É aplicada então uma média móvel no vetor diff, com parâmetro
 $\alpha$, cujo resultado é o vetor filtrado diff\_ew. O algoritmo da média móvel
 é mostrado na Equação~\ref{eq:ew}:
 
@@ -559,12 +588,12 @@ diff\_ew. Os intervalos usados (emparelhados) são $t \in [T-1,T-1+t_f]$ para
 reglin\_1 e $i \in [T-29,T-29+t_f]$ para diff\_ew. $k$ também é um hiper-parâmetro.
 
 \[
-reglin\_ew_t = reglin\_1_t + k * \mathit{diff\_ew}_i
+     \hat{RC28}_t^{reglin\_ew} = \hat{RC28}^{reglin\_1}_t + k * \mathit{diff\_ew}_i
 \]
 
 
 Levantando-se os erros quadráticos para os 4 modelos em seus períodos de
-teste, escolhem-se os hiper-parâmetros $t_d$, $k$ e $\alpha$. $t_f$ pode ser
+teste, escolhem-se os hiper-parâmetros $t_d$, $k$ e $\alpha$. O parâmetro $t_f$ pode ser
 escolhido de acordo com a necessidade de controle de qualidade da fábrica. Nos
 testes realizados nesse trabalho, usamos $t_f=7$ para efeito de comparação com
 os modelos de Aprendizagem Profunda. 
@@ -575,8 +604,8 @@ os modelos de Aprendizagem Profunda.
 A família das Redes Neurais Recorrentes (RNN) é composta por modelos especializados
 em processar dados sequenciais \citep{dlbook}, da forma $x^{(1)},x^{(2)} ,x^{(3)}\dots ,x^{(T)}$. Uma rede neural recorrente é definida por uma função com
 \textbf{recorrência} ou \textbf{recursão}, de modo que no processamento de uma
-sequência o estado da rede seja de certo modo propagado temporalmente. A equação
-a seguir ilustra uma função com recorrência: \\
+sequência o estado da rede seja de certo modo propagado temporalmente.
+A equação a seguir ilustra uma função com recorrência: \\
 
 \[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
 
@@ -721,30 +750,32 @@ DL como redes encoder-decoder. \\
 
 Apesar de se tratarem de aproximações de verdadeiras inferências bayesianas, os
 modelos nessa seção buscam unir a acurácia de métodos frequentistas de
-Aprendizado Automático com a
-margem de incerteza proveniente do uso da Lei de Bayes.
+Aprendizado Automático com a margem de incerteza proveniente do uso da Lei de Bayes.
 
 \subsection{Inferência Bayesiana em Aprendizado de Máquinha}
 \label{sec:bayesinf}
-O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso dos frequentistas \citep{dlbook}.
+O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso do frequentista \citep{dlbook}.
 
 Pode-se considerar que diferença entre as duas escolas de pensamento está em
-\textbf{onde} se considera que a incerteza do problema está presente: Para a
-estatística bayesiana a incerteza está presente no modelo, as observações não
+\textbf{onde} se considera que a incerteza do problema modelado está presente: Para a
+interpretação bayesiana a incerteza está presente no modelo, as observações não
 são consideradas variáveis aleatórias, mas uma realidade observada. Para a estatística frequentista
-se considera que os dados de entrada são uma realização possível de uma
-distribuição desconhecida (uma variável aleatória), e nosso modelo gera \textbf{estimativas pontuais} \citep{rethink}.
+considera-se que os dados de entrada são uma realização possível de uma
+distribuição desconhecida, e um modelo gera \textbf{estimativas pontuais} \citep{rethink}.
 
-Em uma análise frequentista estima-se um valor de $\theta$ e então todas as
+Considerando-se que todos os parâmetros de um modelo estão contidos em um vetor
+$\theta$, em uma análise frequentista estima-se o melhor valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
 a distribuição de possíveis valores de $\theta$ ao se fazer uma predição. \\ 
 
 
-Sejam $X,Y$ conjutos de entradas e anotações para o treinamento de um modelo,
+Sejam $X,Y$ respectivamente entradas e anotações usadas no treinamento de um modelo,
 $x^*,y^*$ um par inédito de entrada e anotação (i.e. dados de teste) e
-$\theta$ os parâmetros dos modelos. $p(y^* | x^*,\theta)$ é a verossimilhança de
+$\theta$ os parâmetros dos modelos.
+
+Usando a nomenclatura Bayesiana, teste$p(y^* | x^*,\theta)$ é a verossimilhança de
 uma nova predição do modelo e $p(\theta | X,Y)$ é a distribuição posterior dos
-parâmetros do modelo.
+parâmetros do modelo, obtida pela aplicação da lei de Bayes.
 
 Para obtermos a distribuição de uma nova
 predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
@@ -1010,9 +1041,9 @@ O desvio-padrão total do modelo é então calculado por:
 \subsection{Modelo DeepAR}
 
 O modelo \textit{DeepAR}, proposto em \citep{deepar}, é baseado em redes neurais
-recorrentes auto-regressivas. Essa classe de modelos, que é bastante usada em
+recorrentes auto-regressivas. Essa família de modelos auto-regressivos, que é bastante usada em
 econometria, usa saídas passadas como entradas para o cálculo de próximos
-valores. Dessa maneira em tese esses modelos podem gerar predições em horizontes
+valores. Dessa maneira ,em tese, esses modelos podem gerar predições em horizontes
 de tempo arbitrários no futuro.
 Usa-se a função de verossimilhança binomial para que o modelo seja capaz
 de realizar predições probabilísticas.
