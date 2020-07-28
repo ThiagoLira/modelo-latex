@@ -1,5 +1,5 @@
 % ------------------------------------------------------------------------- %%
-\chapter{Conceitos}
+\chapter{Conceitos Teóricos}
 \label{cap:conceitos}
 
 
@@ -52,19 +52,30 @@ treino e pode ser alterado na busca de uma melhor acurácia de predição.
 \section{Estatística Frequentista e Estatística Bayesiana}
  
 Como nesse trabalho serão usados métodos de inferência Bayesiana aplicados a Aprendizado Automático,
-cabe então uma breve elaboração das diferenças entre as duas principais
-vertentes da estatística \citep{dlbook}. 
+cabe uma breve elaboração das diferenças entre as duas principais
+interpretações da estatística \citep{dlbook}. 
 
-Digamos que exista um evento aleatório que tenha um resultado com probabilidade
-$p$ de acontecer. A visão frequentista de probabilidades diz que, se pudéssemos
-repetir infinitas vezes esse evento, a proporção de vezes que esse resultado irá
-acontecer se aproximará arbitrariamente de $p$. E então entenderíamos a
-probabilidade $p$ meramente como uma proporção de resultados positivos em uma
-certa amostra de experimentos. Mas e se o evento não pudesse ser repetido?
-Quando físicos criam modelos para explicar o nascimento do universo, é
-impossível pensar em incerteza como repetições de fenômenos cosmológicos como esse. Nesse segundo caso, resultados são derivados de \textbf{graus de certeza}, onde a chance de um evento acontecer é estimada pela aplicação de conhecimentos prévios em vista de algo que foi observado posteriormente. A primeira maneira de se entender estatística é chamada de Frequentista e a segunda de Bayesiana. \\
+Historicamente, a estatística era pensada como um conjunto de métodos de
+contagem, idealizados na realidade de jogos de azar e outras atividades de
+natureza aleatória. Mesmo após a estatística ter sido formalizada ao lado de
+outros ramos da matemática em uma base sólida, resta a interpretação de seus
+métodos e objetos de estudo (probabilidades) quando aplicados em problemas
+reais. Atualmente existem duas dessas interpretações, a Frequentista e a
+Bayesiana.
 
-E no campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
+A interpretação frequentista é relacionada as origens da estatística, entendendo
+probabilidades como contagens de eventos em um espaço amostral pré-definido,
+supondo que no limite, se pudessemos repetir experimentos infinitas vezes,
+chegaríamos ao valor real de alguma probabilidade ou estatística. Métodos
+frequentistas fazem estimativas pontuais (i.e. não aleatórias) e tratam os dados como uma entre muitas
+possíveis realizações de uma distribuição de probabilidade desconhecida, porém fixa. 
+
+No caso bayesiano, entende-se a probabilidade como um grau de confiança. Começamos
+experimentos com uma distribuição \textbf{a priori} que representa o
+conhecimento sobre algum fenômeno antes de observados os dados (uma distribuição
+de probabilidade assim como as usadas em métodos frequentistas). Usa-se então a
+lei de Bayes para atualizar o nosso conhecimento a priori com a evidência dada
+pela observação dos dados. No campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
 frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
 
 
