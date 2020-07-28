@@ -99,7 +99,23 @@ experimentos com uma distribuição \textbf{a priori} que representa o
 conhecimento sobre algum fenômeno antes de observados os dados (uma distribuição
 de probabilidade assim como as usadas em métodos frequentistas). Usa-se então a
 lei de Bayes para atualizar o nosso conhecimento a priori com a evidência dada
-pela observação dos dados. No campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
+pela observação dos dados.
+
+ \begin{figure} 
+\[
+  P(A|B)=\frac{P(B|A)P(A)}{P(B)}
+\]
+\caption{Em uma nomenclatura simplificada, a lei de Bayes descreve a maneira de
+  como podemos atualizar nossa crença no evento $A$ dado a observação do evento
+  $B$. Para isso usa-se a nossa crença a priori $P(A)$ e a verossimilhança
+  $P(B|A)$. O denominador $P(B)$ é uma constante de normalização que
+  frequentemente não precisa ser calculada diretamente.}
+  \end{figure}
+
+
+
+
+No campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
 frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
 
 
@@ -766,19 +782,17 @@ distribuição desconhecida, e um modelo gera \textbf{estimativas pontuais} \cit
 Considerando-se que todos os parâmetros de um modelo estão contidos em um vetor
 $\theta$, em uma análise frequentista estima-se o melhor valor de $\theta$ e então todas as
 predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
-a distribuição de possíveis valores de $\theta$ ao se fazer uma predição. \\ 
-
+a distribuição de possíveis valores de $\theta$ ao se fazer uma predição.
 
 Sejam $X,Y$ respectivamente entradas e anotações usadas no treinamento de um modelo,
 $x^*,y^*$ um par inédito de entrada e anotação (i.e. dados de teste) e
 $\theta$ os parâmetros dos modelos.
 
-Usando a nomenclatura Bayesiana, teste$p(y^* | x^*,\theta)$ é a verossimilhança de
+Usando a nomenclatura Bayesiana, $p(y^* | x^*,\theta)$ é a verossimilhança de
 uma nova predição do modelo e $p(\theta | X,Y)$ é a distribuição posterior dos
 parâmetros do modelo, obtida pela aplicação da lei de Bayes.
 
-Para obtermos a distribuição de uma nova
-predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
+Para obtermos a distribuição de uma nova predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
 
 \begin{equation}
   \label{eq:int}
