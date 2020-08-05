@@ -3,9 +3,28 @@
 \label{cap:conceitos}
 
 
+\section{O problema de predição de RC como Aprendizado Supervisionado}
+
+Para cada lote de cimento presente nos dados, possuímos resultados do ensaio de
+RC28 (o objetivo de predição), bem como de ensaios químicos (e.g. concentração
+de $Al_2O_3$) e mesmo ensaios de resistência compressiva mais rápidos (RC1, RC3 e RC7). Usaremos esses resultados
+de ensaios químicos, bem como RC1, RC3 e RC7 como entrada para modelos
+estatísticos buscando modelar o nosso alvo RC28.
+
+Seja um modelo de regressão $f$, uma predição de RC28 usará o vetor de entrada
+$\textbf{x}$ e uma matriz de parâmetros $\theta$:
+
+\[
+  \hat{RC28}_i = f(\textbf{x}_i;\theta)
+\]
 
 
-\section{Séries Temporais}
+Nota-se que para essa modelagem outros valores de RC28 (e suas variáveis) temporalmente próximos do
+i-ésimo não são usados. Dada a natureza temporal do processo industrial,
+trabalhos recentes passaram a incomporar o histórico de entradas e saídas na
+análise, obtendo resultados mais robustos \cite{grecialin}. 
+
+\subsection{Séries Temporais}
 
 Séries temporais são dados indexados em ordem temporal. Formalmente, podemos
 representar uma série temporal como uma lista de números ou vetores ordenados
@@ -29,7 +48,7 @@ espaçados no tempo, embora isso seja necessário para diversas técnicas de
 modelagem e análise \citep{ARIMA_LSTM}.
 
 
-\section{Definição do Problema}
+\subsection{Regressão de Séries Temporais}
 
 
 Os dados da produção de cimento são anotados temporalmente, então podemos escolher
@@ -45,8 +64,7 @@ químicas de reagentes presentes na produção de cimento, $\textbf{X} = \{ \tex
 Para k séries temporais de covariados i.e. parâmetros de
 entrada. Para simplificar a notação, o índice $t$ será por vezes omitido.
 
-O problema é de Aprendizado Supervisionado(Tópico explicado na
-Sessão~\ref{sec:aprenauto}). Usaremos valores passados dos covariados a da
+Usaremos valores passados dos covariados a da
 própria série alvo para a predição de novas anotações $y$. A literatura de predição de séries
 temporais chama esse tipo de problema onde são usadas valores passadas de uma série
 para a predição do futuro da mesma de \textbf{auto-regressão}, para um resumo
@@ -55,21 +73,15 @@ das diversas tarefas de aprendizado relacionadas a séries temporais, ver \cite{
 
 Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
  $x_k$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
-séries. Desejamos modelar a distribuição de probabilidade das próximas anotações
-de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
-observações das diversas variáveis  $x_k$ e do alvo $y$ no passado
-\citep{deepfactors}. Nota-se que se supõe que possuímos entradas das
-variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
+séries. Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ será
+da seguinte forma:
 
-\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:F}) \]
 
-A distribuição será buscada por meio de aprendizado supervisionado, onde os
-modelos serão alimentados com diversos pares de entradas,
-$(y_t,\textbf{x}_{t:t+W})$, onde $\textbf{x}$ é um vetor que contém os valores de
-cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
-entrada contém $W$ entradas do vetor de entrada. O parâmetro $W$, o
-tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
-treino e pode ser alterado na busca de uma melhor acurácia de predição.
+
+\[
+  \hat{RC28}_{T:F}  = f ( RC28_{1:T},\textbf{x}_{{1}:F} ; \theta)
+\]
+
 
 
 
@@ -162,6 +174,25 @@ Dados vetores de entrada $x$ associados a uma anotação $y$, a tarefa consiste 
 função dentro de uma família de funções que melhor generalize a relação entre
 $x$ e $y$. De modo que os modelos possam gerar anotações inéditas $y'$ para
 dados $x'$ nunca antes vistos. 
+
+
+\subsubsection{Aprendizado Supervisionado para Séries Temporais}
+
+Desejamos modelar a distribuição de probabilidade das próximas anotações
+de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
+observações das diversas variáveis  $x_k$ e do alvo $y$ no passado
+\citep{deepfactors}. Nota-se que se supõe que possuímos entradas das
+variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
+
+\[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:F}) \]
+
+A distribuição será buscada por meio de aprendizado supervisionado, onde os
+modelos serão alimentados com diversos pares de entradas,
+$(y_t,\textbf{x}_{t:t+W})$, onde $\textbf{x}$ é um vetor que contém os valores de
+cada variável independente $x_i$, no instante de tempo $t$. Cada tupla de
+entrada contém $W$ entradas do vetor de entrada. O parâmetro $W$, o
+tamanho da janela de tempo consumida para gerar cada saída, é escolhido antes do
+treino e pode ser alterado na busca de uma melhor acurácia de predição.
 
 
 \subsubsection{Aprendizado Não Supervisionado}
