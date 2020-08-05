@@ -72,16 +72,15 @@ das diversas tarefas de aprendizado relacionadas a séries temporais, ver \cite{
 
 
 Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
- $x_k$ com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
+agregadas para cada índice $t$ como um vetor $\textbf{x}_t$. O treinamento será
+realizado com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ será
 da seguinte forma:
-
 
 
 \[
   \hat{RC28}_{T:F}  = f ( RC28_{1:T},\textbf{x}_{{1}:F} ; \theta)
 \]
-
 
 
 
