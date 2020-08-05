@@ -70,53 +70,6 @@ para que eles se tornem diários:
 
 
 
-\section{Testes de Sazonalidade}
-
-Diversas publicações recentes estudam a eficácia de modelos de Deep Learning
-para predição de séries temporais, como consumo de energia elétrica
-\citep{lstmbr}. Os dados estudados nesse documento são séries temporais dado que
-são indexados pelo tempo, porém, resta analisar características temporais desses
-dados. Como exemplo, \cite{lstmbr} usaram a informação do mês atual como
-parâmetro para prever o consumo de energia elétrica. Dados que não possuem nenhuma característica temporal (i.e. a ordem não importa) seriam por exemplo provenientes de um estudo do salário recebido por uma amostra da população dados fatores como gênero, escolaridade e idade. No primeiro exemplo temos um caso de \textbf{sazonalidade} nos dados, algo que pode ser analisado em séries temporais com testes de análise espectral e auto-correlação. Para os dados desse problema, iremos testar a sazonalidade dos preditores de dureza do cimento.
-
-\subsection{Análise Espectral}
-
-Uma maneira de testar sazonalidade de dados indexados temporalmente é usar a
-técnica de Transformada de Fourier \citep{spec}, onde podemos estudar quais
-frequências dentro de um espectro podem ser usadas para decompor um sinal (i.e.
-nossos dados). Para essa análise usamos os índices de dureza contidos nos dados
-de expedição, de 2008 até 2014 e descartamos a parte imaginária da análise já
-que nossos dados não possuem parte complexa \citep{spec}. Seguem os resultados:
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\columnwidth]{FFT_RC28.png}
-\caption{Análise Espectral para preditor RC28}
-\end{figure}
-
-
-Podemos notar que a "energia" do sinal não possui picos em nenhuma frequência além da frequência zero, que seria a potência média do sinal, ou seja, uma componente que não depende do tempo. Então, afirmamos que esses dados não possuem sazonalidade mensal ou anual. O que significa que a média e a variância desses indicadores não possuem tendências e.g. alguma mudança similar todo mês de Janeiro.
-
-
-\section{Correlação entre Colunas}
-
-Vamos analisar agora a \textit{correlação} entre colunas dos dados de expedição
-de cimento. Usaremos sempre a \textit{correlação de Pearson} para os cálculos.
-\\
-Sejam duas amostras de variáveis aleatórias $X,Y$ pareadas $[x_1,x_2, \dots ,
-x_n]$ e $[y_1,y_2, \dots , y_n]$, calcula-se o índice de correlação de Pearson por:
-
-
-
-\[ r = \frac{{}\sum_{i=1}^{n} (x_i - \overline{x})(y_i - \overline{y})}
-{\sqrt{\sum_{i=1}^{n} (x_i - \overline{x})^2(y_i - \overline{y})^2}} \] 
-
-
-O valor de $r$ está no intervalo $[-1,1]$, onde 1 indica uma correlação positiva
-total, -1 uma correlação negativa (i.e. uma variável tem um efeito negativo na
-outra) e 0 a falta de correlação.
-
-
 \subsection{RC3, RC7 e RC28}
 
 Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
@@ -156,30 +109,14 @@ colunas de dados e o nosso objetivo, o índice RC28:
   P2O5  &  0.292252 \\
   RC28  &  1.000000 \\
   \bottomrule
-  \label{tabelacorr}
 \end{tabular}
+\caption{Tabela mostrando correlações entre as variáveis e o alvo para o problema de aprendizado.}
+\label{tabelacorr}
 \end{table}
 
 
 É notável que o RC28 não possui uma alta correlação com nenhuma das propriedades
 do cimento. Tendo essa correlação apenas com os outros índices de resistência compressiva.
-
-\section{Normalização}
-
-Os dados foram normalizados pelo método min-max. Essa técnica foi escolhida pelo
-fato da distribuição de muitas das colunas não ser normal.
-
-Seja um vetor $X =[x_1,x_2,\dots,x_n]$ . Podemos normaliza-lo por esse método usando a
-seguinte transformação:
-
-
-\[
-x^*_{i} = ( x_i - Min(X))/(Max(X) - Min(X)) 
-\]
-
-$Min(X)$  e $Max(X)$ são constantes que devem ser guardadas para posterior
-desnormalização do vetor.
-
 
 
 

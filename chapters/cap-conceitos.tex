@@ -19,7 +19,8 @@ $\textbf{x}$ e uma matriz de parâmetros $\theta$:
 \]
 
 
-Nota-se que para essa modelagem outros valores de RC28 (e suas variáveis) temporalmente próximos do
+A função será encontrada por métodos de aprendizado que serão explicados ao
+longo desse trabalho. Nota-se que para essa modelagem outros valores de RC28 (e suas variáveis) temporalmente próximos do
 i-ésimo não são usados. Dada a natureza temporal do processo industrial,
 trabalhos recentes passaram a incomporar o histórico de entradas e saídas na
 análise, obtendo resultados mais robustos \cite{grecialin}. 
@@ -57,31 +58,21 @@ dados num horizonte de tempo futuro finito.
 Na tarefa de aprendizado será usada a série temporal alvo $Y$, dos índices
 $RC_{28}$ de resistência compressiva, $Y = \{y_t , t \in T \}$.
 Também serão usadas séries temporais de
-\textbf{covariados}, i.e. variáveis também anotadas temporalmente de composições
-químicas de reagentes presentes na produção de cimento, $\textbf{X} = \{ \textbf{x}_t  \, , t
-\in T  \}$, onde cada $\textbf{x}_t \in \mathbb{R}^K$.
+\textbf{variáveis} presentes na produção de cimento, $\{ \textbf{x}_t  \, , t
+\in T  \}$, onde cada $\textbf{x}_t \in \mathbb{R}^K$, cada dimensão $k$
+representando uma variável diferente. Cada $\textbf{x}_t$ terá a forma
+$\{{Al_2O_3}_t\, , IP_t \dots \}$ dependendo das variáveis escolhidas para cada
+modelo. Uma listagem completa das variáveis presentes nos dados é apresentada na
+Tabela~\ref{tb:vars}.
 
-Para k séries temporais de covariados i.e. parâmetros de
-entrada. Para simplificar a notação, o índice $t$ será por vezes omitido.
-
-Usaremos valores passados dos covariados a da
-própria série alvo para a predição de novas anotações $y$. A literatura de predição de séries
-temporais chama esse tipo de problema onde são usadas valores passadas de uma série
-para a predição do futuro da mesma de \textbf{auto-regressão}, para um resumo
-das diversas tarefas de aprendizado relacionadas a séries temporais, ver \cite{gluonts}.
-
-
-Seja um série temporal alvo, $Y$, e diversas séries temporais de variáveis
-agregadas para cada índice $t$ como um vetor $\textbf{x}_t$. O treinamento será
-realizado com valores nos instantes de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
+O treinamento será realizado com valores dessas séries nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
 séries. Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ será
-da seguinte forma:
+uma função da seguinte forma:
 
 
 \[
   \hat{RC28}_{T:F}  = f ( RC28_{1:T},\textbf{x}_{{1}:F} ; \theta)
 \]
-
 
 
 \section{Estatística Frequentista e Estatística Bayesiana}
@@ -128,7 +119,6 @@ pela observação dos dados.
 
 No campo de Aprendizado Automático, as duas maneiras de se gerar predições são estimadores
 frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:bayesinf}).
-
 
 
 \section{Aprendizado Automático}
@@ -241,108 +231,127 @@ O último termo do erro denotado por $\sigma$ é a parte aleatória do erro
 impossível de ser reduzida devido a impossibilidade de modelagem de toda a
 distribuição geradora dos dados.
 
-\subsubsection{Estimadores}
+\subsection{Estimadores Frequentistas}
 \label{sec:est}
 
-A aprendizagem estatística busca a diminuição de \textit{risco empírico} das predições feitas por
-um modelo \citep{mlprob}. O risco empírico é dado pelo somatório de uma função
-de custo por todo o conjunto de dados:
+
+Um estimador dos parametros $\theta$, na visão frequentista, é uma função dos dados, e portanto uma
+variável aleatória. Considerando-se os dados como uma realização de uma
+distribuição fixa porém desconhecida, o objetivo é encontrarmos um estimador
+que, no limite, se aproxime dos parâmetros corretos \cite{mlprob}.
+Esse parâmetro pode ser a média da distribuição do alvo, por exemplo.
+
+Embora qualquer função dos dados possa ser usada como um estimador, bons
+estimadores podem ser encontrados pelo método da Máxima Verossimilhança (MLE).
+Isso significa, computar a probabilidade de um certo estimador
+ter gerado os dados. Usando um exemplo de aprendizado supervisionado onde
+desejamos modelar a distribuição $p(Y|X)$, o estimador de máxima verossimilhança
+é o que minimiza a equação:
 
 \[
-  \mathcal{L} = \frac{1}{T}\sum_{t=0}^{i=T}L(y_t,\hat{y_t}) 
+  \theta_{MLE} = \argmax_{\theta} p( Y | X ; \theta)
 \]
 
-Um método possível da diminuição de risco é o de guiar o aprendizado pela
-maximização da verossimilhança do modelo. Esse valor é a probabilidade de termos
-observado os dados alvo condicionada pelos parâmetros do modelo e as entradas
-(que iremos representar pelo vetor $\theta$). Uma iteração de
-treino então consistira do produtório de todas as verossimilhanças para cada par
-de entradas. Na definição do nosso problema, temos que o custo total do modelo
-$\mathcal{L}$ é dado pela seguinte equação \citep{dlbook}, considerando que o
-modelo recebe $W$ entradas temporais para o calculo da verossimilhança de uma saída:
+Onde $p(y | X ; \theta)$ é uma família de distribuições de probabilidade
+parametrizada por $\theta$ que modela o nosso problema de aprendizado, $\theta_{MLE}$ é o parâmetro que a torna mais
+próxima possível de $p(y | X)$, a real distribuição geradora dos dados. O
+objetivo de otimização não se altera se otimizarmos o logarítimo da
+verossimilhança, e essa mudança torna a otimização mais estável.
 
 \[
-\mathcal{L} = \prod_{t=0}^{i=T} p(y_t | \textbf{x}_{t}, \theta) 
+  \theta_{MLE} = \argmax_{\theta}\log p( Y | X ; \theta)
 \]
 
-É comum, porém, por motivos de estabilidade numérica \citep{dlbook}, substituir
-o produtório de probabilidades pelo somatório do logarítimo das probabilidades: 
+O objetivo também pode ser escrito por um produtório da verossimilhança de todos
+os pares de dados, assumindo que todos são independentes:
 
 \[
-  \mathcal{L} = \sum_{t=0}^{i=T} \log{p(y_t | \textbf{x}_{t},\theta)}
-\]
-
-Em uma análise bayesiana, também buscaríamos maximizar a verossimilhança dos
-dados condicionados aos parâmetros do modelo. Mas como exige a formalização
-bayesiana, iriamos considerar uma distribuição a priori dos parâmetros do
-modelo, i.e. $p(\theta)$:
-
-
-\[
-  \mathcal{L} = \prod_{t=0}^{i=T}p(y_t|\textbf{x}_{t},\theta)p(\theta) 
+  \theta_{MLE} = \argmax_{\theta}\prod_{i=0}\log p( y_i | x_i ; \theta)
 \]
 
 
-Para modelos com baixa dimensionalidade e muitos dados, a estimativa bayesiana
-coincide com a frequentista, convergindo para a \textbf{estimação de máxima
-verossimilhança} \citep{mlprob}. Isso se deve ao fato que a distribuição de
-probabilidade a priori progressivamente se torna menos importante no calculo da
-probabilidade posterior com muitos dados. Por isso se diz que a Inferência
-Bayesiana é um estimador consistente \citep{mlprob}, i.e. ele converge para uma
-hipótese arbitrariamente próxima da verdade.
+\subsection{Inferência Bayesiana} 
+\label{sec:bayesinf}
+O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso do frequentista \citep{dlbook}.
+
+Pode-se considerar que diferença entre as duas escolas de pensamento está em
+\textbf{onde} se considera que a incerteza do problema modelado está presente: Para a
+interpretação bayesiana a incerteza está presente no modelo, as observações não
+são consideradas variáveis aleatórias, mas uma realidade observada. Para a estatística frequentista
+considera-se que os dados de entrada são uma realização possível de uma
+distribuição desconhecida, e um modelo gera \textbf{estimativas pontuais} \citep{rethink}.
+
+Considerando-se que todos os parâmetros de um modelo estão contidos em um vetor
+$\theta$, em uma análise frequentista estima-se o \say{melhor valor} (checar Sessão~\ref{sec:est}) de $\theta$ e então todas as
+predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
+a distribuição de possíveis valores de $\theta$ ao se fazer uma predição. E
+também se considera uma distribuição a priori de todos os parâmetros do modelo.
+Essa será atualizada pela Lei de Bayes em frente a evidência apresentada pelos
+dados (que não são mais considerados variáveis aleatórias, mas observadas).
+
+Sejam $X,Y$ respectivamente entradas e anotações usadas no treinamento de um modelo,
+$x^*,y^*$ um par inédito de entrada e anotação (i.e. dados de teste) e
+$\theta$ os parâmetros dos modelos.
+
+Usando a nomenclatura Bayesiana, $p(y^* | x^*,\theta)$ é a verossimilhança de
+uma nova predição do modelo e $p(\theta | X,Y)$ é a distribuição posterior dos
+parâmetros do modelo, obtida pela aplicação da lei de Bayes.
+
+\[
+  p(\theta | X,Y) \sim p(Y | X,\theta) * p(\theta)
+\]
 
 
-Na seção~\ref{sec:reglog} iremos dar um exemplo dessa cálculo de verossimilhança
-assumindo que o erro do modelo é distribuído normalmente.
-
-\subsubsection{A Distribuição Normal}
-\label{sec:reglog}
-
-Uma variável aleatória Y distribuída normalmente possui uma função densidade de
-probabilidade da seguinte forma \citep{mlprob}:
+Para obtermos a distribuição de uma nova predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
 
 \begin{equation}
-  \label{eq:ver}
-p(y| \mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp{-\frac{(y - \mu)^2}{2\sigma^2}}
+  \label{eq:int}
+  p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
 \end{equation}
 
-Esse valor também é chamado de verossimilhança (a probabilidade de termos
-observado um valor de Y, dado que essa variável é distribuída normalmente, com média $\mu$ e variância $\sigma^2$), e
-normalmente trabalha-se com o logaritmo desse valor, para podermos trocar um
-produtório por somatório para agregar os erros gaussianos de um conjunto de dados
-i.i.d.. Nesse caso, temos pares de predição e valor real, que assumirá o papel
-da média $\mu$. A verossimilhança total de um conjunto de diversos pares
-$(\hat{y},y)$ é dado por: 
+Para grande parte dos modelos de Aprendizado Automático a distribuição posterior
+$p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
+distribuição $q(\theta)$, essa podendo ser otimizada por métodos numéricos para
+aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
+calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
+
+\begin{align*}
+  \label {eq:pq}
+    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,\theta) q(\theta)d\theta \\
+                       &= q(y^* | x^*)
+\end{align*}
+
+ Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
+Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
+Equação~\ref{eq:ine} é sempre menor que $p(Y|X)$, e igual no limite em que
+$q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
+\textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q$ e
+a distribuição alvo:
 
 \begin{equation}
-\label{eq:logver1}
-  \mathcal{L}= -m \log \sigma - \frac{m}{2} \log (2 \pi) - \sum^m_{i=1}
-  \frac{\abs{\hat{y_i}-y_i}^2}{2 \sigma^2}
+  \label {eq:ine}
+  \mathcal{L}_{VI} = \int q(\theta) \log p(Y | X,\theta)d\theta - \mathnormal{KL}(q(\theta) ||p(\theta)) \\
+                  \leq \log p(Y|X)
 \end{equation}
 
-Um estimador sem viés da Equação~\ref{eq:logver1}, chamado de Erro Quadrático
-Médio, pode ser escrito apenas como \citep{mlprob}:
-
-\begin{equation}
-  \label{eq:logver2}
-  \mathcal{L}=  \sum^m_{i=1} (\hat{y_i}-y_i)^2
-\end{equation}
+A outra distância KL está presente no objetivo de otimização é a
+distância entre a distribuição a priori $p(\theta)$ e a distribuição aproximada
+$q(\theta)$ dos parâmetros do modelo. É importante notar que a Equação~\ref{eq:ine} é verdade para qualquer escolha de
+$q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o melhor possível.
 
 
 \subsubsection{Função de Custo}
 
 A Função de Custo é uma função usada para guiar os algoritmos de otimização na
 direção de parâmetros que melhorem a performance do modelo \citep{dlbook}.
-Essa função para alguns modelos pode representar a verossimilhança dos dados,
-mas isso não é necessário no geral.
-
-Nessa sessão iremos definir a função de custo usada em todos os modelos de regressão usados. \\
+Essa função para alguns modelos pode representar o cálculo da verossimilhança do
+modelo, mas isso não é necessário no geral.
 
 \subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
 
-O Erro Quadrático Médio é um estimador não enviesado da Equação~\ref{eq:ver}
-\citep{dlbook} para o cálculo da verossimilhança de um modelo Gaussiano. Ele é calculado em relação a duas variáveis contínuas
+O Erro Quadrático Médio é um estimador não enviesado da verossimilhança de um
+modelo Gaussiano \cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
 $(\hat{y},y)$, definido da seguinte forma:
 
 \[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
@@ -792,72 +801,6 @@ DL como redes encoder-decoder. \\
 
 
 
-\section{Modelos Bayesianos}
-
-Apesar de se tratarem de aproximações de verdadeiras inferências bayesianas, os
-modelos nessa seção buscam unir a acurácia de métodos frequentistas de
-Aprendizado Automático com a margem de incerteza proveniente do uso da Lei de Bayes.
-
-\subsection{Inferência Bayesiana em Aprendizado de Máquinha}
-\label{sec:bayesinf}
-O tratamento Bayesiano para modelos de Aprendizado Automático é bastante diverso do frequentista \citep{dlbook}.
-
-Pode-se considerar que diferença entre as duas escolas de pensamento está em
-\textbf{onde} se considera que a incerteza do problema modelado está presente: Para a
-interpretação bayesiana a incerteza está presente no modelo, as observações não
-são consideradas variáveis aleatórias, mas uma realidade observada. Para a estatística frequentista
-considera-se que os dados de entrada são uma realização possível de uma
-distribuição desconhecida, e um modelo gera \textbf{estimativas pontuais} \citep{rethink}.
-
-Considerando-se que todos os parâmetros de um modelo estão contidos em um vetor
-$\theta$, em uma análise frequentista estima-se o melhor valor de $\theta$ e então todas as
-predições são feitas a partir desse valor. No caso Bayesiano se consideram toda
-a distribuição de possíveis valores de $\theta$ ao se fazer uma predição.
-
-Sejam $X,Y$ respectivamente entradas e anotações usadas no treinamento de um modelo,
-$x^*,y^*$ um par inédito de entrada e anotação (i.e. dados de teste) e
-$\theta$ os parâmetros dos modelos.
-
-Usando a nomenclatura Bayesiana, $p(y^* | x^*,\theta)$ é a verossimilhança de
-uma nova predição do modelo e $p(\theta | X,Y)$ é a distribuição posterior dos
-parâmetros do modelo, obtida pela aplicação da lei de Bayes.
-
-Para obtermos a distribuição de uma nova predição do modelo devemos marginalizar os parâmetros $\theta$ usando a seguinte integral:
-
-\begin{equation}
-  \label{eq:int}
-  p(y^* | x^* , X,Y) = \int  p(y^* | x^*,\theta) p(\theta | X,Y)  d\theta 
-\end{equation}
-
-Para grande parte dos modelos de Aprendizado Automático a distribuição posterior
-$p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
-distribuição $q(\theta)$, essa podendo ser otimizada por métodos numéricos para
-aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
-calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
-
-\begin{align*}
-  \label {eq:pq}
-    p(y^* | x^* , X,Y) &\approx \int  p(y^* | x^*,\theta) q(\theta)d\theta \\
-                       &= q(y^* | x^*)
-\end{align*}
-
- Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
-Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
-Equação~\ref{eq:ine} é sempre menor que $p(Y|X)$, e igual no limite em que
-$q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
-\textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q$ e
-a distribuição alvo:
-
-\begin{equation}
-  \label {eq:ine}
-  \mathcal{L}_{VI} = \int q(\theta) \log p(Y | X,\theta)d\theta - \mathnormal{KL}(q(\theta) ||p(\theta)) \\
-                  \leq \log p(Y|X)
-\end{equation}
-
-A outra distância KL está presente no objetivo de otimização é a
-distância entre a distribuição a priori $p(\theta)$ e a distribuição aproximada
-$q(\theta)$ dos parâmetros do modelo. É importante notar que a Equação~\ref{eq:ine} é verdade para qualquer escolha de
-$q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o melhor possível.
 
 
 \subsubsection{Rede Neural Bayesiana}
@@ -1232,6 +1175,41 @@ O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Process
 \[
 \mathcal{L} = \sum_{t=0}^N{\log p(y_t|x_t)}
 \]
+
+
+
+\section{Correlação entre Variáveis}
+
+Sejam duas amostras de variáveis aleatórias $X,Y$ pareadas $[x_1,x_2, \dots ,
+x_n]$ e $[y_1,y_2, \dots , y_n]$, calcula-se o índice de correlação de Pearson por:
+
+
+
+\[ r = \frac{{}\sum_{i=1}^{n} (x_i - \overline{x})(y_i - \overline{y})}
+  {\sqrt{\sum_{i=1}^{n} (x_i - \overline{x})^2(y_i - \overline{y})^2}} \] 
+
+
+O valor de $r$ está no intervalo $[-1,1]$, onde 1 indica uma correlação positiva
+total, -1 uma correlação negativa (i.e. uma variável tem um efeito negativo na
+outra) e 0 a falta de correlação.
+
+
+\section{Normalização Min-Max}
+
+Como os dados possuem variáveis com diferentes ordens de grandeza, convém
+normalizar essas variáveis para corrigir problemas de viés em certos modelos de
+ML. O método min-max deixa todas as entradas de uma variável entre 0 e 1.
+
+Seja um vetor $X =[x_1,x_2,\dots,x_n]$ . Podemos normaliza-lo por esse método usando a
+seguinte transformação:
+
+\[
+  x^*_{i} = ( x_i - Min(X))/(Max(X) - Min(X)) 
+\]
+
+$Min(X)$  e $Max(X)$ são constantes que devem ser guardadas para posterior
+desnormalização do vetor.
+
 
 
 %%% Local Variables:
