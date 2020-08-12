@@ -3,7 +3,7 @@
 \label{cap:conceitos}
 
 
-\section{O problema de predição de RC como Aprendizado Supervisionado}
+\section{O problema de predição de RC como Regressão}
 
 Para cada lote de cimento presente nos dados, possuímos resultados do ensaio de
 RC28 (o objetivo de predição), bem como de ensaios químicos (e.g. concentração
@@ -49,11 +49,11 @@ espaçados no tempo, embora isso seja necessário para diversas técnicas de
 modelagem e análise \citep{ARIMA_LSTM}.
 
 
-\subsection{Regressão de Séries Temporais}
+\subsection{O problema de predição de RC como Regressão de Série Temporal}
 
 
 Os dados da produção de cimento são anotados temporalmente, então podemos escolher
-tratá-los como uma série temporal. A tarefa de regressão se torna então prever as próximas anotações desses
+modela-los como uma série temporal. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito.
 Na tarefa de aprendizado será usada a série temporal alvo $Y$, dos índices
 $RC_{28}$ de resistência compressiva, $Y = \{y_t , t \in T \}$.
@@ -269,8 +269,14 @@ os pares de dados, assumindo que todos são independentes:
   \theta_{MLE} = \argmax_{\theta}\prod_{i=0}\log p( y_i | x_i ; \theta)
 \]
 
-E de fato, o objetivo de treino da maior parte dos modelos de Aprendizado
-Automático podem ser escritos dessa forma, caso esses não possuam regularização~\cite{dlbook}. 
+E de fato, o objetivo de treino da maior parte dos modelos de Aprendizado Automático podem ser escritos dessa forma caso eles não possuam regularização~\cite{dlbook}.
+
+O \textbf{custo} de um modelo é medido por esse valor agregado de todo os dados de treino. A otimização para Aprendizado Supervisionado é feita usualmente pelo algoritmo de Backpropagation \citep{dlbook}, usando o gradiante dessa função para buscar um mínimo local.
+
+\[
+  \mathbb{L} = \prod_{i=0}\log p( y_i | x_i ; \theta)
+\]
+
 
 \subsection{Inferência Bayesiana} 
 \label{sec:bayesinf}
@@ -341,13 +347,6 @@ distância entre a distribuição a priori $p(\theta)$ e a distribuição aproxi
 $q(\theta)$ dos parâmetros do modelo. É importante notar que a Equação~\ref{eq:ine} é verdade para qualquer escolha de
 $q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o melhor possível.
 
-
-\subsubsection{Função de Custo}
-
-A Função de Custo é uma função usada para guiar os algoritmos de otimização na
-direção de parâmetros que melhorem a performance do modelo \citep{dlbook}.
-Essa função para alguns modelos pode representar o cálculo da verossimilhança do
-modelo, mas isso não é necessário no geral.
 
 \subsubsection{Erro Quadrático Médio}
 \label{sec:MSE}
@@ -664,7 +663,7 @@ em processar dados sequenciais \citep{dlbook}, da forma $x^{(1)},x^{(2)} ,x^{(3)
 sequência o estado da rede seja de certo modo propagado temporalmente.
 A equação a seguir ilustra uma função com recorrência: \\
 
-\[h_{(t)} = f(h_{(t-1)},x_{(t)};\theta)\]
+\[h^{(t)} = f(h^{(t-1)},x^{(t)};\theta)\]
 
 Nessa equação notamos que na iteração $t$ o valor do vetor $h$ depende de
 $h_{t-1}$.RNNs aprendem a usar esse vetores como
@@ -811,7 +810,7 @@ Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distri
 A Lei de Bayes é então aplicada para se calcular a distribuição posterior de
 $\theta$, em vez de uma estimativa pontual, como usualmente é feito no tratamento frequentista.
 Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \citep{Gal2016Uncertainty}.
-Daremos um exemplo de um desses métodos, o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
+O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
 
 \subsubsection{Monte Carlo Dropout}
 
@@ -832,15 +831,14 @@ probabilidade $p$.\\
 A cada computação da rede amostra-se com geradores de números aleatórios uma
 máscara que ira zerar valores de ativação entre camadas subsequentes. Iremos
 reparametrizar a rede neural com o fim de poder mostrar que o objetivo de
-otimização da rede com dropout é equivalente ao objetivo da Inferência Variacional.
+otimização da rede com dropout é equivalente ao método de inferência variacional.
 
 Seja uma rede neural, cuja matriz de parâmetros é $\theta$, com dimensões
 $K_i,K_{i-1}$, para cada camada $i$, e $L$ camadas. Define-se uma distribuição
 de probabilidade sob a matriz de parâmetros $q(\theta)$.
 Essa distribuição usa os pesos $M$ inicializados na rede e associa a eles a incerteza proveninente do
 método de Dropout. A distribuição $q(\theta)$ se comporta da seguinte maneira,
-onde $M_i$ e $p_i$, em cada camada, são considerados parâmetros variacionais
-(i.e. parâmetros da distribuição de probababilidade):
+onde $M_i$ e $p_i$, em cada camada, são considerados parâmetros variacionais:
 
 \newcommand{\diag}{\mathop{\mathrm{diag}}}
 
@@ -865,10 +863,7 @@ regularização L2 pode ser escrita da seguinte forma:
 O objetivo de minimização desse Rede Neural com dropout em todas as camadas é
 equivalente a diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
 posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que parametriza a
-distribuição dos parâmetros da rede \citep{dropbayes}. O Processo Gaussiano
-Profundo é um modelo flexível que permite escrever em termos probabilisticos uma
-grande gama de modelos de Aprendizado Profundo (CITACAO).
-Seja $\mathnormal{L}$ o
+distribuição dos parâmetros da rede \citep{dropbayes}. Seja $\mathnormal{L}$ o
 objetivo de inferência variacional da distribuição posterior do Processo Gaussiano Profundo, o trabalho
 \citep{dropbayes} mostra como podemos reescrever esse objetivo como a Equação ~\ref{eq:dropob}:
 
