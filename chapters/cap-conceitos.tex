@@ -197,53 +197,19 @@ Esse tipo de problema é mais comum em tarefas de Visão Computacional e NLP.
 \subsection{A Performance}
 \label{sec:metricas}
 
-A performance dos modelos de aprendizagem automática é a quantificação da
+A performance dos modelos de Aprendizado Automático é a quantificação da
 qualidade das predições frente a verdade desconhecida do fenômeno modelado.
-Claramente um modelo parametrizado possuirá algum erro de predição \cite{dlbook}, e é esse
-erro que iremos diminuir com o aprendizado. Os estimadores serão a ferramenta
-usada para guiar o treinamento em uma direção que reduza ao máximo o viés das predições.
+Claramente um modelo parametrizado possuirá algum erro de predição \citep{dlbook}, e é esse
+erro que iremos diminuir com o aprendizado. O Risco de um modelo é o valor esperado do erro das suas predições \citep{mlprob}. Como precisaríamos conhecer a distribuição real geradora dos dados para calcular esse valor, nos contentamos com o cálculo do risco empírico, usado para avaliar a performance de um modelo estatístico. O risco empírico é calculado pela soma do \textbf{custo} do modelo para cada ponto datual. O custo irá capturar alguma noção de proximidade entre as predições do modelo e os valores reais. A ferramenta estatística frequentista mais usada para encontrar boas funções de custo é o método de máxima verossimilhança, explicado em detalhes na Sessão~\ref{sec:est}. 
 
-\subsubsection{O fenômeno do perde-e-ganha entre viés e variância}
 
-Seja um modelo treinado de aprendizagem automática representado por uma função
-$\hat{f}$, que recebe como domínio valores de $x \in \mathbb{R}$, os dados de
-entrada. Iremos estudar como se comporta o valor esperado do erro quadrático do
-modelo, i.e. $\mathbb{E}[(y - \hat{f}(x))^2]$, onde $y$ é o valor real porém
-desconhecido da saída. Estudando esse valor, podemos decompô-lo em
-3 partes \citep{mlprob}:
-
-\[
-  \mathbb{E}[(y - \hat{f}(x))^2] = \text{Viés}[\hat{f}(x)]^2 +
-  \text{Var}[\hat{f}(x)] + \sigma 
-\]
-
-O erro quadrático médio de um modelo de aprendizado
-é sempre composto por esses 3 termos. O viés nos informa o valor esperado do
-erro das predições, i.e. um modelo sem viés tem a sua média de predições
-consistente com o valor real. Porém, por mais que um modelo sem viés seja
-altamente desejável, esse termo de erro deve ser negociado em frente a variância
-das predições, o segundo termo. Por mais que a média das predições de um modelo
-se aproximem do valor real, isso de nada adianta se, por diversos ruídos na
-modelagem, o modelo apresentar uma alta sensibilidade a pequenas alterações em
-parâmetros ou dados, i.e. uma alta variância nas predições.
-
-O último termo do erro denotado por $\sigma$ é a parte aleatória do erro
-impossível de ser reduzida devido a impossibilidade de modelagem de toda a
-distribuição geradora dos dados.
-
-\subsection{Estimadores Frequentistas}
+\subsection{Método da Máxima Verossimilhança}
 \label{sec:est}
 
 
-Um estimador dos parametros $\theta$, na visão frequentista, é uma função dos dados, e portanto uma
-variável aleatória. Considerando-se os dados como uma realização de uma
-distribuição fixa porém desconhecida, o objetivo é encontrarmos um estimador
-que, no limite, se aproxime dos parâmetros corretos \cite{mlprob}.
-Esse parâmetro pode ser a média da distribuição do alvo, por exemplo.
+Como explicado previamente~\ref{sec:apren}, Aprendizado Supervisionado consiste na busca de uma distribuição de probabilidade que explique as anotações em função das entradas (ou variáveis). Do ponto de vista probabilístico podemos calcular para a saída de qualquer modelo de regressão a verossimilhança dessa predição em relação ao seu valor real. Essa função de verossimilhança poderia guiar a otimização do modelo em busca dos melhores parâmetros pontuais, pensando na ótica frequentista. 
 
-Embora qualquer função dos dados possa ser usada como um estimador, bons
-estimadores podem ser encontrados pelo método da Máxima Verossimilhança (MLE).
-Isso significa, computar a probabilidade de um certo estimador
+A verossimilhança significa a probabilidade do modelo
 ter gerado os dados. Usando um exemplo de aprendizado supervisionado onde
 desejamos modelar a distribuição $p(Y|X)$, o estimador de máxima verossimilhança
 é o que minimiza a equação:
@@ -256,26 +222,27 @@ Onde $p(y | X ; \theta)$ é uma família de distribuições de probabilidade
 parametrizada por $\theta$ que modela o nosso problema de aprendizado, $\theta_{MLE}$ é o parâmetro que a torna mais
 próxima possível de $p(y | X)$, a real distribuição geradora dos dados. O
 objetivo de otimização não se altera se otimizarmos o logarítimo da
-verossimilhança, e essa mudança torna a otimização mais estável.
+verossimilhança, e essa mudança torna a otimização mais estável. Podemos também, considerando os dados i.i.d., substituir a verossimilhança pelo somatório da verossimilhança de cada ponto datual.
 
-\[
-  \theta_{MLE} = \argmax_{\theta}\log p( Y | X ; \theta)
-\]
+\begin{equation}
+        \label{eq:objver}
+  \theta_{MLE} = \argmax_{\theta}\sum_{i=0}\log p( y_i | x_i ; \theta)
+\end{equation}
 
-O objetivo também pode ser escrito por um produtório da verossimilhança de todos
-os pares de dados, assumindo que todos são independentes:
 
-\[
-  \theta_{MLE} = \argmax_{\theta}\prod_{i=0}\log p( y_i | x_i ; \theta)
-\]
+\subsection{Erro Quadrático Médio}
+\label{sec:MSE}
 
-E de fato, o objetivo de treino da maior parte dos modelos de Aprendizado Automático podem ser escritos dessa forma caso eles não possuam regularização~\cite{dlbook}.
 
-O \textbf{custo} de um modelo é medido por esse valor agregado de todo os dados de treino. A otimização para Aprendizado Supervisionado é feita usualmente pelo algoritmo de Backpropagation \citep{dlbook}, usando o gradiante dessa função para buscar um mínimo local.
+Agora que apresentamos a ideia probabilística que nos permite encontrar boas funções de custo, iremos detalhar uma delas, que pode ser encontrada em qualquer pacote de Aprendizado de Máquina. O Erro Quadrático Médio é um estimador não enviesado da verossimilhança de um
+modelo Gaussiano \citep{dlbook}. Ele é calculado em relação a duas variáveis contínuas
+$(\hat{y},y)$, definido da seguinte forma:
 
-\[
-  \mathbb{L} = \prod_{i=0}\log p( y_i | x_i ; \theta)
-\]
+\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
+
+
+Sendo que $\hat{y_i}$ é uma função de $\theta$, os parâmetros do modelo. Podemos usar o gradiente dessa função de custo com respeito a $\theta$ e diretamente otimizar esses valores. Esse método, chamado de \textbf{backpropagation} é ubíquo para otimização de modelos de Aprendizado Profundo \citep{dlbook}.
+
 
 
 \subsection{Inferência Bayesiana} 
@@ -348,17 +315,6 @@ $q(\theta)$ dos parâmetros do modelo. É importante notar que a Equação~\ref{
 $q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o melhor possível.
 
 
-\subsubsection{Erro Quadrático Médio}
-\label{sec:MSE}
-
-O Erro Quadrático Médio é um estimador não enviesado da verossimilhança de um
-modelo Gaussiano \cite{dlbook}. Ele é calculado em relação a duas variáveis contínuas
-$(\hat{y},y)$, definido da seguinte forma:
-
-\[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
-
-Essa métrica é uma medida absoluta. E quanto maior esse valor pior o desempenho
-do modelo, i.e. mais distante suas predições estão da média real. \\
 
 \subsubsection{Divergência KL}
 
