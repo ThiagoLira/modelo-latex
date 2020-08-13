@@ -200,17 +200,26 @@ Esse tipo de problema é mais comum em tarefas de Visão Computacional e NLP.
 A performance dos modelos de Aprendizado Automático é a quantificação da
 qualidade das predições frente a verdade desconhecida do fenômeno modelado.
 Claramente um modelo parametrizado possuirá algum erro de predição \citep{dlbook}, e é esse
-erro que iremos diminuir com o aprendizado. O Risco de um modelo é o valor esperado do erro das suas predições \citep{mlprob}. Como precisaríamos conhecer a distribuição real geradora dos dados para calcular esse valor, nos contentamos com o cálculo do risco empírico, usado para avaliar a performance de um modelo estatístico. O risco empírico é calculado pela soma do \textbf{custo} do modelo para cada ponto datual. O custo irá capturar alguma noção de proximidade entre as predições do modelo e os valores reais. A ferramenta estatística frequentista mais usada para encontrar boas funções de custo é o método de máxima verossimilhança, explicado em detalhes na Sessão~\ref{sec:est}. 
+erro que iremos diminuir com o aprendizado. O \textbf{Risco} de um modelo é o valor
+esperado do erro das suas predições \citep{mlprob}.
+Como precisaríamos conhecer a distribuição real geradora dos dados para calcular
+esse valor, nos contentamos com o cálculo do \textbf{Risco Empírico} \citep{mlprob}, usado para avaliar
+a performance de um modelo.
+O Risco Empírico é calculado pela soma do \textbf{Custo} da predição do modelo para cada ponto datual.
+O custo irá capturar alguma noção de proximidade entre as predições do modelo e os valores reais.
+A ferramenta estatística frequentista mais usada para encontrar boas funções de custo é o método de máxima verossimilhança, explicado em detalhes na Sessão~\ref{sec:est}. 
 
 
 \subsection{Método da Máxima Verossimilhança}
 \label{sec:est}
 
 
-Como explicado previamente~\ref{sec:apren}, Aprendizado Supervisionado consiste na busca de uma distribuição de probabilidade que explique as anotações em função das entradas (ou variáveis). Do ponto de vista probabilístico podemos calcular para a saída de qualquer modelo de regressão a verossimilhança dessa predição em relação ao seu valor real. Essa função de verossimilhança poderia guiar a otimização do modelo em busca dos melhores parâmetros pontuais, pensando na ótica frequentista. 
+Como explicado previamente~\ref{sec:apren}, Aprendizado Supervisionado consiste
+na busca de uma distribuição de probabilidade que explique as anotações em
+função das entradas (ou variáveis). 
 
-A verossimilhança significa a probabilidade do modelo
-ter gerado os dados. Usando um exemplo de aprendizado supervisionado onde
+A verossimilhança é a medida da probabilidade do modelo
+com um determinado conjunto de parâmetros ter gerado os dados. Usando um exemplo de aprendizado supervisionado onde
 desejamos modelar a distribuição $p(Y|X)$, o estimador de máxima verossimilhança
 é o que minimiza a equação:
 
@@ -218,10 +227,10 @@ desejamos modelar a distribuição $p(Y|X)$, o estimador de máxima verossimilha
   \theta_{MLE} = \argmax_{\theta} p( Y | X ; \theta)
 \]
 
-Onde $p(y | X ; \theta)$ é uma família de distribuições de probabilidade
-parametrizada por $\theta$ que modela o nosso problema de aprendizado, $\theta_{MLE}$ é o parâmetro que a torna mais
-próxima possível de $p(y | X)$, a real distribuição geradora dos dados. O
-objetivo de otimização não se altera se otimizarmos o logarítimo da
+Onde $p(Y | X ; \theta)$ é uma família de distribuições de probabilidade
+parametrizada por $\theta$ que modela o nosso problema de aprendizado,
+$\theta_{MLE}$ é o parâmetro que maximiza $p(Y | X)$, a verossimilhança.
+O objetivo de otimização não se altera se otimizarmos o logarítimo da
 verossimilhança, e essa mudança torna a otimização mais estável. Podemos também, considerando os dados i.i.d., substituir a verossimilhança pelo somatório da verossimilhança de cada ponto datual.
 
 \begin{equation}
@@ -230,18 +239,24 @@ verossimilhança, e essa mudança torna a otimização mais estável. Podemos ta
 \end{equation}
 
 
+Os custos que são otimizados no treinamento de modelos de Aprendizado Profundo
+são derivados do Método de Máxima Verossimilhança. Para regressão usa-se o \textbf{Erro
+Quadrático Médio}.
+
+
+
 \subsection{Erro Quadrático Médio}
 \label{sec:MSE}
 
 
-Agora que apresentamos a ideia probabilística que nos permite encontrar boas funções de custo, iremos detalhar uma delas, que pode ser encontrada em qualquer pacote de Aprendizado de Máquina. O Erro Quadrático Médio é um estimador não enviesado da verossimilhança de um
-modelo Gaussiano \citep{dlbook}. Ele é calculado em relação a duas variáveis contínuas
-$(\hat{y},y)$, definido da seguinte forma:
+O Erro Quadrático Médio é o Estimador de Máxima Verossimilhança caso
+consideremos um erro Gaussiano. Sejam valores reais de anotação $Y$ e as
+predições de algum modelo de regressão $\hat{Y}$:
 
 \[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
 
 
-Sendo que $\hat{y_i}$ é uma função de $\theta$, os parâmetros do modelo. Podemos usar o gradiente dessa função de custo com respeito a $\theta$ e diretamente otimizar esses valores. Esse método, chamado de \textbf{backpropagation} é ubíquo para otimização de modelos de Aprendizado Profundo \citep{dlbook}.
+$\hat{y_i}$ é uma função de $\theta$, os parâmetros do modelo. Podemos usar o gradiente dessa função de custo com respeito a $\theta$ e diretamente otimizar esses valores. Esse método, chamado de \textbf{backpropagation} é ubíquo para otimização de modelos de Aprendizado Profundo \citep{dlbook}.
 
 
 
