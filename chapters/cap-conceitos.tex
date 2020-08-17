@@ -170,7 +170,7 @@ dados $x'$ nunca antes vistos.
 Desejamos modelar a distribuição de probabilidade das próximas anotações
 de $y$ até uma nova data $F + T$, $F \in \mathbb{N}$, condicionadas por uma janela de
 observações das diversas variáveis  $x_k$ e do alvo $y$ no passado
-\citep{deepfactors}. Nota-se que se supõe que possuímos entradas das
+\citep{deepfactors}. Supõe-se que possuímos entradas das
 variáveis $x_i$ também no período de predição, i.e. no intervalo $[T,F]$.
 
 \[ p(y_{T:F} | y_{1:T},\textbf{x}_{{1}:F}) \]
@@ -205,7 +205,7 @@ esperado do erro das suas predições \citep{mlprob}.
 Como precisaríamos conhecer a distribuição real geradora dos dados para calcular
 esse valor, nos contentamos com o cálculo do \textbf{Risco Empírico} \citep{mlprob}, usado para avaliar
 a performance de um modelo.
-O Risco Empírico é calculado pela soma do \textbf{Custo} da predição do modelo para cada ponto datual.
+O Risco Empírico é calculado pela soma do \textbf{Custo} de uma predição do modelo para cada ponto datual.
 O custo irá capturar alguma noção de proximidade entre as predições do modelo e os valores reais.
 A ferramenta estatística frequentista mais usada para encontrar boas funções de custo é o método de máxima verossimilhança, explicado em detalhes na Sessão~\ref{sec:est}. 
 
@@ -218,8 +218,11 @@ Como explicado previamente~\ref{sec:apren}, Aprendizado Supervisionado consiste
 na busca de uma distribuição de probabilidade que explique as anotações em
 função das entradas (ou variáveis). 
 
-A verossimilhança é a medida da probabilidade do modelo
-com um determinado conjunto de parâmetros ter gerado os dados. Usando um exemplo de aprendizado supervisionado onde
+A verossimilhança é a medida da probabilidade do modelo, parametrizado
+com um determinado conjunto de parâmetros, ter gerado os dados. Em outras
+palavras gostaríamos de um modelo que tem uma alta probabilidade de ter gerado
+os dados observados.
+Usando um exemplo de aprendizado supervisionado onde
 desejamos modelar a distribuição $p(Y|X)$, o estimador de máxima verossimilhança
 é o que minimiza a equação:
 
@@ -240,7 +243,7 @@ verossimilhança, e essa mudança torna a otimização mais estável. Podemos ta
 
 
 Os custos que são otimizados no treinamento de modelos de Aprendizado Profundo
-são derivados do Método de Máxima Verossimilhança. Para regressão usa-se o \textbf{Erro
+são derivados do Método de Máxima Verossimilhança. Para regressão é comum se usar o \textbf{Erro
 Quadrático Médio}.
 
 
@@ -250,7 +253,7 @@ Quadrático Médio}.
 
 
 O Erro Quadrático Médio é o Estimador de Máxima Verossimilhança caso
-consideremos um erro Gaussiano. Sejam valores reais de anotação $Y$ e as
+consideremos um erro Gaussiano para o modelo. Sejam valores reais de anotação $Y$ e as
 predições de algum modelo de regressão $\hat{Y}$:
 
 \[MSE = \sum^n_{i=1}\frac{(\hat{y_i} - y_i)^2}{n}\]
