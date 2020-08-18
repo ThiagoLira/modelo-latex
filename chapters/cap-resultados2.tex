@@ -251,40 +251,31 @@ Os modelos de Aprendizado Profundo Bayesianos retornam, para cada predição, um
 probabilidade definida por média e variância, ou diversas realizações de uma
 distribuição desconhecida, da qual podemos estimar esses parâmetros. 
 Com o desvio-padrão podemos reportar o risco das predições para diversos percentis, como explicado na
-Sessão~\ref{sec:quant}. Os custos quantílicos dos modelos são reportados nas Tabelas~\ref{tb:quants1} e \ref{tb:quants2}.
+Sessão~\ref{sec:quant}. Os custos quantílicos dos modelos são reportados na
+Tabela~\ref{tb:quants}.
 
 
 \begin{center}
- \begin{table} 
-\begin{tabular}{l|l|l|l|l|l|l|}
-  \cline{2-7}
-  & \multicolumn{3}{l|}{P50QL}        & \multicolumn{3}{l|}{P90QL}        \\ \cline{2-7} 
-  & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 \\ \hline
-  \multicolumn{1}{|l|}{7d}  & 0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
-  \multicolumn{1}{|l|}{24h} &  0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
-\end{tabular}
-  \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
-    das predições para o modelo DeepAR.}
-  \label{tb:quants1}
-\end{table}
-\end{center}
-
-\begin{center}
-  
 \begin{table}
   \begin{tabular}{l|l|l|l|l|l|l|}
     \cline{2-7}
     & \multicolumn{3}{l|}{P50QL}                       & \multicolumn{3}{l|}{P90QL}                       \\ \cline{2-7} 
-    & DeepFactors\_7 & DeepFactors\_3 & DeepFactors\_1 & DeepFactors\_7 & DeepFactors\_3 & DeepFactors\_1 \\ \hline
+    & Factors\_7 & Factors\_3 & Factors\_1 & Factors\_7 & Factors\_3 & Factors\_1 \\ \hline
     \multicolumn{1}{|l|}{7d}  & 0.06           & 0.13           & 0.05           & 0.03           & 0.053          & 0.04           \\ \hline
     \multicolumn{1}{|l|}{24h} & 0.06           & 0.13           & 0.05           & 0.03           & 0.053          & 0.04           \\ \hline
+    & Uber\_7 & Uber\_3 & Uber\_1 & Uber\_7 & Uber\_3 & Uber\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.02    & 0.23    & 0.02    & 0.018    & 0.015   & 0.013    \\ \hline
+    \multicolumn{1}{|l|}{24h} & 0.01    & 0.21    & 0.01    & 0.012   & 0.010   & 0.008    \\ \hline
+    & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
+    \multicolumn{1}{|l|}{24h} &  0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
   \end{tabular}
   \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
-    das predições para o modelo DeepFactors.}
-  \label{tb:quants2}
+    das predições para os modelos de DL Bayesiano.}
+  \label{tb:quants}
 \end{table}
-
 \end{center}
+
 
 
 \subsubsection{Versão corrigida do modelo DeepAR}
