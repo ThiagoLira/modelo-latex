@@ -887,12 +887,12 @@ neural frequentistas sem nenhuma alteração no método de otimização.
 Os resultados apresentados nessa sessão também valem para modelos de rede neural
 mais complexos como LSTMs \citep{dropbayes}.
  
-\subsubsection{Modelo Encoder-Decoder-Forecaster}
+\subsubsection{Modelo Encoder-Decoder-Forecaster (Uber)}
 
 Iremos utilizar nesse trabalho o modelo proposto em \citep{ubertime}. A
 arquitetura consiste em uma rede \textbf{encoder-decoder} que aprende codificações da
 série temporal (i.e. uma representação que resuma informações úteis para o
-problema) e então uma rede \textbf{forecaster} que use essas codificações ao lado de
+problema) e uma rede \textbf{forecaster} que use essas codificações juntamente com
 variáveis exógenas a série temporal para realizar predições.  \\ 
 
 
@@ -940,7 +940,7 @@ de incerteza pode ser calculada usando esse modelo. \\
 
 Para esse problema usamos a verossimilhança $p(y |f^\theta(x))$.
 Onde $f^\theta(.)$ é a rede Encoder-Forecaster após o treino.
-Como estamos lidando com regressão, podemos especificar ainda essa distribuição
+Como estamos lidando com regressão, podemos especificar ainda essa verossimilhança
 como \citep{ubertime}:  
 
 \begin{equation}

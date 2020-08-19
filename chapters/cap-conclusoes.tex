@@ -3,36 +3,35 @@
 \label{cap:conclusoes}
 
 
-Pelos resultados obtidos, é possível concluir que não houveram ganhos
-significativos em usarmos modelos sequenciais de Deep Learning na modelagem dos
-dados. Como uma simples regressão linear consegue em alguns casos uma
-performance até melhor que uma rede neural ou uma rede recorrente, podemos afirmar também que a natureza temporal dos dados não é útil na modelagem dos mesmos. A performance de modelos que consideram esses dados não-sequenciais obteve uma performance equivalente ou melhor.
+Após realizados os experimentos, pode-se concluir que existe um ganho de
+qualidade e acurácia de predições em se utilizando modelos de Aprendizagem
+Profunda. Em particular modelos Bayesianos são capazes de gerar predições
+probabilísticas bastante versáteis para o controle de um processo industrial.
 
-Os dados possuem uma grande quantidade de ruído proveniente de incertezas no instante das medições, o que dificulta o aprendizado seja de qual modelo for usado. E também é claro que ao longo dos 10 anos de dados possuimos mudanças bruscas de valores provenientes de fatores não presentes nos dados. Ou seja, do domínio que queremos aprender temos dados com um ruído alto e variável além de não possuirmos toda a informação do suposto "processo gerador de dados" (a distribuição de probabilidades $p$ que queremos estimar), o que dificulta qualquer modelo estatístico para o qual iremos dar essa tarefa.
+A limitação desse trabalho, porém, são a quantidade e o escopo dos dados
+fornecidos pela empresa Intercement. Pela análise ter sido levantada para dados
+de apenas uma fábrica os métodos possuem uma limitação intrínseca na garantia de
+resultados similares em outras fábricas, ou mesmo na fábrica de Cajati em
+outros períodos com anomalias diferentes das apresentadas pelos dados usados
+nesse trabalho.
 
-Como uma regressão linear consegue resultados comparáveis a modelos diferentes e mais complexos, pode-se afirmar que a distribuição de probabilidade que queremos estimar para os preditores não é muito complexa, mas os fatores mencionados no parágrafo anterior atrapalham uma melhor performance dos modelos usados. Resultados melhores possivelmente podem ser obtidos usando métodos clássicos de Machine Learning como \textbf{feature engineering}, ou seja, aplicar um conhecimento específico do domínio do problema em questão para deixar menos para os modelos decidirem sozinhos. O que é imcompatível com métodos de Deep Learning. 
+Não obstante, esse trabalho mostra que, mesmo com uma quantidade menor de dados
+do que normalmente é possível para modelos de Aprendizado Profundo, é possível
+se obter uma melhor acurácia do que com modelos clássicos, e não precisamos
+abandonar as propriedades estatísticas desejáveis de modelos clássicos, pois com
+novas técnicas de aprendizado automático, podemos modelar também a incerteza das predições.
 
 
-
-
-
-% ------------------------------------------------------
-%% 
-%% \section{Considerações Finais} 
-%% 
-%% Texto texto texto texto texto texto texto texto texto texto texto texto texto
-%% texto texto texto texto texto texto texto texto texto texto texto texto texto
-%% texto texto texto texto texto texto. 
-%% 
-%% %------------------------------------------------------
 \section{Sugestões para Pesquisas Futuras} 
 
+Direções futuras de pesquisa incluem a aplicação desses modelos em dados
+de fábricas diferentes, para uma possível comparação inter-fábricas. Existe
+também a ideia da aplicação de \textbf{Transfer Learning}. O uso de
+representações vetoriais aprendidas em um determinado conjunto de fábricas em
+alguma fábrica inédita. Isso permitiria que uma quantidade enorme de dados fosse
+aplicada para a criação de uma inteligência cujo domínio de aplicação seria
+estendido para fábricas do mundo todo.
 
-
-%%
-%% Texto texto texto texto texto texto texto texto texto texto texto texto texto
-%% texto texto texto texto texto texto texto texto texto texto texto texto texto
-%% texto texto texto texto texto texto.
 
 %%% Local Variables:
 %%% mode: latex

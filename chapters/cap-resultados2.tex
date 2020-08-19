@@ -6,7 +6,9 @@
 
 \subsection{Modelos de Aprendizado de Máquina}
 
-Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
+
+Em um primeiro momento, o problema é tratado como de Aprendizado Automático sem
+dados temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
 treinamos os modelos. 
 
@@ -42,7 +44,7 @@ de dados usados para treinamento.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{RMSE values by forecast span}
+\caption{RMSE por horizonte de predição.}
 \centering
 \begin{tabular}{rr}
 \hline
@@ -70,34 +72,34 @@ Random Forest & RMSE\\
 \end{center}
 
  Reportamos distribuição dos valores previstos, até 1 mês após a data
-onde começam os dados de validação (i.e. os dados não usados para treinamento), a Figura \ref{fig:distr_lin} permite comparar as distribuições previstas pelos 3 modelos:
+onde começam os dados de validação (i.e. os dados não usados para treinamento),
+a Figura~\ref{fig:distr_lin} mostra as distribuições previstas pelos 3 modelos:
 
 \begin{figure}[H]
-\label{fig:distr_lin}
 \centering
 \includegraphics[width=.3\textwidth]{qq-LinearRegression.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-NeuralNet.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-RandomForest.pdf} 
 \caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\label{fig:distr_lin}
 \end{figure}
 
-Para modelagem de séries temporais, é comum se estudar o resíduo das
-predições. É assumido em uma tarefa de regressão que o resíduo é distribuído
-normalmente e com média zero.
+Para testar a acurácia de modelos em séries temporais, é comum se estudar o resíduo das
+predições. 
 
 \begin{figure}[H]
-  \label{fig:res_lin}
   \centering
   \includegraphics[width=.3\textwidth]{residuals-LinearRegression.pdf} \hfill
   \includegraphics[width=.3\textwidth]{residuals-NeuralNet.pdf} \hfill
   \includegraphics[width=.3\textwidth]{residuals-RandomForest.pdf} 
-  \caption{Distribuição dos Erros de cada modelo. Como esperado, todos os erros flutuam em torno da média 0. } 
+  \caption{Distribuição dos resíduos de cada modelo de Aprendizado Automático}
+  \label{fig:res_lin}
 \end{figure}
 
 \subsection{Modelos de Séries Temporais}
 
 
-Agora com um tratamento completo do problema como o de previsão de séries
+Agora com um tratamento completo do problema como o de Aprendizado Automático para predição de séries
 temporais, consideramos os dados sequencialmente, treinando e testando o modelo a partir de janelas de $w$
 entradas consumidas em sequência pelo o modelo. A tarefa destes é então gerar
 predições que continuem essa janela de dados. 
@@ -105,9 +107,9 @@ predições que continuem essa janela de dados.
 Como mencionado na introdução desse trabalho, um benefício das técnicas de
 Aprendizado Profundo é a de escalar tarefas de aprendizado para datasets de
 tamanho muito maior que era possível com modelos clássicos \citep{dlbook}.
-Para tarefas de regressão de séries temporais, modelos recentes de Aprendizado
-Profundo permitem que sejam usadas diversas séries temporais para a tarefa de
-aprendizado. Os modelos poderão então ter parâmetros tanto locais (calculados
+Para tarefas de regressão de séries temporais, modelos recentes utilizam
+diversas séries temporais de um mesmo processo simultaneamente.
+Os modelos poderão então ter parâmetros tanto locais (calculados
 para cada série) como globais (dividimos por todas as séries de treinamento).
 
 \subsubsection{Divisão dos dados entre treino e validação}
@@ -197,7 +199,7 @@ todo o dataset, para predições de 24h e 7 dias.
       \multicolumn{1}{|l|}{reglin\_1} & 1.66                          & 2.19                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_3} & 2.12                          & 2.02                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_7} & 2.09                          & 1.63                             &  \\ \cline{1-1}
-      \multicolumn{1}{|l|}{reglin\_ew} & 2.12                          & 1.42                             &  \\ \cline{1-1}
+      \multicolumn{1}{|l|}{reglin\_ew} & 2.12                          & 1.42                            &  \\ \cline{1-1}
     \end{tabular}
     \caption{Valores agregados de RMSE para os modelos de Regressão Linear Dinâmica}
 
@@ -210,7 +212,7 @@ todo o dataset, para predições de 24h e 7 dias.
 \subsection{Modelos de Deep Learning Bayesianos}
 
 
-Usamos a implementação dos modelos DeepAR e DeepFactors da bibliteca GluonTS
+Usamos a implementação dos modelos DeepAR e DeepFactors da biblioteca GluonTS
 \citep{gluonts}. O modelo Uber foi implementado com as primitivas fornecidas
 pela biblioteca PyTorch \citep{pytorch}.
 
@@ -277,6 +279,10 @@ Tabela~\ref{tb:quants}.
 \end{center}
 
 
+As versões do modelo DeepAR possuem em média os menores riscos. O que indica que
+suas predições probabilísticas mais calibradas e com maior cobertura dos valores
+reais observados.
+
 
 \subsubsection{Versão corrigida do modelo DeepAR}
 
@@ -284,7 +290,7 @@ Também corrigimos o modelo \textbf{DeepAR\_1} com o modelo \textbf{DeepAR\_7} d
 Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}.
 
 Usando a média retornada para cada predição dos modelos DeepAR, é possível
-comparar o erro quadrático das predições. Iremos comparar esses resultados com os obtidos pelo modelo
+comparar o erro quadrático das predições de cada modelo. Iremos comparar esses resultados com os obtidos pelo modelo
 linear dinâmico. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
 após a implementação do modelo em produção. As predições de 24h são naturalmente
 ruidosas para todos os modelos testados nesse trabalho.
