@@ -7,8 +7,8 @@
 \subsection{Modelos de Aprendizado de Máquina}
 
 
-Em um primeiro momento, o problema é tratado como de Aprendizado Automático sem
-dados temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
+Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
+dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
 treinamos os modelos. 
 
@@ -28,13 +28,13 @@ $20\%$ para validação, i.e. testar o poder de generalização dos modelos.
 \end{figure}
 
 Foram usadas implementações dos modelos fornecidos pela biblioteca Sklearn.
-As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:linmodels}  
+As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:mlmodels}.  
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=0.9\columnwidth]{linear_exp.pdf}
+\includegraphics[width=0.9\columnwidth]{mlmodels.pdf}
 \caption{Predições nos dados de validação nos experimentos com modelos não-temporais. }
-\label{fig:linmodels}
+\label{fig:mlmodels}
 \end{figure}
 
 Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente
@@ -135,11 +135,11 @@ treinamento e os últimos 30 dias como dados de validação.
 
 \subsection{Regressão Linear Dinâmica com Filtragem Exponencial}
 
-Com o fim de termos uma baseline com a qual compararmos os modelos de
+Com o fim de termos uma base de comparação para os modelos de
 Aprendizado Profundo, aplicaremos o modelo proposto em \citep{grecialin}.
 São criadas janelas de dados de treinamento e teste de maneira análoga a esse trabalho.
 
-Usaremos 3 modelos com diferentes grupos de variáveis, a tabela a seguir mostra
+Usaremos 3 modelos com diferentes grupos de variáveis, a Tabela~\ref{tab:modelslin} mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
 desse trabalho. Também mostraremos resultados para o modelo corrigido
 reglin\_ew, que é uma combinação dos modelos reglin\_1 e reglin\_7.
@@ -160,7 +160,8 @@ reglin\_7 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2
 \label{tab:modelslin}
 \end{table}
 
-Os resultados para cada modelo no período de validação de cada ano são reportados a seguir:
+Os resultados para cada modelo no período de validação de cada ano são
+reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e \ref{fig:rc287preds}.
 
 \begin{figure}[H]
   \centering
@@ -175,7 +176,7 @@ Os resultados para cada modelo no período de validação de cada ano são repor
   \includegraphics[width=0.6\columnwidth]{predgrecialin-rc28_3.pdf}
   \caption{Predições no período de teste para cada período de validação pelo
     modelo reglin\_3}
-  \label{fig:rc281preds}
+  \label{fig:rc283preds}
 
 \end{figure}
 \begin{figure}[H]
@@ -183,7 +184,7 @@ Os resultados para cada modelo no período de validação de cada ano são repor
   \includegraphics[width=0.6\columnwidth]{predgrecialin-rc28_7.pdf}
   \caption{Predições no período de teste para cada período de validação pelo
     modelo reglin\_7}
-  \label{fig:rc281preds}
+  \label{fig:rc287preds}
 
 \end{figure}
 

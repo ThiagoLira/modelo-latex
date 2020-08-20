@@ -1020,7 +1020,7 @@ O modelo é treinado em um conjunto de diversas séries temporais $y_i$ do
 processo em estudo, todas representando o mesmo período de tempo. Nota-se que o estado da RNN tem como argumento o estado anterior e os parâmetros de entrada, mas também a saída da iteração passada do modelo, $y^*_{i,t-1}$. \\
 
 A verossimilhança do modelo, $p(y_{i,t} | \mu,\sigma)$, é uma distribuição fixa
-cujos parâmetros $\mu, \sigma$ são dados por uma função determinística da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão, assim como na Equação~\ref{eq:logver1}:
+cujos parâmetros $\mu, \sigma$ são dados por uma função determinística da saída $h$ do modelo. Usaremos uma função de verossimilhança binomial já que estamos otimizando um objetivo de regressão.
 \[
   p(y | \mu,\sigma) = {(2\pi\sigma^2)}^{-\frac{1}{2}} \exp(-  \frac{-y - \mu^2}{2\sigma^2})  
 \]
