@@ -285,6 +285,29 @@ suas predições probabilísticas mais calibradas e com maior cobertura dos valo
 reais observados.
 
 
+A Tabela~\ref{tb:rmsetd} reporta o RMSE para cada modelo nos horizontes de tempo
+estudados na modelagem.
+
+\begin{center}
+\begin{table}[]
+  \begin{tabular}{l|l|l|l|}
+    \cline{2-4}
+    & DeepFactors\_7 & DeepFactors\_3 & DeepFactors\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 4.69           & 8.29           & 6.31           \\ \hline
+    \multicolumn{1}{|l|}{24h} & 3.42           & 6.52           & 4.89           \\ \hline
+    & Uber\_7        & Uber\_3        & Uber\_1        \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 2.70           & 2.51           & 2.21           \\ \hline
+    \multicolumn{1}{|l|}{24h} & 1.62           & 1.73           & 1.44           \\ \hline
+    & DeepAR\_7      & DeepAR\_3      & DeepAR\_1      \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 1.50           & 1.86           & 1.81           \\ \hline
+    \multicolumn{1}{|l|}{24h} & 1.87           & 1.68           & 1.66           \\ \hline
+  \end{tabular}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+  \label{tb:rmsetd}
+\end{table}
+\end{center}
+
+
 \subsubsection{Versão corrigida do modelo DeepAR}
 
 Também corrigimos o modelo \textbf{DeepAR\_1} com o modelo \textbf{DeepAR\_7} de maneira análoga a
