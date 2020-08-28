@@ -10,7 +10,10 @@
 Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
 dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
-treinamos os modelos. 
+treinamos os modelos. Para essa bateria de experimentos os modelos receberão
+como entrada apenas os variáveis correspondentes ao dia em que desejamos
+realizar uma predição. Diferentemente dos modelos de série temporal que irão
+usar uma janela inteira de variáveis de alguns dias do passado para cada predição.
 
 \subsubsection{Divisão dos dados entre treino e validação}
 
@@ -137,8 +140,6 @@ treinamento e os últimos 30 dias como dados de validação.
 
 Com o fim de termos uma base de comparação para os modelos de
 Aprendizado Profundo, aplicaremos o modelo proposto em \citep{grecialin}.
-São criadas janelas de dados de treinamento e teste de maneira análoga a esse trabalho.
-
 Usaremos 3 modelos com diferentes grupos de variáveis, a Tabela~\ref{tab:modelslin} mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
 desse trabalho. Também mostraremos resultados para o modelo corrigido
@@ -160,8 +161,13 @@ reglin\_7 &  AGP &  AL2O3 &  SIO2 &  MGO &  IP &  FP &  SBL &  PF &  P2O5 &  FE2
 \label{tab:modelslin}
 \end{table}
 
+
+Os modelos foram testados com o parâmetro $t_f = 7$ (i.e. simulamos o uso do
+modelo por 7 dias) com o índice $T$ referente
+ao começo das predições sendo o primeiro dia de dezembro para cada dataset.
 Os resultados para cada modelo no período de validação de cada ano são
-reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e \ref{fig:rc287preds}.
+reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
+\ref{fig:rc287preds}. 
 
 \begin{figure}[H]
   \centering
@@ -218,12 +224,13 @@ Usamos a implementação dos modelos DeepAR e DeepFactors da biblioteca GluonTS
 pela biblioteca PyTorch \citep{pytorch}.
 
 De modo análogo ao modelo de Regressão Linear Dinâmica, para
-cada modelo de DL iremos treinar 3 versões distintas. Uma para cada conjunto de variáveis apresentado na Tabela~\ref{tab:modelslin}.
-
-
-Para o modelo DeepAR, as versões treinadas serão chamadas de \textbf{DeepAR\_1},
+cada modelo de DL iremos treinar 3 versões distintas. Uma para cada conjunto de
+variáveis apresentado na Tabela~\ref{tab:modelslin}. Para o modelo DeepAR, as versões treinadas serão chamadas de \textbf{DeepAR\_1},
 \textbf{DeepAR\_3} e \textbf{DeepAR\_7}. Os outros modelos seguirão uma
-regra de nomeação análoga.
+regra de nomeação análoga. Para possibilitar a comparação com o modelo de Regressão Linear Dinâmica, usaremos para esses modelos o mesmo
+tamanho do horizonte de predição, 7 dias. As mesmas séries temporais anuais são
+usadas para treinamento desses modelos, e os últimos 7 dias de cada ano serão
+usados como validação.
 
 As Figuras~\ref{fig:fordeepar1},\ref{fig:fordeepar3} e \ref{fig:fordeepar7} reportam as
 predições geradas por cada versão do modelo DeepAR, bem como o intervalo de confiança. 
