@@ -25,6 +25,9 @@ i-ésimo não são usados. Dada a natureza temporal do processo industrial,
 trabalhos recentes passaram a incomporar o histórico de entradas e saídas na
 análise, obtendo resultados mais robustos \cite{grecialin}. 
 
+É importante notar que \textbf{sempre} o objetivo de todos os modelos desse
+trabalho será a predição de RC28, nunca de outra grandeza.
+
 \subsection{Séries Temporais}
 
 Séries temporais são dados indexados em ordem temporal. Formalmente, podemos
@@ -348,31 +351,13 @@ Ou em uma forma mais usual: \\
 
 
 
-\subsection{Métrica de Acurácia}
+\subsection{Métrica de Acurácia para Modelos de Série Temporal}
 
 Diferentemente da função de custo, a métrica de acurácia não é usada para guiar a otimização do modelo,
-mas para testar as predições frente a realidade e avaliar sua qualidade. \\
-
-\subsubsection{R-quadrado}
-Como teste da acurácia dos modelos foi usada a métrica R-quadrado ($R^2$) \citep{cohen}. Sejam $\hat{y}$ e $y$ nossa previsão dada pelo modelo e o seu valor real, a acurácia do modelo é dada por:\\
-
-\begin{align}
-&R^2 = 1 - \frac{SS_{res}}{SS_{tot}} &\\
-&SS_{tot} = \sum^n_{i=1} (y_i- \bar{y_i})^2 &\\
-&SS_{res} = \sum^n_{i=1} (y_i - \hat{y})^2 &\\
-&\bar{y} = \frac{1}{n} \sum^n_{i=1} y &
-\end{align}
-
-% \justify
-$SS_{res}$ mensura a quantidade de variância \textit{residual}, a
-variância entre os dados reais e as predições do modelo, i.e. a variância não
-explicada pelo modelo. $SS_{tot}$ cumpre o papel da variância \textit{total}. A métrica $R^2$
-então nos mostra quanto da variância dos dados é explicada pelo modelo. \\
-
-Para essa métrica, o modelo pode ter um desempenho arbitrariamente ruim, com esse valor
-podendo se tornar arbitrariamente negativo. Porém, seu valor máximo é 1,
-indicando um modelo ideal.\\
-
+mas para testar as predições frente a realidade e avaliar sua qualidade. Em
+particular, apenas o erro quadrático não é suficiente para mensurar a qualidade
+de predições probabilísticas. Para isso, usamos métricas que levam em
+consideração a distribuição das predições, e não apenas a sua média.\\
 
 \subsubsection{Custo quantílico}
 \label{sec:quant}
