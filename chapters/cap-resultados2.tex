@@ -1,10 +1,9 @@
 \chapter{ Resultados Experimentais }
 \label{cap:resultados}
-\section{Experimentos}
 
 
 
-\subsection{Modelos de Aprendizado de Máquina}
+\section{Modelos de Aprendizado de Máquina}
 
 
 Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
@@ -12,7 +11,7 @@ dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisã
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
 treinamos os modelos. 
 
-\subsubsection{Divisão dos dados entre treino e validação}
+\subsection{Divisão dos dados entre treino e validação}
 
 
 A divisão entre dados de treino e validação é feita da maneira padrão com
@@ -96,7 +95,7 @@ predições.
   \label{fig:res_lin}
 \end{figure}
 
-\subsection{Modelos de Séries Temporais}
+\section{Modelos de Séries Temporais}
 
 
 Agora com um tratamento completo do problema como o de Aprendizado Automático para predição de séries
@@ -112,7 +111,7 @@ diversas séries temporais de um mesmo processo simultaneamente.
 Os modelos poderão então ter parâmetros tanto locais (calculados
 para cada série) como globais (dividimos por todas as séries de treinamento).
 
-\subsubsection{Divisão dos dados entre treino e validação}
+\subsection{Divisão dos dados entre treino e validação}
 
 Com o fim de explorar essa capacidade dos modelos de consumirem diversas séries
 temporais, os dados da fábrica de Cajati foram separados por ano e consideramos
@@ -210,7 +209,7 @@ todo o dataset, para predições de 24h e 7 dias.
 
 
 
-\subsection{Modelos de Deep Learning Bayesianos}
+\section{Modelos de Deep Learning Bayesianos}
 
 
 Usamos a implementação dos modelos DeepAR e DeepFactors da biblioteca GluonTS
@@ -285,7 +284,7 @@ suas predições probabilísticas mais calibradas e com maior cobertura dos valo
 reais observados.
 
 
-\subsubsection{Versão corrigida do modelo DeepAR}
+\subsection{Versão corrigida do modelo DeepAR}
 
 Também corrigimos o modelo \textbf{DeepAR\_1} com o modelo \textbf{DeepAR\_7} de maneira análoga a
 Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}.

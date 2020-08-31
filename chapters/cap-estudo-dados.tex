@@ -72,11 +72,12 @@ para que eles se tornem diários:
 
 \subsection{RC3, RC7 e RC28}
 
-Assim como proposto em \cite{grecialin}, iremos usar dados supostos disponíveis diariamente no chão de fábrica. Portanto, para um lote recém expedido,
-não podemos usar os índices RC3 e RC7 desse mesmo lote para auxiliar na predição
-de RC28, visto que esses ainda não foram experimentados em laboratório, esses
-experimentos levam respectivamente 3 e 7 dias para ficarem prontos. Dessa maneira, iremos usar os últimos índices RC3 e RC7 disponíveis para o lote expedido no dia $t$,
-i.e. o índice RC3 do lote do dia $t-3$ e RC7 do lote dia $t-7$, que acabaram de ser medidos. 
+A variável de interesse para todos os modelos de predição é o RC28, o valor
+escolhido por normas de segurança de construção civil. Os modelos usados nesse
+trabalho irão buscar usar outros resultados de ensaios mais rápidos de
+resistência compressiva na predição do ensaio mais importante e demorado. É
+válido então uma análise de correlação entre essas grandezas.
+
 
 A Figura~\ref{fig:gridcorr} mostra um correlograma entre os índices RC3 e RC7
 atrasados e o RC28 diário. 
