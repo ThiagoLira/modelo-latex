@@ -18,6 +18,6 @@ $makeindex = 'makeindex -s mkidxhead.ist -L %O -o %D %S 2>&1 | tee';
 
 $pdf_mode = 1;
 
-$postscript_mode = $dvi_mode = 0;
+$postscript_mode = $dvi_mode = 0  ;
 
 $silence_logfile_warnings = 1;

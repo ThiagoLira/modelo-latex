@@ -40,35 +40,20 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
 \end{figure}
 
 Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente
-após o fim do último dia de dados usados para treino. Iremos mostrar o
-erro para o dia seguinte, três dias depois e então uma semana após o último dia
-de dados usados para treinamento.
+após o fim do último dia de dados usados para treino. A Tabela reporta o erro agregado
+para todo o dataset de testes.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{RMSE por horizonte de predição.}
+\caption{RMSE por modelo.}
 \centering
-\begin{tabular}{rr}
-\hline
- Regressão Linear & RMSE\\
-\hline
-24h & 2.94\\
-3d & 0.13\\
-7d & 5.43\\
-\hline
-Rede Neural & RMSE\\
-\hline
-24h & 3.70\\
-3d & 1.26\\
-7d & 6.04\\
-\hline
-Random Forest & RMSE\\
-\hline
-24h & 1.61\\
-3d & 1.36\\
-7d & 5.83\\
-\end{tabular}
-
+\begin{tabular}{|l|l|}
+    \hline
+    Modelo           & RMSE \\ \hline
+    Regressão Linear & 4.69 \\ \hline
+    Rede Neural      & 4.99 \\ \hline
+    Random Forest    & 4.08 \\ \hline
+  \end{tabular}
 \label{tb:rmse_lin}
 \end{table}
 \end{center}
@@ -86,17 +71,6 @@ a Figura~\ref{fig:distr_lin} mostra as distribuições previstas pelos 3 modelos
 \label{fig:distr_lin}
 \end{figure}
 
-Para testar a acurácia de modelos em séries temporais, é comum se estudar o resíduo das
-predições. 
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.3\textwidth]{residuals-LinearRegression.pdf} \hfill
-  \includegraphics[width=.3\textwidth]{residuals-NeuralNet.pdf} \hfill
-  \includegraphics[width=.3\textwidth]{residuals-RandomForest.pdf} 
-  \caption{Distribuição dos resíduos de cada modelo de Aprendizado Automático}
-  \label{fig:res_lin}
-\end{figure}
 
 \section{Modelos de Séries Temporais}
 
