@@ -235,7 +235,8 @@ probabilidade definida por média e variância, ou diversas realizações de uma
 distribuição desconhecida, da qual podemos estimar esses parâmetros. 
 Com o desvio-padrão podemos reportar o risco das predições para diversos percentis, como explicado na
 Sessão~\ref{sec:quant}. Os custos quantílicos dos modelos são reportados na
-Tabela~\ref{tb:quants}.
+Tabela~\ref{tb:quants}. As coberturas (i.e. percentagem das predições dentro da
+margem de confiança retornada pelo modelo) de cada modelo são reportadas na Tabela~\ref{tb:cobs}.
 
 
 \begin{center}
@@ -259,6 +260,26 @@ Tabela~\ref{tb:quants}.
 \end{table}
 \end{center}
 
+\begin{center}
+\begin{table}
+  \begin{tabular}{l|l|l|l|l|l|l|}
+    \cline{2-7}
+    & \multicolumn{3}{l|}{Cobertura 0.5}                       & \multicolumn{3}{l|}{Cobertura 0.9}                       \\ \cline{2-7} 
+    & Factors\_7 & Factors\_3 & Factors\_1 & Factors\_7 & Factors\_3 & Factors\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.58           & 1           & 0.94           & 0.89           & 1          & 1           \\ \hline
+    \multicolumn{1}{|l|}{24h} & 0.58           & 1           & 0.94           & 0.89           & 1          & 1           \\ \hline
+    & Uber\_7 & Uber\_3 & Uber\_1 & Uber\_7 & Uber\_3 & Uber\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.02    & 0.23    & 0.02    & 0.018    & 0.015   & 0.013    \\ \hline
+    \multicolumn{1}{|l|}{24h} & 0.01    & 0.21    & 0.01    & 0.012   & 0.010   & 0.008    \\ \hline
+    & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.41     & 0.41     & 0.32     & 0.81     & 0.75     & 0.76     \\ \hline
+    \multicolumn{1}{|l|}{24h} &  0.41     & 0.41     & 0.32     & 0.81     & 0.75     & 0.76     \\ \hline
+  \end{tabular}
+  \caption{Coberturas das predições probabilísticas para os quantis de 50\% e
+    90\% de confiança.}
+  \label{tb:cobs}
+\end{table}
+\end{center}
 
 As versões do modelo DeepAR possuem em média os menores riscos. O que indica que
 suas predições probabilísticas mais calibradas e com maior cobertura dos valores
