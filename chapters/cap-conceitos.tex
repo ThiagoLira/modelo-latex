@@ -463,7 +463,14 @@ modelar como saída o índice RC28. \\
 \end{figure}
 
 
-\bigskip
+\subsubsection{Uso para o problema de predição de RC}
+
+Como os demais modelos, a predição será sempre o valor de RC28. As entradas
+serão as grandezas químicas correspondentes ao lote de cimento do qual
+gostaríamos de prever o RC28, ou seja, para o lote de cimento $i$ um vetor da forma $(Al2O3_i, RC1_i, RC3_i
+\dots )$ para a predição de $RC28_i$. 
+
+
 
 \subsubsection{Regularização L2}
 
@@ -984,6 +991,14 @@ O desvio-padrão total do modelo é então calculado por:
   \eta = \sqrt{\eta^2_1 + \eta^2_2}  
 \]
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_t, \dots RC28_{t+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
 
 \subsection{Modelo DeepAR}
 
@@ -1065,6 +1080,15 @@ Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaus
  y^*_{i,t} \sim \mathcal{N}(\mu_{i,t},\sigma_{i,t}) 
 \]
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_t, \dots RC28_{t+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
+
 \subsection{Modelo com Deep Factors}
 
 O modelo \textit{Deep Factors with Gaussian Process} \citep{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
@@ -1137,6 +1161,14 @@ O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Process
 \]
 
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_t, \dots RC28_{t+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
 
 \section{Correlação entre Variáveis}
 
