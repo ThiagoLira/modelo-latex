@@ -9,7 +9,7 @@ capacidade é um dos fatores para avaliar a qualidade do cimento
 \citep{cementml}. O CCS após 28 dias da produção do cimento (RC28) é escolhido
  como um parâmetro regulatório em normas de construção. Dado que os custos
  anuais de manutenção de estruturas são da ordem de bilhões de dólares, métodos
- estatísticos para a predição dessa quantidade ainda na fase de fabricação ganha ainda mais importância para o
+ estatísticos para a predição dessa quantidade ainda na fase de fabricação ganham ainda mais importância para o
  funcionamento mais eficiente da indústria. Nota-se também que essa  
  indústria representa grande parte das emissões de $CO_2$ na atmosfera \citep{cementroadmap}.
 
@@ -26,13 +26,14 @@ para a tomada de decisões na operação da fábrica.
 
 
 
-Trabalhos recentes aplicam técnicas estatísticas em amostras de cimento num
+Trabalhos recentes aplicam técnicas estatísticas para predição de RC28 em amostras de cimento num
 contexto laboratorial \citep{cementlin,nncement}.
 Nosso objetivo é estender a metodologia para
 levar essas análises da operação da fábrica, com dados colhidos na operação diária que já
 possam entregar resultados imediatos para a ação dos operadores.
 
-O trabalho \citep{dynstat} propõe uma regressão linear cujos parâmetros são recalculados
+O trabalho \citep{dynstat} propõe uma metodologia de aplicação de técnicas de
+regressão linear  para predição de RC28 cujos parâmetros são recalculados
 sempre que um novo valor RC28 é amostrado pelo laboratório. Nossa contribuição é
 similar, por meio de um tratamento completo dos dados providenciados na operação da fábrica como
 \textbf{séries temporais} i.e. dados indexados por anotações de tempo.
@@ -43,14 +44,16 @@ Esses modelos têm uma excelente capacidade estatística e interpretabilidade.
 Mas essa família de modelos possui suas limitações:
 ela falha em modelar relações não-lineares nos dados \citep{forecasting} e 
 muitos processos reais tendem a ser não-lineares por natureza.
-Esses modelos também têm dificuldade de incorporar variáveis exógenas à série temporal nas predições \citep{ubertime}.
+Esses modelos também têm dificuldade de incorporar variáveis independentes (i.e.
+além da própria série alvo, RC28 no caso desse trabalho) à série temporal nas predições \citep{ubertime}.
 
 
-A modelagem de série temporais tem se beneficiado pelo desenvolvimento de novos
+A modelagem de séries temporais tem se beneficiado pelo desenvolvimento de novos
 métodos de Aprendizado de Máquina (ML), e mais recentemente de Aprendizado Profundo (DL).
 Modelos de DL diferem de abordagens estatísticas clássicas por serem orientados
 a dados \citep{dlbook}.
-Esses modelos não necessitam de \textit{feature engineering}, e também não
+Esses modelos não necessitam de seleção de atributos, ou seja, é minimizada a
+necessidade de especialistas para a escolha de variáveis, e esse tipo de modelo também não
 assumem muito sobre a distribuição geradora dos dados, como por exemplo a
 família ARIMA, que requisita do engenheiro de dados a especificação da
 sazonalidade e estacionariedade dos dados \citep{arima}.
@@ -62,10 +65,12 @@ arquiteturas de DL mais presentes atualmente em análise de séries temporais
 são as Redes Neurais Recorrentes. Esses modelos já foram usados com
 melhores resultados do que métodos clássicos para prever séries temporais de
 demanda de energia elétrica e de carros em um aplicativo de corridas popular
-\citep{energylstm,ubertime}.
+\citep{energylstm,ubertime}. Outro benefício de modelos baseados em redes
+neurais são a capacidade de modelar não-linearidades complexas e também de não
+assumir independência estatística entre as variáveis de entrada \citep{dlbook}.
 
 
-Nossa metodologia deve ser capaz de prever o sensível nível de imprecisão e
+Um método de estimação adequado às incertezas do processo deve ser capaz de prever o sensível nível de imprecisão e
 incerteza que ocorre no processo industrial,
 refletindo assim as condições reais observadas na fábrica. A estatística bayesiana oferece técnicas
 mais robustas para a modelagem de incerteza \citep{bayesml}. E num contexto em
@@ -131,7 +136,8 @@ A propriedade que iremos tentar prever usando nossos modelos será a resistênci
 compressiva do cimento. A resistência de uma amostra de cimento é ensaiada em
 intervalos determinados de dias após a sua confecção. Essas informações são
 anotadas nos dados com os nomes de $RCn$, com $n$ sendo a idade da amostra em
-dias. Esses índices possuem a unidade de kPa, i.e. quilopascal.
+dias. Esses índices possuem a unidade de MPa, i.e. quilopascal. Valores usuais
+desse ensaio são RC1, RC3, RC7 e RC28 (o mais relevante para as normas).
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
