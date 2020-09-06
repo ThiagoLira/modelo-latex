@@ -7,12 +7,12 @@
 
 
 Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
-dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
-Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
+dados não temporais. Separamos os dados em treino e validação, normalizamos as variáveis e
 treinamos os modelos. Para essa bateria de experimentos os modelos receberão
 como entrada apenas os variáveis correspondentes ao dia em que desejamos
 realizar uma predição. Diferentemente dos modelos de série temporal que irão
-usar uma janela inteira de variáveis de alguns dias do passado para cada predição.
+usar uma janela inteira de variáveis de alguns dias do passado para cada
+predição. Usamos nessa parte do trabalho Redes Neurais, Random Forests e regressão linear.
 
 \subsection{Divisão dos dados entre treino e validação}
 
@@ -67,7 +67,9 @@ a Figura~\ref{fig:distr_lin} mostra as distribuições previstas pelos 3 modelos
 \includegraphics[width=.3\textwidth]{qq-LinearRegression.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-NeuralNet.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-RandomForest.pdf} 
-\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\caption{Valores reais plotados contra os valores previstos para análise da
+  distribuição aprendida por cada modelo. Os modelos de Aprendizado de Máquina
+  possuem flutuações altas na distribuição das predições, frutos de viés.} 
 \label{fig:distr_lin}
 \end{figure}
 
@@ -113,7 +115,8 @@ treinamento e os últimos 30 dias como dados de validação.
 
 Com o fim de termos uma base de comparação para os modelos de
 Aprendizado Profundo, aplicaremos o modelo proposto em \citep{grecialin}.
-Usaremos 3 modelos com diferentes grupos de variáveis, a Tabela~\ref{tab:modelslin} mostra
+Usaremos 3 modelos com diferentes grupos de variáveis, a
+Tabela~\ref{tab:modelslin}, já referenciada na Sessão\~ref{ses:ewma} mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
 desse trabalho. Também mostraremos resultados para o modelo corrigido
 reglin\_ew, que é uma combinação dos modelos reglin\_1 e reglin\_7.
@@ -140,7 +143,7 @@ modelo por 7 dias) com o índice $T$ referente
 ao começo das predições sendo o primeiro dia de dezembro para cada dataset.
 Os resultados para cada modelo no período de validação de cada ano são
 reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
-\ref{fig:rc287preds}. 
+\ref{fig:rc287preds}.  
 
 \begin{figure}[H]
   \centering
@@ -167,6 +170,9 @@ reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
 
 \end{figure}
 
+Os modelos de regressão linear com janela móvel possuem uma boa assertividade
+para alguns casos possuem um erro sistemático para todo o mesmo dataset. Todos
+os modelos desse tipo falharam na tarefa de predição do ano de 2011, por exemplo.
 Agregando esses valores, podemos apresentar o RMSE médio para cada modelo para
 todo o dataset, para predições de 24h e 7 dias.
 
