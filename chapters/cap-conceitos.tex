@@ -71,19 +71,26 @@ Tabela~\ref{tb:vars}.
 O treinamento será realizado com valores dessas séries nas anotações de tempo no
 intervalo $[1,T]$.
 Seja $T$ o último dia em que se possui dados da variável alvo RC28.
-Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ será
-uma função da seguinte forma, gerando predições de RC28 até um horizonte futuro:
+Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ poderá ter
+duas formas, uma auto-regressiva e uma sem auto-regressão, i.e. a própria série
+alvo usada no problema de predição. 
 
 
 \[
   \hat{RC28}_{T:T+F}  = f ( RC28_{T-29-W:T-29},\textbf{x}_{T-W:T+F} ; \theta)
 \]
 
+E para a versão sem auto-regressão:
+
+\[
+  \hat{RC28}_{T:T+F}  = f ( \textbf{x}_{T-W:T+F} ; \theta)
+\]
+
 A função é parametrizada por $W$ e $F$, respectivamente o tamanho da janela de
 dados do passado que o modelo irá usar para as predições e o número de dias para
 o qual o modelo irá gerar predições no futuro. Uma limitação adicional do problema de predição de RC28 é que
-o último valor de RC28 está presente 29 dias no passado, característica
-incorporada no problema de predição. 
+o último valor de RC28 que pode ser usado está presente 29 dias no passado, característica
+incorporada nos modelos auto-regressivos, atrasando a série alvo em 29 dias.
 O objetivo de treinamento é encontrar parâmetros $\theta$ para que essa função seja o mais assertiva possível.
 
 
@@ -325,8 +332,7 @@ $p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
 distribuição $q(\theta)$, que pode ser otimizada por métodos numéricos para
 aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
 calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. A
-aproximação da Equação~\ref{eq:pq} depende de uma boa escolha de $q$, algo que
-será explicado a seguir. 
+aproximação da equação a seguir depende de uma boa escolha de $q$. 
 
 \begin{align*}
   \label {eq:pq}
@@ -334,7 +340,7 @@ será explicado a seguir.
                        &= q(y^* | x^*)
 \end{align*}
 
- Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
+Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
 Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
 Equação~\ref{eq:ine} é sempre menor que $\log p(Y|X)$, e igual no limite em que
 $q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
