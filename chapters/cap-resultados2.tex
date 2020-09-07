@@ -187,7 +187,9 @@ todo o dataset, para predições de 24h e 7 dias.
       \multicolumn{1}{|l|}{reglin\_7} & 2.09                          & 1.63                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_ew} & 2.12                          & 1.42                            &  \\ \cline{1-1}
     \end{tabular}
-    \caption{Valores agregados de RMSE para os modelos de Regressão Linear Dinâmica}
+    \caption{Valores agregados de RMSE para os modelos de Regressão Linear
+      Dinâmica. Como esperado, o erro decresce a medida que mais variáveis são
+      incorporadas ao modelo. O modelo corrigido tem o menor erro quadrático.}
 
     \label{tb:rmse_exp}
   \end{table}
@@ -263,7 +265,8 @@ margem de confiança retornada pelo modelo) de cada modelo são reportadas na Ta
     \multicolumn{1}{|l|}{24h} &  0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
   \end{tabular}
   \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
-    das predições para os modelos de DL Bayesiano.}
+    das predições para os modelos de DL Bayesiano. Os menores riscos-quantílicos
+  são fornecidos pelos modelos DeepAR.}
   \label{tb:quants}
 \end{table}
 \end{center}
@@ -284,7 +287,9 @@ margem de confiança retornada pelo modelo) de cada modelo são reportadas na Ta
     \multicolumn{1}{|l|}{24h} &  0.41     & 0.41     & 0.32     & 0.81     & 0.75     & 0.76     \\ \hline
   \end{tabular}
   \caption{Coberturas das predições probabilísticas para os quantis de 50\% e
-    90\% de confiança.}
+    90\% de confiança. Apesar de o modelo Deep Factors ser capaz de fornecer a
+    maior cobertura, veremos mais adiante que a média das predições possui erros
+  sensívelmente maiores que dos outros modelos.}
   \label{tb:cobs}
 \end{table}
 \end{center}
@@ -312,7 +317,10 @@ estudados na modelagem.
     \multicolumn{1}{|l|}{7d}  & 1.50           & 1.86           & 1.81           \\ \hline
     \multicolumn{1}{|l|}{24h} & 1.87           & 1.68           & 1.66           \\ \hline
   \end{tabular}
-  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7
+    dias. Os modelos Uber e DeepAR são sensívelmente melhores que os modelos
+    Deep Factors. O modelo DeepAR gera predições mais estáveis para todas as
+    tarefas de aprendizado.}
   \label{tb:rmsetd}
 \end{table}
 \end{center}
