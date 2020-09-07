@@ -266,7 +266,7 @@ margem de confiança retornada pelo modelo) de cada modelo são reportadas na Ta
   \end{tabular}
   \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
     das predições para os modelos de DL Bayesiano. Os menores riscos-quantílicos
-  são fornecidos pelos modelos DeepAR.}
+  são fornecidos pelos modelos DeepAR e Uber.}
   \label{tb:quants}
 \end{table}
 \end{center}
@@ -333,9 +333,7 @@ Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}.
 
 Usando a média retornada para cada predição dos modelos DeepAR, é possível
 comparar o erro quadrático das predições de cada modelo. Iremos comparar esses resultados com os obtidos pelo modelo
-linear dinâmico. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
-após a implementação do modelo em produção. As predições de 24h são naturalmente
-ruidosas para todos os modelos testados nesse trabalho.
+linear dinâmico. 
 
 \begin{center}
 \begin{table}[]
@@ -348,7 +346,12 @@ ruidosas para todos os modelos testados nesse trabalho.
     \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_ew/DeepAR\_ew} & 2.12 / 1.16                   & 1.42 / 1.12                      &  \\ \cline{1-1}
   \end{tabular}
-  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7
+    dias. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
+    após a implementação do modelo em produção. As predições de 24h são naturalmente
+    ruidosas para todos os modelos testados nesse trabalho.}
 \label{tb:rmsedeepar}
 \end{table}
 \end{center}
+
+% LocalWords:  Uber DeepAR licos percentis DL Factors DeepFactors
