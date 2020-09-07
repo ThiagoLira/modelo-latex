@@ -116,7 +116,7 @@ treinamento e os últimos 30 dias como dados de validação.
 Com o fim de termos uma base de comparação para os modelos de
 Aprendizado Profundo, aplicaremos o modelo proposto em \citep{grecialin}.
 Usaremos 3 modelos com diferentes grupos de variáveis, a
-Tabela~\ref{tab:modelslin}, já referenciada na Sessão\~ref{ses:ewma} mostra
+Tabela~\ref{tab:modelslin}, já referenciada na Sessão~\ref{ses:ewma} mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
 desse trabalho. Também mostraremos resultados para o modelo corrigido
 reglin\_ew, que é uma combinação dos modelos reglin\_1 e reglin\_7.
@@ -143,7 +143,9 @@ modelo por 7 dias) com o índice $T$ referente
 ao começo das predições sendo o primeiro dia de dezembro para cada dataset.
 Os resultados para cada modelo no período de validação de cada ano são
 reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
-\ref{fig:rc287preds}.  
+\ref{fig:rc287preds}. Os modelos DeepAR de modo geral seguem a tendência dos
+valores corretos de RC28, que são naturalmente ruidosos, como pode ser
+percebido pelas curvas azul claro mostrando os valore reais. 
 
 \begin{figure}[H]
   \centering
