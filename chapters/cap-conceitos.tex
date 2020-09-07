@@ -324,7 +324,9 @@ Para grande parte dos modelos de Aprendizado Automático a distribuição poster
 $p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
 distribuição $q(\theta)$, que pode ser otimizada por métodos numéricos para
 aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
-calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
+calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. A
+aproximação da Equação~\ref{eq:pq} depende de uma boa escolha de $q$, algo que
+será explicado a seguir. 
 
 \begin{align*}
   \label {eq:pq}
