@@ -13,8 +13,6 @@ Em um primeiro momento, o problema é tratado como de Aprendizado Automático pa
 dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
 Lineares, separamos os dados em treino e validação, normalizamos as variáveis e treinamos os modelos. 
 
-
-
 \subsection{Divisão dos dados entre treino e validação}
 
 
@@ -41,35 +39,20 @@ As avaliações de RMSE de todo o conjunto de validação estão apresentados po
 \end{figure}
 
 Na Tabela~\ref{tb:rmse_lin} reportamos os erros para predições imediatamente
-após o fim do último dia de dados usados para treino. Iremos mostrar o
-erro para o dia seguinte, três dias depois e então uma semana após o último dia
-de dados usados para treinamento.
+após o fim do último dia de dados usados para treino. A Tabela reporta o erro agregado
+para todo o dataset de testes.
 
 \begin{center}
 \begin{table}[htbp]
-\caption{RMSE por horizonte de predição.}
+\caption{RMSE por modelo.}
 \centering
-\begin{tabular}{rr}
-\hline
- Regressão Linear & RMSE\\
-\hline
-24h & 2.94\\
-3d & 0.13\\
-7d & 5.43\\
-\hline
-Rede Neural & RMSE\\
-\hline
-24h & 3.70\\
-3d & 1.26\\
-7d & 6.04\\
-\hline
-Random Forest & RMSE\\
-\hline
-24h & 1.61\\
-3d & 1.36\\
-7d & 5.83\\
-\end{tabular}
-
+\begin{tabular}{|l|l|}
+    \hline
+    Modelo           & RMSE \\ \hline
+    Regressão Linear & 4.69 \\ \hline
+    Rede Neural      & 4.99 \\ \hline
+    Random Forest    & 4.08 \\ \hline
+  \end{tabular}
 \label{tb:rmse_lin}
 \end{table}
 \end{center}
@@ -83,21 +66,12 @@ a Figura~\ref{fig:distr_lin} mostra as distribuições previstas pelos 3 modelos
 \includegraphics[width=.3\textwidth]{qq-LinearRegression.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-NeuralNet.pdf} \hfill
 \includegraphics[width=.3\textwidth]{qq-RandomForest.pdf} 
-\caption{Valores reais plotados contra os valores previstos para análise da distribuição aprendida por cada modelo} 
+\caption{Valores reais plotados contra os valores previstos para análise da
+  distribuição aprendida por cada modelo. Os modelos de Aprendizado de Máquina
+  possuem flutuações altas na distribuição das predições, frutos de viés.} 
 \label{fig:distr_lin}
 \end{figure}
 
-Para testar a acurácia de modelos em séries temporais, é comum se estudar o resíduo das
-predições. 
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.3\textwidth]{residuals-LinearRegression.pdf} \hfill
-  \includegraphics[width=.3\textwidth]{residuals-NeuralNet.pdf} \hfill
-  \includegraphics[width=.3\textwidth]{residuals-RandomForest.pdf} 
-  \caption{Distribuição dos resíduos de cada modelo de Aprendizado Automático}
-  \label{fig:res_lin}
-\end{figure}
 
 \section{Modelos de Séries Temporais}
 
@@ -141,7 +115,8 @@ treinamento e os últimos 30 dias como dados de validação.
 
 Com o fim de termos uma base de comparação para os modelos de
 Aprendizado Profundo, aplicaremos o modelo proposto em \citep{grecialin}.
-Usaremos 3 modelos com diferentes grupos de variáveis, a Tabela~\ref{tab:modelslin} mostra
+Usaremos 3 modelos com diferentes grupos de variáveis, a
+Tabela~\ref{tab:modelslin}, já referenciada na Sessão~\ref{ses:ewma} mostra
 as variáveis presentes em cada modelo, e o nome dado aos modelos pelo restante
 desse trabalho. Também mostraremos resultados para o modelo corrigido
 reglin\_ew, que é uma combinação dos modelos reglin\_1 e reglin\_7.
@@ -168,7 +143,9 @@ modelo por 7 dias) com o índice $T$ referente
 ao começo das predições sendo o primeiro dia de dezembro para cada dataset.
 Os resultados para cada modelo no período de validação de cada ano são
 reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
-\ref{fig:rc287preds}. 
+\ref{fig:rc287preds}. Os modelos DeepAR de modo geral seguem a tendência dos
+valores corretos de RC28, que são naturalmente ruidosos, como pode ser
+percebido pelas curvas azul claro mostrando os valore reais. 
 
 \begin{figure}[H]
   \centering
@@ -195,6 +172,9 @@ reportados nas Figuras~\ref{fig:rc281preds},\ref{fig:rc283preds} e
 
 \end{figure}
 
+Os modelos de regressão linear com janela móvel possuem uma boa assertividade
+para alguns casos possuem um erro sistemático para todo o mesmo dataset. Todos
+os modelos desse tipo falharam na tarefa de predição do ano de 2011, por exemplo.
 Agregando esses valores, podemos apresentar o RMSE médio para cada modelo para
 todo o dataset, para predições de 24h e 7 dias.
 
@@ -209,7 +189,9 @@ todo o dataset, para predições de 24h e 7 dias.
       \multicolumn{1}{|l|}{reglin\_7} & 2.09                          & 1.63                             &  \\ \cline{1-1}
       \multicolumn{1}{|l|}{reglin\_ew} & 2.12                          & 1.42                            &  \\ \cline{1-1}
     \end{tabular}
-    \caption{Valores agregados de RMSE para os modelos de Regressão Linear Dinâmica}
+    \caption{Valores agregados de RMSE para os modelos de Regressão Linear
+      Dinâmica. Como esperado, o erro decresce a medida que mais variáveis são
+      incorporadas ao modelo. O modelo corrigido tem o menor erro quadrático.}
 
     \label{tb:rmse_exp}
   \end{table}
@@ -258,12 +240,15 @@ predições geradas por cada versão do modelo DeepAR, bem como o intervalo de c
 \end{figure}
 
 
-Os modelos de Aprendizado Profundo Bayesianos retornam, para cada predição, uma distribuição de
+Os resultados reportados possuem uma boa cobertura probabilística e ao mesmo
+tempo uma acurácia pontual (a média das predições) com uma assertividade maior
+que os modelos de Aprendizado Automático. Os modelos de Aprendizado Profundo Bayesianos retornam, para cada predição, uma distribuição de
 probabilidade definida por média e variância, ou diversas realizações de uma
 distribuição desconhecida, da qual podemos estimar esses parâmetros. 
 Com o desvio-padrão podemos reportar o risco das predições para diversos percentis, como explicado na
 Sessão~\ref{sec:quant}. Os custos quantílicos dos modelos são reportados na
-Tabela~\ref{tb:quants}.
+Tabela~\ref{tb:quants}. As coberturas (i.e. percentagem das predições dentro da
+margem de confiança retornada pelo modelo) de cada modelo são reportadas na Tabela~\ref{tb:cobs}.
 
 
 \begin{center}
@@ -282,11 +267,34 @@ Tabela~\ref{tb:quants}.
     \multicolumn{1}{|l|}{24h} &  0.020     & 0.021     & 0.024     & 0.011     & 0.016     & 0.017     \\ \hline
   \end{tabular}
   \caption{Riscos-quantílicos para os percentis de 50\% e 90\% das distribuições
-    das predições para os modelos de DL Bayesiano.}
+    das predições para os modelos de DL Bayesiano. Os menores riscos-quantílicos
+  são fornecidos pelos modelos DeepAR e Uber.}
   \label{tb:quants}
 \end{table}
 \end{center}
 
+\begin{center}
+\begin{table}
+  \begin{tabular}{l|l|l|l|l|l|l|}
+    \cline{2-7}
+    & \multicolumn{3}{l|}{Cobertura 0.5}                       & \multicolumn{3}{l|}{Cobertura 0.9}                       \\ \cline{2-7} 
+    & Factors\_7 & Factors\_3 & Factors\_1 & Factors\_7 & Factors\_3 & Factors\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.58           & 1           & 0.94           & 0.89           & 1          & 1           \\ \hline
+    \multicolumn{1}{|l|}{24h} & 0.58           & 1           & 0.94           & 0.89           & 1          & 1           \\ \hline
+    & Uber\_7 & Uber\_3 & Uber\_1 & Uber\_7 & Uber\_3 & Uber\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.24    & 0.27    & 0.26    & 0.52    & 0.57   & 0.54    \\ \hline
+    \multicolumn{1}{|l|}{24h} & 0.28    & 0.28    & 0.28    & 0.71   & 0.71   & 0.71    \\ \hline
+    & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 & DeepAR\_7 & DeepAR\_3 & DeepAR\_1 \\ \hline
+    \multicolumn{1}{|l|}{7d}  & 0.41     & 0.41     & 0.32     & 0.81     & 0.75     & 0.76     \\ \hline
+    \multicolumn{1}{|l|}{24h} &  0.41     & 0.41     & 0.32     & 0.81     & 0.75     & 0.76     \\ \hline
+  \end{tabular}
+  \caption{Coberturas das predições probabilísticas para os quantis de 50\% e
+    90\% de confiança. Apesar de o modelo Deep Factors ser capaz de fornecer a
+    maior cobertura, veremos mais adiante que a média das predições possui erros
+  sensívelmente maiores que dos outros modelos.}
+  \label{tb:cobs}
+\end{table}
+\end{center}
 
 As versões do modelo DeepAR possuem em média os menores riscos. O que indica que
 suas predições probabilísticas mais calibradas e com maior cobertura dos valores
@@ -311,7 +319,10 @@ estudados na modelagem.
     \multicolumn{1}{|l|}{7d}  & 1.50           & 1.86           & 1.81           \\ \hline
     \multicolumn{1}{|l|}{24h} & 1.87           & 1.68           & 1.66           \\ \hline
   \end{tabular}
-  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7
+    dias. Os modelos Uber e DeepAR são sensívelmente melhores que os modelos
+    Deep Factors. O modelo DeepAR gera predições mais estáveis para todas as
+    tarefas de aprendizado.}
   \label{tb:rmsetd}
 \end{table}
 \end{center}
@@ -324,9 +335,7 @@ Sessão~\ref{ses:ewma}, ao modelo corrigido damos o nome de \textbf{DeepAR\_ew}.
 
 Usando a média retornada para cada predição dos modelos DeepAR, é possível
 comparar o erro quadrático das predições de cada modelo. Iremos comparar esses resultados com os obtidos pelo modelo
-linear dinâmico. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
-após a implementação do modelo em produção. As predições de 24h são naturalmente
-ruidosas para todos os modelos testados nesse trabalho.
+linear dinâmico. 
 
 \begin{center}
 \begin{table}[]
@@ -339,7 +348,12 @@ ruidosas para todos os modelos testados nesse trabalho.
     \multicolumn{1}{|l|}{reglin\_7/DeepAR\_7} & 2.09 / 1.82                   & 1.63 / 1.42                      &  \\ \cline{1-1}
     \multicolumn{1}{|l|}{reglin\_ew/DeepAR\_ew} & 2.12 / 1.16                   & 1.42 / 1.12                      &  \\ \cline{1-1}
   \end{tabular}
-  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7 dias.}
+  \caption{Valores do RMSE para cada modelo nos horizonte de predição de 24h e 7
+    dias. Os modelos DeepAR consistentemente geram melhores predições agregando valores previstos por 7 dias
+    após a implementação do modelo em produção. As predições de 24h são naturalmente
+    ruidosas para todos os modelos testados nesse trabalho.}
 \label{tb:rmsedeepar}
 \end{table}
 \end{center}
+
+% LocalWords:  Uber DeepAR licos percentis DL Factors DeepFactors

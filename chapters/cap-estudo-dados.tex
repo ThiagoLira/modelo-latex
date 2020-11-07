@@ -5,15 +5,16 @@
 \section{Preparo dos Dados}
 
 
-Os dados estão distribuídos em colunas com diversas propriedades analisadas em
+Os dados são anotados diariamente em planilhas para o controle da fábrica
+de Cajati. Estes estão distribuídos em colunas com diversas propriedades analisadas em
 laboratório de cada lote retirado da fábrica. Existem diversas planilhas para
 lotes retirados de diversas partes do processo de fabricação. Devido a dificuldades logísticas de se casar um
 mesmo lote de cimento em diferentes partes do processo (e.g. o mesmo lote ao
 sair do forno e depois de finalizado e pronto para expedição), estudos serão feitos apenas para os dados de
 \textit{expedição de cimento}. 
 
-A Tabela~\ref{tb:vars} define todas as variáveis, dependentes e independentes,
-que são usadas na modelagem.
+A Tabela~\ref{tb:vars} apresenta todas as variáveis, dependentes e independentes,
+que serão usadas na modelagem.
 
 
 \begin{table}[]
@@ -43,7 +44,9 @@ A seguir vemos para os dados de Expedição de Cimento, para cada uma de suas va
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\columnwidth]{slides_dados_pct.pdf}
-  \caption{Porcentagem de dados faltantes por variável para dados de Expedição de Cimento}
+  \caption{Porcentagem de dados faltantes por variável para dados de Expedição
+    de Cimento. Cada coluna azul indica a porcentagem do total de dias contemplados
+    pela planilha que contém dados dessa variável.}
   \label{fig:dadosfalta}
 \end{figure}
 
@@ -64,13 +67,17 @@ para que eles se tornem diários:
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\columnwidth]{slides_dados_antes_resample.pdf}
-  \caption{Distribuição das distâncias entre entradas subsequentes dos dados de Expedição de Cimento, antes da reamostragem.}
+  \caption{Distribuição das distâncias entre entradas subsequentes dos dados de
+    Expedição de Cimento, antes da reamostragem. Grande parte das entradas da
+    planilha estão distantes de 1 dia. Porém uma quantidade significativa tem 3
+    dias de intervalo (sem dados no meio). Para o trabalho será necessário
+    preencher esses dias faltantes.}
   \label{fig:reamos}
 \end{figure}
 
 
 
-\subsection{RC3, RC7 e RC28}
+\subsection{RC1, RC3, RC7 e RC28}
 
 A variável de interesse para todos os modelos de predição é o RC28, o valor
 escolhido por normas de segurança de construção civil. Os modelos usados nesse
@@ -79,17 +86,19 @@ resistência compressiva na predição do ensaio mais importante e demorado. É
 válido então uma análise de correlação entre essas grandezas.
 
 
-A Figura~\ref{fig:gridcorr} mostra um correlograma entre os índices RC3 e RC7
+A Figura~\ref{fig:gridcorr} mostra um correlograma entre os índices RC1, RC3 e RC7
 atrasados e o RC28 diário. 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\columnwidth]{corr_grid.pdf}
-  \caption{Correlograma dos índices de resistência compressiva}
+  \caption{Correlograma dos índices de resistência compressiva. A diagonal
+    mostra a distribuição de cada variável. Como esperado, RC28 tem uma
+    correlação maior com ensaios mais recentes (i.e. RC7) do que com RC1.}
   \label{fig:gridcorr}
 \end{figure}
 
-A Tabela~\ref{tabelacorr} mostra o restante das correlações entre as demais
+A Tabela~\ref{tabelacorr} mostra o restante das correlações de Pearson \citep{dlbook} entre as demais
 colunas de dados e o nosso objetivo, o índice RC28:
 
 
@@ -101,17 +110,17 @@ colunas de dados e o nosso objetivo, o índice RC28:
   \midrule
   AGP   &  0.592847 \\
   AL2O3 &  0.463414 \\
+  P2O5  &  0.292252 \\
   SIO2  & -0.053178 \\
   MGO   & -0.371414 \\
   IP    & -0.132297 \\
   FP    & -0.419800 \\
   SBL   &  0.396555 \\
   PF    & -0.480720 \\
-  P2O5  &  0.292252 \\
-  RC28  &  1.000000 \\
   \bottomrule
 \end{tabular}
-\caption{Tabela mostrando correlações entre as variáveis e o alvo para o problema de aprendizado.}
+\caption{Tabela mostrando as correlações de Pearson entre cada uma das variáveis
+  e o alvo RC28.} 
 \label{tabelacorr}
 \end{table}
 

@@ -23,10 +23,10 @@ A função será encontrada por métodos de aprendizado que serão explicados ao
 longo desse trabalho. Nota-se que para essa modelagem outros valores de RC28 (e suas variáveis) temporalmente próximos do
 i-ésimo não são usados. Dada a natureza temporal do processo industrial,
 trabalhos recentes passaram a incomporar o histórico de entradas e saídas na
-análise, obtendo resultados mais robustos \cite{grecialin}. 
+análise, obtendo resultados mais robustos \citep{grecialin}. 
 
-É importante notar que \textbf{sempre} o objetivo de todos os modelos desse
-trabalho será a predição de RC28, nunca de outra grandeza.
+É importante notar que o objetivo de todos os modelos desse
+trabalho será sempre a predição de RC28, nunca de outra grandeza.
 
 \subsection{Séries Temporais}
 
@@ -55,7 +55,7 @@ modelagem e análise \citep{ARIMA_LSTM}.
 \subsection{O problema de predição de RC como Regressão de Série Temporal}
 
 
-Os dados da produção de cimento são anotados temporalmente, então podemos escolher
+Os dados da produção de cimento, como ensaios de resistência e composição química são anotados temporalmente, então podemos escolher
 modela-los como uma série temporal. A tarefa de regressão se torna então prever as próximas anotações desses
 dados num horizonte de tempo futuro finito.
 Na tarefa de aprendizado será usada a série temporal alvo $Y$, dos índices
@@ -68,14 +68,30 @@ $\{{Al_2O_3}_t\, , IP_t \dots \}$ dependendo das variáveis escolhidas para cada
 modelo. Uma listagem completa das variáveis presentes nos dados é apresentada na
 Tabela~\ref{tb:vars}.
 
-O treinamento será realizado com valores dessas séries nas anotações de tempo no intervalo $[1,T]$. Seja $T$ o último dia em que se possui dados de todas essas
-séries. Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ será
-uma função da seguinte forma:
+O treinamento será realizado com valores dessas séries nas anotações de tempo no
+intervalo $[1,T]$.
+Seja $T$ o último dia em que se possui dados da variável alvo RC28.
+Um modelo de aprendizado supervisionado $f$ com parâmetros $\theta$ poderá ter
+duas formas, uma auto-regressiva e uma sem auto-regressão, i.e. a própria série
+alvo usada no problema de predição. 
 
 
 \[
-  \hat{RC28}_{T:F}  = f ( RC28_{1:T},\textbf{x}_{{1}:F} ; \theta)
+  \hat{RC28}_{T:T+F}  = f ( RC28_{T-29-W:T-29},\textbf{x}_{T-W:T+F} ; \theta)
 \]
+
+E para a versão sem auto-regressão:
+
+\[
+  \hat{RC28}_{T:T+F}  = f ( \textbf{x}_{T-W:T+F} ; \theta)
+\]
+
+A função é parametrizada por $W$ e $F$, respectivamente o tamanho da janela de
+dados do passado que o modelo irá usar para as predições e o número de dias para
+o qual o modelo irá gerar predições no futuro. Uma limitação adicional do problema de predição de RC28 é que
+o último valor de RC28 que pode ser usado está presente 29 dias no passado, característica
+incorporada nos modelos auto-regressivos, atrasando a série alvo em 29 dias.
+O objetivo de treinamento é encontrar parâmetros $\theta$ para que essa função seja o mais assertiva possível.
 
 
 \section{Estatística Frequentista e Estatística Bayesiana}
@@ -89,12 +105,12 @@ contagem, idealizados na realidade de jogos de azar e outras atividades de
 natureza aleatória. Mesmo após a estatística ter sido formalizada ao lado de
 outros ramos da matemática em uma base sólida, resta a interpretação de seus
 métodos e objetos de estudo (probabilidades) quando aplicados em problemas
-reais. Atualmente existem duas dessas interpretações, a Frequentista e a
+reais. Duas dessas são as mais usadas em Ciencia da Computação: A Frequentista e a
 Bayesiana.
 
-A interpretação frequentista é relacionada as origens da estatística, entendendo
+A interpretação frequentista é relacionada às origens da estatística, entendendo
 probabilidades como contagens de eventos em um espaço amostral pré-definido,
-supondo que no limite, se pudessemos repetir experimentos infinitas vezes,
+supondo que no limite, se pudéssemos repetir experimentos infinitas vezes,
 chegaríamos ao valor real de alguma probabilidade ou estatística. Métodos
 frequentistas fazem estimativas pontuais (i.e. não aleatórias) e tratam os dados como uma entre muitas
 possíveis realizações de uma distribuição de probabilidade desconhecida, porém fixa. 
@@ -104,7 +120,7 @@ experimentos com uma distribuição \textbf{a priori} que representa o
 conhecimento sobre algum fenômeno antes de observados os dados (uma distribuição
 de probabilidade assim como as usadas em métodos frequentistas). Usa-se então a
 lei de Bayes para atualizar o nosso conhecimento a priori com a evidência dada
-pela observação dos dados.
+pela observação dos dados, gerando assim uma probabilidade a posteriori.
 
  \begin{figure} 
 \[
@@ -112,7 +128,7 @@ pela observação dos dados.
 \]
 \caption{Em uma nomenclatura simplificada, a lei de Bayes descreve a maneira de
   como podemos atualizar nossa crença no evento $A$ dado a observação do evento
-  $B$. Para isso usa-se a nossa crença a priori $P(A)$ e a verossimilhança
+  $B$. Para isso usa-se a nossa probabilidade a priori $P(A)$ e a verossimilhança
   $P(B|A)$. O denominador $P(B)$ é uma constante de normalização que
   frequentemente não precisa ser calculada diretamente.}
   \end{figure}
@@ -127,7 +143,7 @@ frequentistas (Seção~\ref{sec:est}) e inferência Bayesiana (seção~\ref{sec:
 \section{Aprendizado Automático}
 \label{sec:aprenauto}
 O campo de Aprendizado Automático (Machine Learning - Aprendizado Automático) é um ramo da Ciência
-da Computação que utiliza métodos estatísticos para criar sistemas que possam
+da Computação que utiliza métodos estatísticos e adaptativos para criar sistemas que possam
 aprender a realizar uma determinada tarefa através de dados. Um problema de Aprendizado Automático possui
 as seguintes partes \citep{dlbook}: \\
 
@@ -142,7 +158,7 @@ as seguintes partes \citep{dlbook}: \\
   do modelo e os dados de treinamento. A teoria por trás desses métricas será explicada na seção~\ref{sec:metricas}.
 
 \item A experiência $E$, que define qual tipo de informação o modelo poderá usar
-  durante o treinamento. Explicaremos esse conceito na seção~\ref{sec:exp} 
+  durante o treinamento. Explicaremos esse conceito a seguir. 
   
 \end{itemize}
 
@@ -159,8 +175,10 @@ produção de cimento.
 Aprendizado Supervisionado consiste, do ponto de vista estatístico, no
 aprendizado de uma distribuição de probabilidade do tipo $p(y | x)$. Uma
 regressão linear pode ser entendida como a distribuição do alvo $y$, $p(y | x) = \theta^Tx + \epsilon =
-\mathcal{N}(\theta^Tx,\sigma) $, $\epsilon \sim \mathcal{N}(0,\sigma)$. Esse ponto será melhor
-explorado na Sessão~\ref{sec:est}. \\ 
+\mathcal{N}(\theta^Tx,\sigma) $, $\epsilon \sim \mathcal{N}(0,\sigma)$. Usaremos
+a notação  $\epsilon \sim \mathcal{N}(0,\sigma)$ significando que a variável
+aleatória $\epsilon$ possui uma distribuição normal com média 0 e desvio-padrão $\sigma$.
+Esse ponto será melhor explorado na Sessão~\ref{sec:est}. \\ 
 
 Dados vetores de entrada $x$ associados a uma anotação $y$, a tarefa consiste na busca de uma
 função dentro de uma família de funções que melhor generalize a relação entre
@@ -217,7 +235,7 @@ A ferramenta estatística frequentista mais usada para encontrar boas funções 
 \label{sec:est}
 
 
-Como explicado previamente~\ref{sec:apren}, Aprendizado Supervisionado consiste
+Como explicado previamente na Sessão~\ref{sec:apren}, Aprendizado Supervisionado consiste
 na busca de uma distribuição de probabilidade que explique as anotações em
 função das entradas (ou variáveis). 
 
@@ -237,7 +255,9 @@ Onde $p(Y | X ; \theta)$ é uma família de distribuições de probabilidade
 parametrizada por $\theta$ que modela o nosso problema de aprendizado,
 $\theta_{MLE}$ é o parâmetro que maximiza $p(Y | X)$, a verossimilhança.
 O objetivo de otimização não se altera se otimizarmos o logarítimo da
-verossimilhança, e essa mudança torna a otimização mais estável. Podemos também, considerando os dados i.i.d., substituir a verossimilhança pelo somatório da verossimilhança de cada ponto datual.
+verossimilhança, e essa mudança torna a otimização mais estável, visto que ao
+aplicar logarítmos em números pequenas estaremos então lidando com números
+maiores e com mais precisão. Podemos também, considerando os dados i.i.d., substituir a verossimilhança pelo somatório da verossimilhança de cada ponto datual.
 
 \begin{equation}
         \label{eq:objver}
@@ -246,7 +266,9 @@ verossimilhança, e essa mudança torna a otimização mais estável. Podemos ta
 
 
 Os custos que são otimizados no treinamento de modelos de Aprendizado Profundo
-são derivados do Método de Máxima Verossimilhança. Para regressão é comum se usar o \textbf{Erro
+são derivados do Método de Máxima Verossimilhança. Para regressão é comum se
+usar alguma medida de distância para ser minimizada, uma das mais usadas e que
+incorpora o conceito de máxima verossimilhança é o \textbf{Erro
 Quadrático Médio}.
 
 
@@ -307,9 +329,10 @@ Para obtermos a distribuição de uma nova predição do modelo devemos marginal
 
 Para grande parte dos modelos de Aprendizado Automático a distribuição posterior
 $p(\theta | X,Y)$ é intratável \citep{ubertime}. Pode-se de definir uma outra
-distribuição $q(\theta)$, essa podendo ser otimizada por métodos numéricos para
+distribuição $q(\theta)$, que pode ser otimizada por métodos numéricos para
 aproximar $p(\theta | X,Y)$. E então usando a distribuição variacional podemos
-calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. 
+calcular uma aproximação da distribuição das predições $q(y^*|x^*)$. A
+aproximação da equação a seguir depende de uma boa escolha de $q$. 
 
 \begin{align*}
   \label {eq:pq}
@@ -317,9 +340,9 @@ calcular uma aproximação da distribuição das predições $q(y^*|x^*)$.
                        &= q(y^* | x^*)
 \end{align*}
 
- Para aproximar $q^*$ da distribuição alvo usa-se o método da Inferência
+Para aproximar $q$ da distribuição alvo usa-se o método da Inferência
 Variacional \citep{bayesml}. O objetivo $\mathcal{L}_{VI}$ na
-Equação~\ref{eq:ine} é sempre menor que $p(Y|X)$, e igual no limite em que
+Equação~\ref{eq:ine} é sempre menor que $\log p(Y|X)$, e igual no limite em que
 $q(\theta)$ seja exatamente igual a $q(\theta | X,Y)$. Esse objetivo é chamado de
 \textit{Variational Lower Bound}, e ele é derivado da distância KL entre $q$ e
 a distribuição alvo:
@@ -339,8 +362,9 @@ $q$. A otimização de $\mathcal{L}_{VI}$ buscará tornar essa aproximação o m
 
 \subsubsection{Divergência KL}
 
-A divergência KL, ou Kullback-Leibler, é uma medida de diferença entre duas distribuições de probabilidade (também chamada de Entropia Relativa). \\
-Essa medida pode ser definida pelo valor esperado da diferença logarítmica da probabilidade dos dados serem observados em uma distribuição ou na outra \citep{dlbook}. \\
+A divergência KL, ou Kullback-Leibler, é uma medida de diferença entre duas distribuições de probabilidade (também chamada de Entropia Cruzada). \\
+Essa medida pode ser definida pelo valor esperado da diferença logarítmica da
+probabilidade que os dados sejam observados em uma distribuição ou na outra \citep{dlbook}. \\
 Sejam duas distribuições de probabilidade $p$ e $q$, bem como uma matriz de dados $X$: \\
 
 \[D_{KL}(p || q) = \mathop{\mathbb{E}}[\log p(x) - \log q(x)]​\]
@@ -413,10 +437,10 @@ calculado o erro máximo esperado por $90\%$ das predições.
 %% ------------------------------------------------------------------------- %%
 
 
-\section{Abordagem Não-Temporal} 
+\section{Abordagem Não-Temporal para predição de RC28} 
 
 
-\subsection{Redes Neurais}
+\subsection{Redes Neurais (Arquitetura Feed-Forward)}
 
 \label{sec:nn}
 Redes neurais são aproximadores universais de funções \citep{nnuni}. Dado um problema
@@ -463,17 +487,22 @@ modelar como saída o índice RC28. \\
 \end{figure}
 
 
-\bigskip
+\subsubsection{Uso para o problema de predição de RC}
+
+Como os demais modelos, a predição será sempre o valor de RC28. As entradas
+serão as grandezas químicas correspondentes ao lote de cimento do qual
+gostaríamos de prever o RC28, ou seja, para o lote de cimento $i$ um vetor da forma $(Al2O3_i, RC1_i, RC3_i
+\dots )$ para a predição de $RC28_i$. 
+
+
 
 \subsubsection{Regularização L2}
 
 Em \cite{dlbook}, os autores definem regularização como \say{qualquer
   modificação em um algoritmo de aprendizado que diminua o erro de generalização
-mas não o seu erro de treinamento}. A ideia é se colocar informação objetivo de 
-otimização que diminua a complexidade do modelo encontrado, fazendo assim
-que o modelo tenha menos capacidade de aprender a modelar o ruído inerente
-aos dados de treinamento, i.e. a parte dos dados que é atribuída a erros
-impossíveis de serem modelados.
+mas não o seu erro de treinamento}. A ideia é de penalizar o modelo pela sua
+complexidade no objetivo de treinamento, fazendo assim com que o modelo tenha menos capacidade de aprender a modelar o ruído inerente
+aos dados de treinamento, i.e. a parte que não ajuda na tarefa de aprendizado. 
 
 A regularização L2 consiste em adicionar a norma quadrada de todos os parâmetros
 do modelo ao objetivo de otimização. Dessa maneira o algoritmo é levado a
@@ -482,7 +511,7 @@ direcionada a achar o menor valor possível do objetivo.
 
 
 
-\section{Modelos Sequenciais}
+\section{Modelos Sequenciais para predição de RC28}
 
 Modelos sequenciais consomem sequências de dados e também podem ser usados pra
 criar predições sequenciais \citep{dlbook}. A área de NLP viu muitos novos
@@ -792,7 +821,7 @@ Redes Neurais Bayesianas, como qualquer modelo bayesiano, especificam uma distri
 A Lei de Bayes é então aplicada para se calcular a distribuição posterior de
 $\theta$, em vez de uma estimativa pontual, como usualmente é feito no tratamento frequentista.
 Devido a complexidade desses modelos, é intratável calcular analiticamente essa distribuição posterior, então diversos métodos foram propostos para uma aproximação \citep{Gal2016Uncertainty}.
-O Método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
+O método aplicado nesse trabalho é o Monte Carlo Dropout, que não requer nenhuma mudança na arquitetura do modelo para realizar a inferência. Consistindo apenas de uma reinterpretação de uma Rede Neural implementada com uma técnica de regularização chamada Dropout. 
 
 \subsubsection{Monte Carlo Dropout}
 
@@ -843,7 +872,7 @@ regularização L2 pode ser escrita da seguinte forma:
 
 
 O objetivo de minimização desse Rede Neural com dropout em todas as camadas é
-equivalente a diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
+equivalente à diminuição da divergência KL entre $q(\theta)$ definido acima e a distribuição
 posterior $p(\theta | X,Y)$ de um Processo Gaussiano Profundo que parametriza a
 distribuição dos parâmetros da rede \citep{dropbayes}. Seja $\mathnormal{L}$ o
 objetivo de inferência variacional da distribuição posterior do Processo Gaussiano Profundo, o trabalho
@@ -1007,6 +1036,14 @@ O desvio-padrão total do modelo é então calculado por:
   \eta = \sqrt{\eta^2_1 + \eta^2_2}  
 \]
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_i, \dots RC28_{i+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
 
 \subsection{Modelo DeepAR}
 
@@ -1088,6 +1125,15 @@ Uma saída $y^*_{i,t}$ do modelo é calculada por meio de uma amostragem da Gaus
  y^*_{i,t} \sim \mathcal{N}(\mu_{i,t},\sigma_{i,t}) 
 \]
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_i, \dots RC28_{i+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
+
 \subsection{Modelo com Deep Factors}
 
 O modelo \textit{Deep Factors with Gaussian Process} \citep{deepfactors} separa o problema de predição em uma parte \textbf{local}, modelada por um Processo Gaussiano que gera incertezas, e uma parte \textbf{fixa}, modelada por uma rede neural recorrente treinada em diversas séries temporais do mesmo domínio.
@@ -1160,6 +1206,14 @@ O objetivo de treinamento é achar o conjunto de parâmetros da RNN e do Process
 \]
 
 
+\subsubsection{Uso do modelo para predição de RC}
+
+No caso de predição de RC28, o modelo será alimentado com diversas anotações
+temporais de lotes de cimento diferentes. Assim como ilustrado no
+Diagrama~\ref{fig:rnngraph}, o modelo irá absorver vetores da forma
+$(AL2O3_i,RC1_i,RC3_i \dots)$ para um certo intervalo de valores de $i$.
+Usaremos então o estado do modelo para prever $RC28_i, \dots RC28_{i+F}$, onde
+$F$ será um parâmetro determinado por validação cruzada.
 
 \section{Correlação entre Variáveis}
 
@@ -1191,7 +1245,8 @@ seguinte transformação:
 \]
 
 $Min(X)$  e $Max(X)$ são constantes que devem ser guardadas para posterior
-desnormalização do vetor.
+desnormalização do vetor. Esse método de normalização será usado para preparar
+os dados para todos os modelos usados nesse trabalho.
 
 
 
