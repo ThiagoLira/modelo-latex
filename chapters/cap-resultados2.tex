@@ -6,20 +6,21 @@
 \section{Modelos de Aprendizado de Máquina}
 
 
+
+\section{Metodologia}
+
 Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
 dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
-Lineares, separamos os dados em treino e validação, normalizamos as variáveis e
-treinamos os modelos. Para essa bateria de experimentos os modelos receberão
-como entrada apenas os variáveis correspondentes ao dia em que desejamos
-realizar uma predição. Diferentemente dos modelos de série temporal que irão
-usar uma janela inteira de variáveis de alguns dias do passado para cada predição.
+Lineares, separamos os dados em treino e validação, normalizamos as variáveis e treinamos os modelos. 
+
+
 
 \subsection{Divisão dos dados entre treino e validação}
 
 
 A divisão entre dados de treino e validação é feita da maneira padrão com
 modelos de Aprendizado de Máquina, separando-se $80\%$ dos dados para treino e
-$20\%$ para validação, i.e. testar o poder de generalização dos modelos. 
+$20\%$ para validação, i.e. testar o poder de generalização dos modelos \cite{mlbook}.
 
 \begin{figure}[H]
   \centering
@@ -100,6 +101,7 @@ predições.
 
 \section{Modelos de Séries Temporais}
 
+\section{Metodologia}
 
 Agora com um tratamento completo do problema como o de Aprendizado Automático para predição de séries
 temporais, consideramos os dados sequencialmente, treinando e testando o modelo a partir de janelas de $w$

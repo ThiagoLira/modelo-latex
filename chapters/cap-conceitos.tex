@@ -569,8 +569,18 @@ determinantes do tamanho do dataset móvel e do horizonte de predição, respect
 \end{table}
 
 
-Após $t_f$ dias um novo dataset é escolhido para recalcular os parâmetros das regressões e repete-se o processo com $T' = T + t_f$.
+Após $t_f$ dias um novo dataset é escolhido para recalcular os parâmetros das
+regressões e repete-se o processo com $T' = T + t_f$. A Figura~\ref{explic1}
+ilustra, para um dia $T$, quais dados serão usados para treino e validação do
+modelo.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{regexplic1.png}
+  \caption{Diagrama representando o uso do modelo de regressão linear janelado
+    na prática para os dados.}
+  \label{img:explic1}
+\end{figure}
 
 Para um tempo $t$, iremos designar as predições de cada um desses modelos,
 respectivamente, por $\hat{RC28}^{reglin\_1}_t$, $\hat{RC28}^{reglin\_3}_t$ e $\hat{RC28}^{reglin\_7}_t$.
@@ -666,6 +676,19 @@ boas previsões). \\
 
 
 Como já explicado anteriormente, nossos dados de entrada e saída não estão necessariamente pareados perfeitamente dia a dia. Portanto, foi necessário achar intervalos de tempo nos dados onde existe esse pareamento. Isso reduz drasticamente quais períodos representados nos dados realmente podem ser usados para treinar um desses modelos.
+
+
+\subsection{Consumo de dados de Cimento para Modelos baseados em RNNs}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{dlmodel.png}
+  \caption{Diagrama com uma exemplificação do uso de modelos sequenciais
+    baseados em RNNs para a predição de resistência RC28.}
+  \label{fig:rnngraph}
+\end{figure}
+
 
 
 \subsubsection{LSTM}
