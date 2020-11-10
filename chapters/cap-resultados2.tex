@@ -11,7 +11,7 @@
 
 Em um primeiro momento, o problema é tratado como de Aprendizado Automático para
 dados não temporais. Para esses modelos como Redes Neurais, Árvores de Decisão e Regressões
-Lineares, separamos os dados em treino e validação, normalizamos as variáveis e treinamos os modelos. 
+Lineares (Método dos Mínimos Quadrados) \citep{mlbook}, separamos os dados em treino e validação, normalizamos as variáveis e treinamos os modelos. 
 
 \subsection{Divisão dos dados entre treino e validação}
 
@@ -29,7 +29,11 @@ $20\%$ para validação, i.e. testar o poder de generalização dos modelos \cit
 \end{figure}
 
 Foram usadas implementações dos modelos fornecidos pela biblioteca Sklearn.
-As avaliações de RMSE de todo o conjunto de validação estão apresentados por modelos na Imagem~\ref{fig:mlmodels}.  
+As avaliações de RMSE de todo o conjunto de validação estão apresentados por
+modelos na Imagem~\ref{fig:mlmodels}. Vale ressaltar que não existe nenhuma
+carecterística temporal absorvida pelos modelos nesse experimento. Cada ponto de
+validação é calculado usando-se unicamente valores daquele lote particular, e
+nada de nenhum outro anterior temporalmente.
 
 \begin{figure}[H]
   \centering
@@ -89,6 +93,8 @@ Para tarefas de regressão de séries temporais, modelos recentes utilizam
 diversas séries temporais de um mesmo processo simultaneamente.
 Os modelos poderão então ter parâmetros tanto locais (calculados
 para cada série) como globais (dividimos por todas as séries de treinamento).
+\textbf{Para comparação, todos os modelos usamos uma janela de 15 dias de consumo de dados antes da
+  realização de predições.}
 
 \subsection{Divisão dos dados entre treino e validação}
 
@@ -221,21 +227,21 @@ predições geradas por cada versão do modelo DeepAR, bem como o intervalo de c
 \begin{figure}[H]
   \centering
   \includegraphics[width=.7\textwidth]{forecast_deep_ar1.pdf} 
-  \caption{Predição para todos os dados de validação para o modelo DeepAR\_1}
+  \caption{Predição do RC28 para todos os dados de validação para o modelo DeepAR\_1}
   \label{fig:fordeepar1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=.7\textwidth]{forecast_deep_ar3.pdf} 
-  \caption{Predição para todos os dados de validação para o modelo DeepAR\_3}
+  \caption{Predição do RC28 para todos os dados de validação para o modelo DeepAR\_3}
   \label{fig:fordeepar3}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=.7\textwidth]{forecast_deep_ar7.pdf} 
-  \caption{Predição para todos os dados de validação para o modelo DeepAR\_7}
+  \caption{Predição do RC28 para todos os dados de validação para o modelo DeepAR\_7}
   \label{fig:fordeepar7}
 \end{figure}
 
