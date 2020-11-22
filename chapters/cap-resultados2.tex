@@ -84,9 +84,7 @@ a Figura~\ref{fig:distr_lin} mostra as distribuições previstas pelos 3 modelos
 Agora com um tratamento completo do problema como o de Aprendizado Automático para predição de séries
 temporais, consideramos os dados sequencialmente, treinando e testando o modelo a partir de janelas de $w$
 entradas consumidas em sequência pelo o modelo. A tarefa destes é então gerar
-predições que continuem essa janela de dados. 
-
-Como mencionado na introdução desse trabalho, um benefício das técnicas de
+predições que continuem essa janela de dados. Como mencionado na introdução desse trabalho, um benefício das técnicas de
 Aprendizado Profundo é a de escalar tarefas de aprendizado para datasets de
 tamanho muito maior que era possível com modelos clássicos \citep{dlbook}.
 Para tarefas de regressão de séries temporais, modelos recentes utilizam
@@ -96,7 +94,9 @@ para cada série) como globais (dividimos por todas as séries de treinamento).
 \textbf{Para comparação, todos os modelos usamos uma janela de 15 dias de consumo de dados antes da
   realização de predições}. Em todos os modelos, usamos batches de 64 janelas,
 com o otimizador Adam e taxa de aprendizagem de $1e-4$ para o treino das LSTMs
-de cada modelo. Para o modelo Deep Factors usamos a taxa de $1e-2$ para a busca de parâmetros do Processo Gaussiano. 
+de cada modelo. Para o modelo Deep Factors usamos a taxa de $1e-2$ para a busca
+de parâmetros do Processo Gaussiano. A lista completa de hiper-parâmetros usados
+para cada modelo de Aprendizado Profundo pode ser encontrada no Apêndice~\ref{ap:modelos}.
 
 \subsection{Divisão dos dados entre treino e validação}
 
@@ -105,9 +105,7 @@ temporais, os dados da fábrica de Cajati foram separados por ano e consideramos
 cada ano como um exemplo do processo a ser modelado, fornecendo-os separadamente
 aos modelos. Os modelos de Aprendizado
 Profundo irão então usar parâmetros locais para cada ano de produção de cimento,
-mas globalmente buscar padrões para o funcionamento da fábrica. 
-
-Para cada ano de 2012 até 2019 usaremos os primeiros 11 meses como dados de
+mas globalmente buscar padrões para o funcionamento da fábrica. Para cada ano de 2012 até 2019 usaremos os primeiros 11 meses como dados de
 treinamento e os últimos 30 dias como dados de validação. Para os modelos temporais foi necessário descartar
 os anos de 2008 até 2012, visto que esses não possuiam anotações de RC1, que são
 necessárias para a análise temporal, por motivos que são explicados na Sessão~\ref{ses:ewma}.
@@ -215,9 +213,7 @@ todo o dataset, para predições de 24h e 7 dias.
 
 Usamos a implementação dos modelos DeepAR e DeepFactors da biblioteca GluonTS
 \citep{gluonts}. O modelo Uber foi implementado com as primitivas fornecidas
-pela biblioteca PyTorch \citep{pytorch}.
-
-De modo análogo ao modelo de Regressão Linear Dinâmica, para
+pela biblioteca PyTorch \citep{pytorch}. De modo análogo ao modelo de Regressão Linear Dinâmica, para
 cada modelo de DL iremos treinar 3 versões distintas. Uma para cada conjunto de
 variáveis apresentado na Tabela~\ref{tab:modelslin}. Para o modelo DeepAR, as versões treinadas serão chamadas de \textbf{DeepAR\_1},
 \textbf{DeepAR\_3} e \textbf{DeepAR\_7}. Os outros modelos seguirão uma

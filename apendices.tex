@@ -4,3 +4,59 @@
 % Os apêndices podem ser inseridos diretamente aqui ou "puxados" de outros
 % arquivos
 
+\section{Hiper-parâmetros dos Modelos de Deep Learning}
+\label{ap:modelos}
+
+
+
+\begin{center}
+\begin{table}[]
+\begin{tabular}{|l|l|}
+\hline
+Modelo             & Deep\_AR \\ \hline
+prediction\_length & 7        \\ \hline
+num\_cells         & 200      \\ \hline
+num\_layers        & 2        \\ \hline
+context\_length    & 14       \\ \hline
+dropout\_rate      & 0.1      \\ \hline
+\end{tabular}
+\caption{Parâmetros do modelo Deep_AR}
+\end{table}
+\end{center}
+
+\begin{center}
+\begin{table}[]
+\begin{tabular}{|l|l|}
+\hline
+Modelo             & Deep Factors \\ \hline
+prediction\_length & 7        \\ \hline
+num\_factors & 7        \\ \hline
+num\_hidden\_global & 1000        \\ \hline
+num\_hidden\_local & 100        \\ \hline
+num\_cells         & 200      \\ \hline
+num\_layers        & 1        \\ \hline
+context\_length    & 11       \\ \hline
+dropout\_rate      & 0.1      \\ \hline
+\end{tabular}
+\caption{Parâmetros do modelo Deep Factors}
+\end{table}
+\end{center}
+
+\begin{center}
+\begin{table}[] 
+\begin{tabular}{|l|l|} 
+\hline
+Modelo             & Encoder-Decoder-Forecaster \\ \hline
+prediction\_length & 7        \\ \hline
+embedding\_size & 16 \\ \hline
+future\_lookahead & 5 \\ \hline
+encoder\_wdrop & 0.8 \\ \hline
+encoder\_idrop & 0.8 \\ \hline
+decoder\_wdrop & 0.8 \\ \hline
+decoder\_idrop & 0.8 \\ \hline
+forecaster\_drop & 0.8 \\ \hline
+forecaster\_idrop & 0.8 \\ \hline
+\end{tabular}
+\caption{Parâmetros do modelo Encoder-Decoder-Forecaster}
+\end{table}
+\end{center}
